@@ -185,23 +185,23 @@ function generateRecommendations(
   // Recomendaciones específicas por categoría
   if (categoryAverages.ocio && categoryAverages.ocio > 150) {
     recommendations.push(
-      `Tu gasto mensual en Ocio ($${categoryAverages.ocio}) es elevado. ` +
-        `Considera establecer un presupuesto de entretenimiento de $100/mes ` +
+      `Tu gasto mensual en Ocio (${categoryAverages.ocio.toLocaleString("es-ES")}€) es elevado. ` +
+        `Considera establecer un presupuesto de entretenimiento de 100€/mes ` +
         `y busca alternativas gratuitas como eventos culturales o actividades al aire libre.`
     );
   }
 
   if (categoryAverages.comida && categoryAverages.comida > 300) {
     recommendations.push(
-      `En Comida gastas $${categoryAverages.comida}/mes de media. ` +
+      `En Comida gastas ${categoryAverages.comida.toLocaleString("es-ES")}€/mes de media. ` +
         `Planificar un menú semanal y cocinar en batch puede reducir esto un 25-30%. ` +
-        `Ahorrarías aproximadamente $${Math.round(categoryAverages.comida * 0.27)}/mes.`
+        `Ahorrarías aproximadamente ${Math.round(categoryAverages.comida * 0.27).toLocaleString("es-ES")}€/mes.`
     );
   }
 
   if (categoryAverages.suscripciones && categoryAverages.suscripciones > 40) {
     recommendations.push(
-      `Tus Suscripciones suman $${categoryAverages.suscripciones}/mes. ` +
+      `Tus Suscripciones suman ${categoryAverages.suscripciones.toLocaleString("es-ES")}€/mes. ` +
         `Revisa si usas activamente todos los servicios. Compartir planes familiares ` +
         `o alternar servicios por meses puede ahorrarte hasta el 50%.`
     );
@@ -209,7 +209,7 @@ function generateRecommendations(
 
   if (categoryAverages.ropa && categoryAverages.ropa > 200) {
     recommendations.push(
-      `Tu gasto en Ropa promedia $${categoryAverages.ropa}/mes. ` +
+      `Tu gasto en Ropa promedia ${categoryAverages.ropa.toLocaleString("es-ES")}€/mes. ` +
         `Aplica la regla de las 48 horas: espera 2 días antes de cualquier compra ` +
         `no planificada de ropa. Esto reduce las compras impulsivas un 60%.`
     );
@@ -400,10 +400,10 @@ export function generateSavingsPlan(
     `${feasibilityEmoji} **Plan de Ahorro: ${goal.name}**`,
     ``,
     `📊 **Análisis Financiero:**`,
-    `• Ingreso mensual promedio: $${monthlyIncome.toLocaleString()}`,
-    `• Gasto mensual promedio: $${monthlyExpenses.toLocaleString()}`,
-    `• Superávit mensual actual: $${currentSurplus.toLocaleString()}`,
-    `• Ahorro mensual requerido: $${monthlySavingsRequired.toLocaleString()}`,
+    `• Ingreso mensual promedio: ${monthlyIncome.toLocaleString("es-ES")}€`,
+    `• Gasto mensual promedio: ${monthlyExpenses.toLocaleString("es-ES")}€`,
+    `• Superávit mensual actual: ${currentSurplus.toLocaleString("es-ES")}€`,
+    `• Ahorro mensual requerido: ${monthlySavingsRequired.toLocaleString("es-ES")}€`,
     ``,
     `🎯 **Viabilidad: ${feasibilityScore}/100**`,
     feasibilityScore >= 70
@@ -412,9 +412,9 @@ export function generateSavingsPlan(
         ? `Necesitarás recortes significativos o ingresos adicionales.`
         : `La meta es muy ambiciosa con tu situación actual. Considera ajustar el plazo o el monto.`,
     ``,
-    `💡 **Con los recortes sugeridos podrías ahorrar $${Math.round(adjustedMonthlySavings).toLocaleString()}/mes**`,
+    `💡 **Con los recortes sugeridos podrías ahorrar ${Math.round(adjustedMonthlySavings).toLocaleString("es-ES")}€/mes**`,
     `📅 **Tiempo estimado para alcanzar la meta: ${monthsRemaining} meses**`,
-    `💰 **Monto restante: $${remainingAmount.toLocaleString()}**`,
+    `💰 **Monto restante: ${remainingAmount.toLocaleString("es-ES")}€**`,
   ].join("\n");
 
   return {

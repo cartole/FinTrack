@@ -98,7 +98,7 @@ export function TrendChart() {
             </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
-            <YAxis tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v) => `$${v}`} />
+            <YAxis tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v) => `${v}€`} />
             <ChartTooltip
               content={<ChartTooltipContent />}
               formatter={(value: number, name: string) => [
@@ -154,7 +154,7 @@ export function ProjectionChart() {
           <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
-            <YAxis tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v) => `$${v}`} />
+            <YAxis tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v) => `${v}€`} />
             <ChartTooltip
               content={<ChartTooltipContent />}
               formatter={(value: number, name: string) => [

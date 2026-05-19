@@ -98,7 +98,7 @@ export function TransactionForm() {
 
     toast({
       title: type === "ingreso" ? "Ingreso registrado" : "Gasto registrado",
-      description: `${CATEGORY_CONFIG[category as TransactionCategory]?.label}: $${numAmount.toLocaleString()}`,
+      description: `${CATEGORY_CONFIG[category as TransactionCategory]?.label}: ${numAmount.toLocaleString("es-ES")}€`,
     });
 
     resetForm();

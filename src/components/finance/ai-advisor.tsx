@@ -193,7 +193,7 @@ export function AIAdvisor() {
             <div className="space-y-2">
               <Label className="text-xs">¿Para qué quieres ahorrar?</Label>
               <Input
-                placeholder="Ej: Ahorrar $500 para un viaje"
+                placeholder="Ej: Ahorrar 500€ para un viaje"
                 value={customGoal.name}
                 onChange={(e) => setCustomGoal({ ...customGoal, name: e.target.value })}
               />

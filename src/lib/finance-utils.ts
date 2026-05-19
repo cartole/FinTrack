@@ -8,10 +8,10 @@
 import { Transaction, MonthlySummary, ProjectionData, TransactionCategory } from "./types";
 
 /**
- * Formatea un número como moneda (USD por defecto).
+ * Formatea un número como moneda (EUR por defecto).
  */
-export function formatCurrency(amount: number, currency = "USD"): string {
-  return new Intl.NumberFormat("en-US", {
+export function formatCurrency(amount: number, currency = "EUR"): string {
+  return new Intl.NumberFormat("es-ES", {
     style: "currency",
     currency,
     minimumFractionDigits: 0,
