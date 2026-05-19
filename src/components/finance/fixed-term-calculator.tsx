@@ -126,11 +126,6 @@ export function FixedTermCalculator() {
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
-  // Cargar tipos de interés al montar
-  useEffect(() => {
-    fetchInterestRates();
-  }, []);
-
   const fetchInterestRates = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -148,6 +143,11 @@ export function FixedTermCalculator() {
       setIsLoading(false);
     }
   }, []);
+
+  // Cargar tipos de interés al montar
+  useEffect(() => {
+    fetchInterestRates();
+  }, [fetchInterestRates]);
 
   // ---- Cálculos ----
 

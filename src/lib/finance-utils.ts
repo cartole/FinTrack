@@ -126,8 +126,10 @@ export function generateProjections(
     const seasonalFactor =
       monthNum === 11 ? 1.2 : monthNum === 0 ? 0.9 : monthNum === 6 || monthNum === 7 ? 1.1 : 1.0;
 
-    const projectedIncome = Math.round(avgIncome * (0.95 + Math.random() * 0.1));
-    const projectedExpenses = Math.round(avgExpenses * seasonalFactor * (0.95 + Math.random() * 0.1));
+    // Variación determinista basada en el mes (evita resultados aleatorios en cada render)
+    const monthVariation = 1 + (Math.sin(monthNum * 2.5 + i) * 0.05);
+    const projectedIncome = Math.round(avgIncome * monthVariation);
+    const projectedExpenses = Math.round(avgExpenses * seasonalFactor * monthVariation);
 
     projections.push({
       month: monthLabel,

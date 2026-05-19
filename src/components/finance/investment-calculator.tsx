@@ -123,11 +123,6 @@ export function InvestmentCalculator() {
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
-  // Cargar datos de mercado al montar
-  useEffect(() => {
-    fetchMarketData();
-  }, []);
-
   const fetchMarketData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -143,6 +138,11 @@ export function InvestmentCalculator() {
       setIsLoading(false);
     }
   }, []);
+
+  // Cargar datos de mercado al montar
+  useEffect(() => {
+    fetchMarketData();
+  }, [fetchMarketData]);
 
   // ---- Cálculos ----
 

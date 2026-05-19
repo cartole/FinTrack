@@ -404,8 +404,7 @@ export function DebtManager() {
                 Tus Deudas
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                {debts.length} deuda{debts.length !== 1 ? "s" : ""} registrada
-                {debts.length !== 1 ? "s" : ""}
+                {debts.length} deuda{debts.length !== 1 ? "s" : ""} registrada{debts.length !== 1 ? "s" : ""}
               </CardDescription>
             </div>
             <Button size="sm" onClick={handleOpenAdd} className="gap-1.5">

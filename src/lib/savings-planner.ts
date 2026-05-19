@@ -364,7 +364,7 @@ export function generateSavingsPlan(
     } else if (progress >= 0.75) {
       milestone = "¡Ya falta poco!";
     } else if (progress >= 0.5) {
-      milestone = "Mitadel camino";
+      milestone = "Mitad del camino";
     } else if (progress >= 0.25) {
       milestone = "Buen progreso";
     } else if (i === 1) {

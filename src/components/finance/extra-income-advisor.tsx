@@ -467,7 +467,7 @@ export function ExtraIncomeAdvisor() {
                       )}
                     >
                       {plan.diagnosis.monthlyDeficit > 0 ? "-" : "+"}
-                      {formatCurrency(Math.abs(plan.diagnosis.monthlyDeficit > 0 ? plan.diagnosis.monthlyDeficit : plan.diagnosis.monthlyIncome - plan.diagnosis.monthlyExpenses))}
+                      {formatCurrency(Math.abs(plan.diagnosis.monthlyDeficit))}
                     </p>
                   </div>
                   <div className="rounded-lg bg-muted/50 p-3 text-center">
