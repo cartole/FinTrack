@@ -38,6 +38,13 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import {
+  AreaChart,
+  Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
   TrendingUp,
   TrendingDown,
   RefreshCw,
@@ -54,6 +61,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // ---- Tipos ----
 
@@ -504,7 +512,7 @@ export function InvestmentCalculator() {
             {/* Gráfica del escenario activo */}
             <div className="mb-5">
               <ChartContainer config={activeChartConfig} className="h-[280px] w-full">
-                <area-chart data={activeChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart data={activeChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
@@ -539,7 +547,7 @@ export function InvestmentCalculator() {
                     dot={false}
                   />
                   <ChartLegend content={<ChartLegendContent />} />
-                </area-chart>
+                </AreaChart>
               </ChartContainer>
             </div>
 
@@ -593,7 +601,7 @@ export function InvestmentCalculator() {
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
-            <area-chart data={comparisonData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <AreaChart data={comparisonData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="year" tickLine={false} axisLine={false} fontSize={12} />
               <YAxis tickLine={false} axisLine={false} fontSize={11} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k€`} />
@@ -625,7 +633,7 @@ export function InvestmentCalculator() {
                 dot={false}
               />
               <ChartLegend content={<ChartLegendContent />} />
-            </area-chart>
+            </AreaChart>
           </ChartContainer>
 
           {/* Leyenda con valores finales */}
@@ -719,12 +727,4 @@ export function InvestmentCalculator() {
   );
 }
 
-// Import ScrollArea inline
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  AreaChart,
-  Area,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
+

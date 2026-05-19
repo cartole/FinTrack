@@ -23,6 +23,7 @@ import {
 import { useFinanceStore } from "@/store/finance-store";
 import { formatCurrency } from "@/lib/finance-utils";
 import { Brain, Sparkles, Target, Loader2, Zap } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { SavingsPlanDisplay } from "./savings-plan-display";
 
 const quickGoals = [
@@ -237,6 +238,3 @@ export function AIAdvisor() {
   );
 }
 
-function cn(...inputs: (string | undefined | false | null)[]) {
-  return inputs.filter(Boolean).join(" ");
-}

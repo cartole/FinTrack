@@ -78,7 +78,12 @@ function generateFromRecurringTransactions(transactions: Transaction[]): Calenda
 
     // Generar para 12 meses adelante
     for (let m = 0; m < 12; m++) {
-      const eventDate = new Date(now.getFullYear(), now.getMonth() + m, dayOfMonth);
+      // Clamp day to valid range for the month (e.g., day 31 → 28 in February)
+      const year = now.getFullYear();
+      const month = now.getMonth() + m;
+      const maxDay = new Date(year, month + 1, 0).getDate();
+      const safeDay = Math.min(dayOfMonth, maxDay);
+      const eventDate = new Date(year, month, safeDay);
       // Evitar duplicados con el mes original si es muy reciente
       events.push({
         id: generateId(),
@@ -116,6 +121,8 @@ function generateFromSubscriptions(subscriptions: Subscription[]): CalendarEvent
         ? "monthly"
         : sub.billingCycle === "trimestral"
         ? "quarterly"
+        : sub.billingCycle === "semestral"
+        ? "yearly"  // semestral mapped to closest available pattern
         : "yearly";
 
     // Generar eventos hasta un año adelante
@@ -152,7 +159,11 @@ function generateFromDebts(debts: Debt[]): CalendarEvent[] {
 
     // Generar pagos mensuales durante 12 meses
     for (let m = 0; m < 12; m++) {
-      const paymentDate = new Date(now.getFullYear(), now.getMonth() + m, debt.dueDay);
+      const year = now.getFullYear();
+      const month = now.getMonth() + m;
+      const maxDay = new Date(year, month + 1, 0).getDate();
+      const safeDay = Math.min(debt.dueDay, maxDay);
+      const paymentDate = new Date(year, month, safeDay);
 
       if (paymentDate > oneYearFromNow) break;
 
@@ -348,7 +359,6 @@ export function getEventsForDate(events: CalendarEvent[], date: string): Calenda
 export function getUpcomingEvents(events: CalendarEvent[], days: number = 7): CalendarEvent[] {
   const now = new Date();
   const today = toISODate(now);
-  const futureDate = toISODate(addMonths(now, 0));
   const endDate = new Date(now);
   endDate.setDate(endDate.getDate() + days);
   const endStr = toISODate(endDate);

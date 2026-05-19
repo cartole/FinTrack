@@ -36,6 +36,13 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import {
+  AreaChart,
+  Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
   Building2,
   RefreshCw,
   Loader2,
@@ -518,7 +525,7 @@ export function FixedTermCalculator() {
             <div>
               <h4 className="text-xs font-semibold mb-2">Evolución del interés acumulado</h4>
               <ChartContainer config={depositChartConfig} className="h-[200px] w-full">
-                <area-chart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="fillNet" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
@@ -555,7 +562,7 @@ export function FixedTermCalculator() {
                     strokeWidth={2}
                     dot={false}
                   />
-                </area-chart>
+                </AreaChart>
               </ChartContainer>
             </div>
 
@@ -672,11 +679,3 @@ export function FixedTermCalculator() {
   );
 }
 
-// Recharts imports
-import {
-  AreaChart,
-  Area,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";

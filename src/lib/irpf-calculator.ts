@@ -18,7 +18,7 @@ import type { IRPFProfile, IRPFResult, IRPFBracket } from "./types";
 
 interface BracketDefinition {
   from: number;
-  to: number; // null = sin límite
+  to: number | null; // null = sin límite
   stateRate: number;
   autonomousRate: number;
   combinedRate: number;
@@ -304,7 +304,7 @@ function calculateAutonomoEstimates(
     irpfRate = 30;
   }
 
-  const annualIRPFWithholding = Math.round(netIncome * (irpfRate / 100) * 100) / 100;
+  const annualIRPFWithholding = Math.max(0, Math.round(Math.max(0, netIncome) * (irpfRate / 100) * 100) / 100);
   const quarterlyIRPF = Math.round((annualIRPFWithholding / 4) * 100) / 100;
 
   return { quarterlyVAT, quarterlyIRPF, annualIRPFWithholding };
@@ -416,7 +416,7 @@ export function calculateIRPF(profile: IRPFProfile): IRPFResult {
 
   // 5. Base imponible = rendimiento neto reducido + otras rentas
   // Simplificación: solo rendimientos del trabajo
-  const taxableBase = Math.max(0, reducedNetWorkIncome + otherDeductions);
+  const taxableBase = Math.max(0, reducedNetWorkIncome - otherDeductions);
 
   // 6. Mínimo personal y familiar
   const minimumPersonal = calculateMinimumPersonal(age);

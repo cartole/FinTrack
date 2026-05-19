@@ -246,7 +246,7 @@ export function SavingsGoals() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label>Monto objetivo ($)</Label>
+                <Label>Monto objetivo (€)</Label>
                 <Input
                   type="number"
                   placeholder="3000"
@@ -255,7 +255,7 @@ export function SavingsGoals() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Ya ahorrado ($)</Label>
+                <Label>Ya ahorrado (€)</Label>
                 <Input
                   type="number"
                   placeholder="0"

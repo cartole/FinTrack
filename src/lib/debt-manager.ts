@@ -231,20 +231,14 @@ export function generateGlobalDebtPlan(
         const principal = payment - interest;
 
         if (principal >= balance) {
-          // Se paga completamente
-          const lastPayment = balance + interest;
-          totalInterest -= interest; // Ajustar
-          totalInterestByDebt.set(
-            debt.id,
-            (totalInterestByDebt.get(debt.id) ?? 0) - interest
-          );
-          totalInterest += interest; // Volver a sumar correctamente
+          // Se paga completamente - recover surplus for next debt
+          remainingExtra = principal - balance;
           paidOffMonths.set(debt.id, totalMonths);
           balances.set(debt.id, 0);
         } else {
           balances.set(debt.id, balance - principal);
+          remainingExtra = 0;
         }
-        remainingExtra = 0;
       } else {
         // Solo pago mínimo
         const payment = debt.minimumPayment;

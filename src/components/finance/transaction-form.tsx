@@ -166,7 +166,7 @@ export function TransactionForm() {
           {/* Monto */}
           <div className="space-y-2">
             <Label htmlFor="amount" className="text-sm font-medium">
-              Monto ($)
+              Monto (€)
             </Label>
             <Input
               id="amount"

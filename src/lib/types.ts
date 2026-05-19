@@ -313,7 +313,7 @@ export interface IRPFProfile {
 /** Tramo del IRPF */
 export interface IRPFBracket {
   from: number;
-  to: number;
+  to: number | null;
   rate: number;
   stateRate: number;
   autonomousRate: number;
