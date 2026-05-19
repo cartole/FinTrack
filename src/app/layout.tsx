@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,12 +13,49 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#10b981",
+};
+
 export const metadata: Metadata = {
   title: "FinTrack - Finanzas Personales Inteligentes",
-  description: "Gestiona tus finanzas personales con IA. Control de gastos, metas de ahorro y planes personalizados.",
-  keywords: ["finanzas personales", "ahorro", "presupuesto", "IA", "fintech", "gastos", "ingresos"],
+  description:
+    "Gestiona tus finanzas personales con IA. Presupuestos, deudas, suscripciones, IRPF, alertas inteligentes y planes personalizados. Disponible en iOS, Android y PC.",
+  keywords: [
+    "finanzas personales",
+    "ahorro",
+    "presupuesto",
+    "IRPF",
+    "deudas",
+    "suscripciones",
+    "IA",
+    "fintech",
+    "gastos",
+    "ingresos",
+  ],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "FinTrack",
+  },
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icon-192.png" }],
+  },
+  openGraph: {
+    title: "FinTrack - Finanzas Personales Inteligentes",
+    description:
+      "Tu asistente financiero personal con IA. Presupuestos, deudas, suscripciones, IRPF y más.",
+    type: "website",
+    locale: "es_ES",
   },
 };
 
@@ -28,7 +65,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js').catch(() => {});
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

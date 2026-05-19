@@ -4,6 +4,7 @@
  * ============================================
  * Barra lateral con navegación entre secciones.
  * Responsive: colapsa en móvil con Sheet.
+ * Scrollable cuando hay muchas secciones.
  */
 
 "use client";
@@ -22,6 +23,14 @@ import {
   Landmark,
   BarChart3,
   DollarSign,
+  PieChart,
+  CreditCard,
+  Repeat,
+  Bell,
+  CalendarDays,
+  Calculator,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,16 +40,44 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
 
-const navItems = [
-  { id: "dashboard", label: "Panel Principal", icon: LayoutDashboard },
-  { id: "transactions", label: "Transacciones", icon: ArrowLeftRight },
-  { id: "goals", label: "Metas de Ahorro", icon: Target },
-  { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
-  { id: "investments", label: "Inversiones", icon: BarChart3 },
-  { id: "fixed-term", label: "Plazo Fijo", icon: Landmark },
-  { id: "extra-income", label: "Ingreso Extra IA", icon: DollarSign },
-  { id: "ai-advisor", label: "Asesor IA", icon: Brain },
+const navSections = [
+  {
+    title: "General",
+    items: [
+      { id: "dashboard", label: "Panel Principal", icon: LayoutDashboard },
+      { id: "transactions", label: "Transacciones", icon: ArrowLeftRight },
+    ],
+  },
+  {
+    title: "Planificación",
+    items: [
+      { id: "budgets", label: "Presupuestos", icon: PieChart },
+      { id: "goals", label: "Metas de Ahorro", icon: Target },
+      { id: "debts", label: "Deudas", icon: CreditCard },
+      { id: "subscriptions", label: "Suscripciones", icon: Repeat },
+    ],
+  },
+  {
+    title: "Herramientas",
+    items: [
+      { id: "investments", label: "Inversiones", icon: BarChart3 },
+      { id: "fixed-term", label: "Plazo Fijo", icon: Landmark },
+      { id: "irpf", label: "Estimador IRPF", icon: Calculator },
+      { id: "calendar", label: "Calendario", icon: CalendarDays },
+    ],
+  },
+  {
+    title: "IA & Alertas",
+    items: [
+      { id: "alerts", label: "Alertas", icon: Bell },
+      { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
+      { id: "extra-income", label: "Ingreso Extra IA", icon: DollarSign },
+      { id: "ai-advisor", label: "Asesor IA", icon: Brain },
+    ],
+  },
 ];
 
 function NavItem({
@@ -60,7 +97,7 @@ function NavItem({
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+        "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
         active
           ? "bg-primary text-primary-foreground shadow-sm"
           : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -81,7 +118,7 @@ function Logo() {
       <div>
         <h1 className="text-base font-bold tracking-tight">FinTrack</h1>
         <p className="text-[10px] text-muted-foreground leading-none">
- Finanzas Personales
+          Finanzas Personales
         </p>
       </div>
     </div>
@@ -90,32 +127,63 @@ function Logo() {
 
 function NavContent() {
   const { activeTab, setActiveTab } = useFinanceStore();
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+
+  const toggleSection = (title: string) => {
+    setCollapsedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
+      return next;
+    });
+  };
 
   return (
     <div className="flex flex-col h-full">
       <Logo />
       <Separator className="my-3" />
-      <nav className="flex flex-col gap-1 px-2">
-        {navItems.map((item) => (
-          <NavItem
-            key={item.id}
-            id={item.id}
-            label={item.label}
-            icon={item.icon}
-            active={activeTab === item.id}
-            onClick={() => setActiveTab(item.id)}
-          />
-        ))}
-      </nav>
-      <div className="mt-auto px-2 pb-4">
+      <ScrollArea className="flex-1 px-2">
+        <nav className="flex flex-col gap-1 pb-4">
+          {navSections.map((section) => (
+            <div key={section.title}>
+              <button
+                onClick={() => toggleSection(section.title)}
+                className="flex items-center justify-between w-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70 hover:text-muted-foreground"
+              >
+                {section.title}
+                {collapsedSections.has(section.title) ? (
+                  <ChevronRight className="h-3 w-3" />
+                ) : (
+                  <ChevronDown className="h-3 w-3" />
+                )}
+              </button>
+              {!collapsedSections.has(section.title) && (
+                <div className="flex flex-col gap-0.5 mb-2">
+                  {section.items.map((item) => (
+                    <NavItem
+                      key={item.id}
+                      id={item.id}
+                      label={item.label}
+                      icon={item.icon}
+                      active={activeTab === item.id}
+                      onClick={() => setActiveTab(item.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+      </ScrollArea>
+      <div className="px-2 pb-4">
         <Separator className="mb-3" />
         <div className="rounded-lg bg-muted/50 p-3">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-4 w-4 text-emerald-500" />
-            <span className="text-xs font-semibold">Pro Tip</span>
+            <span className="text-xs font-semibold">FinTrack PWA</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            IA que detecta si necesitas ingresos extra y te dice cómo conseguirlos. Datos reales actualizados.
+            Instala la app en iOS, Android o PC para acceso rápido desde tu pantalla de inicio.
           </p>
         </div>
       </div>

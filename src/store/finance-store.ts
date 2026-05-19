@@ -3,12 +3,19 @@
  * Store de Finanzas - Zustand State Management
  * ============================================
  * Estado global de la aplicación con Zustand.
- * Gestiona transacciones, metas de ahorro y UI.
+ * Gestiona transacciones, metas, presupuestos, deudas, suscripciones.
  */
 
 import { create } from "zustand";
-import { Transaction, SavingsGoal, SavingsPlan } from "@/lib/types";
-import { mockTransactions, mockSavingsGoals } from "@/lib/mock-data";
+import {
+  Transaction,
+  SavingsGoal,
+  SavingsPlan,
+  Budget,
+  Debt,
+  Subscription,
+} from "@/lib/types";
+import { mockTransactions, mockSavingsGoals, mockBudgets, mockSubscriptions, mockDebts } from "@/lib/mock-data";
 import { generateSavingsPlan } from "@/lib/savings-planner";
 
 /** Genera un ID único simple */
@@ -18,10 +25,19 @@ function generateId(): string {
 
 /** Estado de la aplicación financiera */
 interface FinanceState {
-  // ---- Datos ----
+  // ---- Datos principales ----
   transactions: Transaction[];
   savingsGoals: SavingsGoal[];
   currentSavingsPlan: SavingsPlan | null;
+
+  // ---- Presupuestos ----
+  budgets: Budget[];
+
+  // ---- Deudas ----
+  debts: Debt[];
+
+  // ---- Suscripciones ----
+  subscriptions: Subscription[];
 
   // ---- UI State ----
   isFormOpen: boolean;
@@ -41,6 +57,21 @@ interface FinanceState {
   // ---- Acciones de IA ----
   generatePlan: (goalId: string) => void;
 
+  // ---- Acciones de Presupuestos ----
+  addBudget: (budget: Omit<Budget, "id" | "createdAt">) => void;
+  updateBudget: (id: string, monthlyLimit: number) => void;
+  deleteBudget: (id: string) => void;
+
+  // ---- Acciones de Deudas ----
+  addDebt: (debt: Omit<Debt, "id" | "createdAt">) => void;
+  updateDebt: (id: string, updates: Partial<Omit<Debt, "id" | "createdAt">>) => void;
+  deleteDebt: (id: string) => void;
+
+  // ---- Acciones de Suscripciones ----
+  addSubscription: (sub: Omit<Subscription, "id" | "createdAt">) => void;
+  updateSubscription: (id: string, updates: Partial<Omit<Subscription, "id" | "createdAt">>) => void;
+  deleteSubscription: (id: string) => void;
+
   // ---- Acciones de UI ----
   setFormOpen: (open: boolean) => void;
   setSavingsPlanOpen: (open: boolean) => void;
@@ -59,6 +90,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   transactions: mockTransactions,
   savingsGoals: mockSavingsGoals,
   currentSavingsPlan: null,
+  budgets: mockBudgets,
+  debts: mockDebts,
+  subscriptions: mockSubscriptions,
 
   isFormOpen: false,
   isSavingsPlanOpen: false,
@@ -123,6 +157,81 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
     set({ currentSavingsPlan: plan, isSavingsPlanOpen: true });
   },
+
+  // ---- Presupuestos ----
+  addBudget: (budget) =>
+    set((state) => ({
+      budgets: [
+        ...state.budgets.filter((b) => b.category !== budget.category),
+        {
+          ...budget,
+          id: generateId(),
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    })),
+
+  updateBudget: (id, monthlyLimit) =>
+    set((state) => ({
+      budgets: state.budgets.map((b) =>
+        b.id === id ? { ...b, monthlyLimit } : b
+      ),
+    })),
+
+  deleteBudget: (id) =>
+    set((state) => ({
+      budgets: state.budgets.filter((b) => b.id !== id),
+    })),
+
+  // ---- Deudas ----
+  addDebt: (debt) =>
+    set((state) => ({
+      debts: [
+        ...state.debts,
+        {
+          ...debt,
+          id: generateId(),
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    })),
+
+  updateDebt: (id, updates) =>
+    set((state) => ({
+      debts: state.debts.map((d) =>
+        d.id === id ? { ...d, ...updates } : d
+      ),
+    })),
+
+  deleteDebt: (id) =>
+    set((state) => ({
+      debts: state.debts.filter((d) => d.id !== id),
+    })),
+
+  // ---- Suscripciones ----
+  addSubscription: (sub) =>
+    set((state) => ({
+      subscriptions: [
+        ...state.subscriptions,
+        {
+          ...sub,
+          id: generateId(),
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    })),
+
+  updateSubscription: (id, updates) =>
+    set((state) => ({
+      subscriptions: state.subscriptions.map((s) =>
+        s.id === id ? { ...s, ...updates } : s
+      ),
+    })),
+
+  deleteSubscription: (id) =>
+    set((state) => ({
+      subscriptions: state.subscriptions.filter((s) => s.id !== id),
+    })),
 
   // ---- UI ----
   setFormOpen: (open) => set({ isFormOpen: open }),

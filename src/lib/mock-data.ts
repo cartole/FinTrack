@@ -6,7 +6,7 @@
  * Incluye 6 meses de historial de transacciones.
  */
 
-import { Transaction, SavingsGoal } from "./types";
+import { Transaction, SavingsGoal, Budget, Debt, Subscription } from "./types";
 
 /** Genera un ID único simple */
 function generateId(): string {
@@ -162,5 +162,139 @@ export const mockSavingsGoals: SavingsGoal[] = [
     currentAmount: 400,
     deadline: createDate(2027, 3, 1),
     createdAt: createDate(2026, 3, 1),
+  },
+];
+
+/** Presupuestos mensuales de ejemplo */
+export const mockBudgets: Budget[] = [
+  { id: generateId(), category: "comida", monthlyLimit: 350, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "ocio", monthlyLimit: 150, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "transporte", monthlyLimit: 100, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "ropa", monthlyLimit: 200, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "suscripciones", monthlyLimit: 60, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "salud", monthlyLimit: 150, createdAt: createDate(2026, 1, 1) },
+  { id: generateId(), category: "educacion", monthlyLimit: 200, createdAt: createDate(2026, 1, 1) },
+];
+
+/** Deudas de ejemplo */
+export const mockDebts: Debt[] = [
+  {
+    id: generateId(),
+    name: "Préstamo personal Banco Santander",
+    type: "prestamo_personal",
+    totalAmount: 8000,
+    currentBalance: 6500,
+    interestRate: 8.5,
+    minimumPayment: 250,
+    dueDay: 15,
+    startDate: createDate(2025, 6, 15),
+    endDate: createDate(2028, 6, 15),
+    createdAt: createDate(2025, 6, 15),
+  },
+  {
+    id: generateId(),
+    name: "Tarjeta Visa Gold",
+    type: "tarjeta_credito",
+    totalAmount: 3200,
+    currentBalance: 2100,
+    interestRate: 19.9,
+    minimumPayment: 85,
+    dueDay: 5,
+    startDate: createDate(2025, 3, 5),
+    createdAt: createDate(2025, 3, 5),
+  },
+  {
+    id: generateId(),
+    name: "Préstamo coche",
+    type: "prestamo_auto",
+    totalAmount: 12000,
+    currentBalance: 9800,
+    interestRate: 6.5,
+    minimumPayment: 320,
+    dueDay: 20,
+    startDate: createDate(2025, 1, 20),
+    endDate: createDate(2029, 1, 20),
+    createdAt: createDate(2025, 1, 20),
+  },
+];
+
+/** Suscripciones de ejemplo */
+export const mockSubscriptions: Subscription[] = [
+  {
+    id: generateId(),
+    name: "Netflix",
+    amount: 12.99,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 10),
+    category: "suscripciones",
+    isActive: true,
+    startDate: createDate(2024, 3, 10),
+    createdAt: createDate(2024, 3, 10),
+  },
+  {
+    id: generateId(),
+    name: "Spotify Premium",
+    amount: 10.99,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 10),
+    category: "suscripciones",
+    isActive: true,
+    startDate: createDate(2024, 1, 10),
+    createdAt: createDate(2024, 1, 10),
+  },
+  {
+    id: generateId(),
+    name: "Gimnasio FitLife",
+    amount: 39.99,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 1),
+    category: "salud",
+    isActive: true,
+    startDate: createDate(2025, 9, 1),
+    createdAt: createDate(2025, 9, 1),
+  },
+  {
+    id: generateId(),
+    name: "iCloud+ 200GB",
+    amount: 3.49,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 15),
+    category: "suscripciones",
+    isActive: true,
+    startDate: createDate(2024, 6, 15),
+    createdAt: createDate(2024, 6, 15),
+  },
+  {
+    id: generateId(),
+    name: "Amazon Prime",
+    amount: 49.90,
+    billingCycle: "anual",
+    nextBillingDate: createDate(2026, 11, 5),
+    category: "suscripciones",
+    isActive: true,
+    startDate: createDate(2024, 11, 5),
+    createdAt: createDate(2024, 11, 5),
+  },
+  {
+    id: generateId(),
+    name: "Disney+",
+    amount: 8.99,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 22),
+    category: "suscripciones",
+    isActive: true,
+    startDate: createDate(2025, 1, 22),
+    createdAt: createDate(2025, 1, 22),
+  },
+  {
+    id: generateId(),
+    name: "Adobe Creative Cloud",
+    amount: 54.99,
+    billingCycle: "mensual",
+    nextBillingDate: createDate(2026, 6, 3),
+    category: "educacion",
+    isActive: true,
+    startDate: createDate(2025, 3, 3),
+    createdAt: createDate(2025, 3, 3),
   },
 ];

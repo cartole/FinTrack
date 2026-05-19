@@ -6,6 +6,12 @@
  * - Dashboard con balance y gráficas
  * - Gestión de transacciones
  * - Metas de ahorro
+ * - Presupuestos mensuales
+ * - Gestor de deudas
+ * - Rastreador de suscripciones
+ * - Calendario de pagos
+ * - Alertas inteligentes
+ * - Estimador IRPF
  * - Asesor IA para planes de ahorro
  */
 
@@ -20,6 +26,12 @@ import { EmergencyAdvisor } from "@/components/finance/emergency-advisor";
 import { InvestmentCalculator } from "@/components/finance/investment-calculator";
 import { FixedTermCalculator } from "@/components/finance/fixed-term-calculator";
 import { ExtraIncomeAdvisor } from "@/components/finance/extra-income-advisor";
+import { BudgetPlanner } from "@/components/finance/budget-planner";
+import { DebtManager } from "@/components/finance/debt-manager";
+import { SubscriptionTracker } from "@/components/finance/subscription-tracker";
+import { SmartAlerts } from "@/components/finance/smart-alerts";
+import { PaymentCalendar } from "@/components/finance/payment-calendar";
+import { IRPFCalculator } from "@/components/finance/irpf-calculator";
 import { TransactionForm } from "@/components/finance/transaction-form";
 import { SavingsPlanDisplay } from "@/components/finance/savings-plan-display";
 import { useFinanceStore } from "@/store/finance-store";
@@ -34,12 +46,24 @@ function ActiveTab() {
       return <TransactionList />;
     case "goals":
       return <SavingsGoals />;
+    case "budgets":
+      return <BudgetPlanner />;
+    case "debts":
+      return <DebtManager />;
+    case "subscriptions":
+      return <SubscriptionTracker />;
     case "emergency":
       return <EmergencyAdvisor />;
     case "investments":
       return <InvestmentCalculator />;
     case "fixed-term":
       return <FixedTermCalculator />;
+    case "irpf":
+      return <IRPFCalculator />;
+    case "calendar":
+      return <PaymentCalendar />;
+    case "alerts":
+      return <SmartAlerts />;
     case "extra-income":
       return <ExtraIncomeAdvisor />;
     case "ai-advisor":

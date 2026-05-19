@@ -78,3 +78,41 @@ Stage Summary:
 - New feature integrates seamlessly with existing app architecture
 - AI engine follows same pattern as savings-planner.ts and emergency-advisor.ts
 - Feature only activates when financial situation is bad (as requested)
+---
+Task ID: 8
+Agent: Main Agent
+Task: Add 6 new features + PWA support for iOS/Android/PC
+
+Work Log:
+- Updated types.ts with all new types: Budget, BudgetStatus, Debt, DebtType, DebtStrategy, DebtPayoffPlan, GlobalDebtPlan, Subscription, BillingCycle, SubscriptionSummary, SmartAlert, AlertType, AlertSeverity, CalendarEvent, CalendarEventType, IRPFProfile, IRPFResult, IRPFBracket, FamilySituation, DisabilityDegree, FamilyType, WorkerType, DEBT_TYPE_CONFIG, ALERT_TYPE_CONFIG
+- Updated finance-store.ts with new state: budgets, debts, subscriptions, and all CRUD actions
+- Updated mock-data.ts with mock budgets (7), mock debts (3), mock subscriptions (7)
+- Updated sidebar.tsx with sectioned navigation (General, Planificación, Herramientas, IA & Alertas) with collapsible sections and scrollable nav
+- Updated page.tsx with all 14 tab routes
+- Created PWA setup: manifest.json, sw.js service worker, icon-192.png, icon-512.png
+- Updated layout.tsx with PWA meta tags, Apple Web App config, service worker registration, viewport config
+
+Subagent A created:
+- src/lib/budget-manager.ts (calculateBudgetStatus, generateBudgetRecommendations)
+- src/components/finance/budget-planner.tsx (full budget management UI)
+- src/lib/smart-alerts.ts (generateSmartAlerts with 6 alert types)
+- src/components/finance/smart-alerts.tsx (alert dashboard with severity grouping)
+
+Subagent B created:
+- src/lib/debt-manager.ts (calculateDebtPayoff, generateGlobalDebtPlan, compareStrategies)
+- src/components/finance/debt-manager.tsx (debt management with snowball/avalanche)
+- src/lib/subscription-tracker.ts (calculateSubscriptionSummary, detectSubscriptionFromTransactions)
+- src/components/finance/subscription-tracker.tsx (subscription tracker with AI detection)
+
+Subagent C created:
+- src/lib/irpf-calculator.ts (complete Spanish IRPF 2025 calculator with all deductions)
+- src/components/finance/irpf-calculator.tsx (10-step wizard with full results)
+- src/lib/payment-calendar.ts (generateCalendarEvents, getEventsForMonth/Date)
+- src/components/finance/payment-calendar.tsx (calendar grid with event types)
+
+Stage Summary:
+- Build succeeds with no errors
+- 14 navigation sections total
+- PWA-ready for iOS, Android, and PC installation
+- All 6 new features implemented: Budget Planner, Debt Manager, Subscription Tracker, Smart Alerts, Payment Calendar, IRPF Calculator
+- IRPF calculator covers: all tax brackets, mínimo personal/familiar, discapacidad, familia numerosa, reducción por trabajo, autónomo IVA/IRPF estimates
