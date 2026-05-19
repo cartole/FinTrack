@@ -19,6 +19,7 @@ import { AIAdvisor } from "@/components/finance/ai-advisor";
 import { EmergencyAdvisor } from "@/components/finance/emergency-advisor";
 import { InvestmentCalculator } from "@/components/finance/investment-calculator";
 import { FixedTermCalculator } from "@/components/finance/fixed-term-calculator";
+import { ExtraIncomeAdvisor } from "@/components/finance/extra-income-advisor";
 import { TransactionForm } from "@/components/finance/transaction-form";
 import { SavingsPlanDisplay } from "@/components/finance/savings-plan-display";
 import { useFinanceStore } from "@/store/finance-store";
@@ -39,6 +40,8 @@ function ActiveTab() {
       return <InvestmentCalculator />;
     case "fixed-term":
       return <FixedTermCalculator />;
+    case "extra-income":
+      return <ExtraIncomeAdvisor />;
     case "ai-advisor":
       return <AIAdvisor />;
     default:

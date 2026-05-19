@@ -47,3 +47,34 @@ Stage Summary:
 - Investment calculator with compound interest, 4 risk scenarios, ETF comparison
 - Fixed-term calculator with real bank rates, tax withholding (19%), net interest calculation
 - All values in EUR with European number formatting
+---
+Task ID: 7
+Agent: Main Agent
+Task: Add AI Extra Income Advisor feature to FinTrack
+
+Work Log:
+- Created /src/lib/extra-income-advisor.ts with complete AI logic engine
+  - Financial diagnosis: urgency scoring (0-100), savings rate, deficit calculation
+  - 10 income suggestion categories with detailed steps, platforms, pros/cons
+  - Action plan generator (4-week timeline)
+  - Stabilization timeline calculator
+  - Only suggests extra income when finances are bad (urgency > "estable")
+- Created /src/components/finance/extra-income-advisor.tsx with full UI
+  - Analyze button with loading animation
+  - Diagnosis card with urgency badge and key metrics
+  - Conditional display: shows income suggestions only when needed
+  - Expandable income suggestion cards with steps, platforms, requirements, pros/cons
+  - 4-week action plan timeline
+  - Coverage progress bar
+  - Smart advice section
+- Updated /src/components/layout/sidebar.tsx
+  - Added "Ingreso Extra IA" with DollarSign icon
+  - Updated Pro Tip text
+- Updated /src/app/page.tsx
+  - Added "extra-income" tab routing to ExtraIncomeAdvisor component
+
+Stage Summary:
+- Build succeeds with no errors
+- New feature integrates seamlessly with existing app architecture
+- AI engine follows same pattern as savings-planner.ts and emergency-advisor.ts
+- Feature only activates when financial situation is bad (as requested)

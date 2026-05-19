@@ -21,6 +21,7 @@ import {
   ShieldAlert,
   Landmark,
   BarChart3,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +39,7 @@ const navItems = [
   { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
   { id: "investments", label: "Inversiones", icon: BarChart3 },
   { id: "fixed-term", label: "Plazo Fijo", icon: Landmark },
+  { id: "extra-income", label: "Ingreso Extra IA", icon: DollarSign },
   { id: "ai-advisor", label: "Asesor IA", icon: Brain },
 ];
 
@@ -113,7 +115,7 @@ function NavContent() {
             <span className="text-xs font-semibold">Pro Tip</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            Datos de mercado reales en Inversiones y Plazo Fijo. Tasas actualizadas diariamente.
+            IA que detecta si necesitas ingresos extra y te dice cómo conseguirlos. Datos reales actualizados.
           </p>
         </div>
       </div>
