@@ -19,6 +19,8 @@ import {
   TrendingUp,
   Wallet,
   ShieldAlert,
+  Landmark,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +36,8 @@ const navItems = [
   { id: "transactions", label: "Transacciones", icon: ArrowLeftRight },
   { id: "goals", label: "Metas de Ahorro", icon: Target },
   { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
+  { id: "investments", label: "Inversiones", icon: BarChart3 },
+  { id: "fixed-term", label: "Plazo Fijo", icon: Landmark },
   { id: "ai-advisor", label: "Asesor IA", icon: Brain },
 ];
 
@@ -109,7 +113,7 @@ function NavContent() {
             <span className="text-xs font-semibold">Pro Tip</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            ¿Gasto imprevisto? Usa Gastos Imprevistos para saber cómo actuar y recuperar tu estabilidad.
+            Datos de mercado reales en Inversiones y Plazo Fijo. Tasas actualizadas diariamente.
           </p>
         </div>
       </div>

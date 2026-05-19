@@ -200,7 +200,7 @@ export function AIAdvisor() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label className="text-xs">Monto objetivo ($)</Label>
+                <Label className="text-xs">Monto objetivo (€)</Label>
                 <Input
                   type="number"
                   placeholder="3000"
