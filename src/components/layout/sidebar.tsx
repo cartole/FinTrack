@@ -18,6 +18,7 @@ import {
   Menu,
   TrendingUp,
   Wallet,
+  ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +33,7 @@ const navItems = [
   { id: "dashboard", label: "Panel Principal", icon: LayoutDashboard },
   { id: "transactions", label: "Transacciones", icon: ArrowLeftRight },
   { id: "goals", label: "Metas de Ahorro", icon: Target },
+  { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
   { id: "ai-advisor", label: "Asesor IA", icon: Brain },
 ];
 
@@ -107,7 +109,7 @@ function NavContent() {
             <span className="text-xs font-semibold">Pro Tip</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            Usa el Asesor IA para generar un plan de ahorro personalizado basado en tus gastos.
+            ¿Gasto imprevisto? Usa Gastos Imprevistos para saber cómo actuar y recuperar tu estabilidad.
           </p>
         </div>
       </div>
