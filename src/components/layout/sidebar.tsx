@@ -156,7 +156,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
         <Logo />
         <Separator className="my-3" />
       </div>
-      <ScrollArea className="flex-1 min-h-0 overflow-y-auto px-2" style={{ height: 'calc(100vh - 8rem)' }}>
+      <ScrollArea className="flex-1 min-h-0 overflow-y-auto px-2">
         <nav className="flex flex-col gap-1 pb-4">
           {navSections.map((section) => (
             <div key={section.title}>
@@ -218,7 +218,7 @@ export function Sidebar() {
       </aside>
 
       {/* Mobile sidebar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center gap-2 border-b bg-card px-4 py-3">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center gap-2 border-b bg-card px-4 py-3" style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0px))' }}>
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="shrink-0">
@@ -227,7 +227,7 @@ export function Sidebar() {
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0 h-full overflow-hidden">
             <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
-            <div className="h-full overflow-hidden">
+            <div className="h-full flex flex-col min-h-0 overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
               <NavContent onNavigate={() => setMobileOpen(false)} />
             </div>
           </SheetContent>

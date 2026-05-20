@@ -292,18 +292,18 @@ export function InvestmentCalculator() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-0">
             {marketIndices.length > 0 ? (
               marketIndices.map((index) => (
                 <div
                   key={index.name}
-                  className="rounded-lg border p-3 hover:bg-muted/50 transition-colors"
+                  className="rounded-lg border p-3 hover:bg-muted/50 transition-colors min-w-0 overflow-hidden"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-muted-foreground">{index.name}</span>
-                    <span className="text-[10px] text-muted-foreground">{index.currency}</span>
+                    <span className="text-xs font-medium text-muted-foreground truncate">{index.name}</span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">{index.currency}</span>
                   </div>
-                  <p className="text-lg font-bold">
+                  <p className="text-lg font-bold whitespace-nowrap">
                     {index.value.toLocaleString("es-ES", { minimumFractionDigits: 2 })}
                   </p>
                   <div className="flex items-center gap-1 mt-0.5">
@@ -645,9 +645,9 @@ export function InvestmentCalculator() {
               const finalValue = comparisonData[comparisonData.length - 1]?.[key] as number || 0;
               return (
                 <div key={scenario.label} className="rounded-lg border p-2 text-center min-w-0 overflow-hidden">
-                  <div className="flex items-center justify-center gap-1 mb-1">
-                    <div className="h-2 w-2 rounded-full" style={{ backgroundColor: scenario.color }} />
-                    <span className="text-[10px] font-semibold">{scenario.label}</span>
+                  <div className="flex items-center justify-center gap-1 mb-1 min-w-0 overflow-hidden">
+                    <div className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: scenario.color }} />
+                    <span className="text-[10px] font-semibold truncate min-w-0">{scenario.label}</span>
                   </div>
                   <p className="text-xs font-bold">{formatCurrency(finalValue)}</p>
                   <p className="text-[9px] text-muted-foreground">{scenario.annualReturn}% anual</p>

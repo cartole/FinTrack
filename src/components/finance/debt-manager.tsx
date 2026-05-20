@@ -350,7 +350,7 @@ export function DebtManager() {
                 </h3>
 
                 {/* Tabla comparativa con overflow controlado */}
-                <div className="rounded-lg border overflow-hidden overflow-x-auto">
+                <div className="rounded-lg border overflow-x-auto">
                   <div className="min-w-[280px]">
                     {/* Header */}
                     <div className="grid grid-cols-3 gap-1 p-2 bg-muted/70 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -377,21 +377,21 @@ export function DebtManager() {
                       <span className="text-center font-bold whitespace-nowrap">{formatCurrency(comparison.avalanche.totalDebt + comparison.avalanche.totalInterest)}</span>
                     </div>
                     {/* Primera deuda liquidada */}
-                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center min-w-0">
+                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center min-w-0 overflow-hidden">
                       <span className="text-muted-foreground font-medium whitespace-nowrap">1ª deuda</span>
-                      <span className="text-center truncate min-w-0">
+                      <span className="text-center truncate min-w-0 overflow-hidden">
                         {comparison.snowball.individualPlans.length > 0 && (
                           <>
-                            <span className="font-semibold">{comparison.snowball.debtsOrder[0]?.name}</span>
-                            <span className="text-muted-foreground ml-1">({comparison.snowball.individualPlans[0]?.monthsToPayoff} meses)</span>
+                            <span className="font-semibold truncate">{comparison.snowball.debtsOrder[0]?.name}</span>
+                            <span className="text-muted-foreground ml-1 whitespace-nowrap">({comparison.snowball.individualPlans[0]?.monthsToPayoff} meses)</span>
                           </>
                         )}
                       </span>
-                      <span className="text-center truncate min-w-0">
+                      <span className="text-center truncate min-w-0 overflow-hidden">
                         {comparison.avalanche.individualPlans.length > 0 && (
                           <>
-                            <span className="font-semibold">{comparison.avalanche.debtsOrder[0]?.name}</span>
-                            <span className="text-muted-foreground ml-1">({comparison.avalanche.individualPlans[0]?.monthsToPayoff} meses)</span>
+                            <span className="font-semibold truncate">{comparison.avalanche.debtsOrder[0]?.name}</span>
+                            <span className="text-muted-foreground ml-1 whitespace-nowrap">({comparison.avalanche.individualPlans[0]?.monthsToPayoff} meses)</span>
                           </>
                         )}
                       </span>

@@ -242,7 +242,7 @@ export function Settings() {
         onChange={handleFileChange}
       />
 
-      <ScrollArea className="max-h-[calc(100vh-12rem)]">
+      <ScrollArea className="flex-1 min-h-0">
         <div className="space-y-6 pr-2">
 
           {/* ============================================ */}

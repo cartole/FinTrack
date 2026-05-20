@@ -373,7 +373,7 @@ export function SubscriptionTracker() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="max-h-48">
+            <ScrollArea className="max-h-40 sm:max-h-48">
               <div className="space-y-2 pr-2">
                 {upcomingRenewals.map(({ subscription, daysUntil }) => (
                   <div
@@ -431,19 +431,19 @@ export function SubscriptionTracker() {
                     : 0;
 
                 return (
-                  <div key={category} className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                  <div key={category} className="space-y-1.5 min-w-0 overflow-hidden">
+                    <div className="flex items-center justify-between gap-2 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0 overflow-hidden">
                         <div
                           className="h-3 w-3 rounded-full shrink-0"
                           style={{
                             backgroundColor: catConfig?.color ?? "#6b7280",
                           }}
                         />
-                        <span className="text-xs font-medium">
+                        <span className="text-xs font-medium truncate min-w-0">
                           {catConfig?.label ?? category}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">
+                        <span className="text-[10px] text-muted-foreground shrink-0">
                           ({data.count})
                         </span>
                       </div>
@@ -723,14 +723,14 @@ export function SubscriptionTracker() {
                       className="space-y-1.5 min-w-0 overflow-hidden"
                     >
                       <div className="flex items-center justify-between gap-2 min-w-0">
-                        <span className="text-xs font-medium truncate min-w-0">
+                        <span className="text-xs font-medium truncate min-w-0 overflow-hidden">
                           {sub.name}
                         </span>
                         <span className="text-xs font-bold shrink-0 whitespace-nowrap">
                           {formatCurrency(annualCost)}/año
                         </span>
                       </div>
-                      <div className="h-5 rounded-full bg-muted overflow-hidden">
+                      <div className="h-5 rounded-full bg-muted overflow-hidden min-w-0">
                         <div
                           className={cn(
                             "h-full rounded-full flex items-center justify-end pr-2 bg-pink-500 transition-all overflow-hidden whitespace-nowrap",
@@ -739,7 +739,7 @@ export function SubscriptionTracker() {
                           style={{ width: `${Math.max(widthPercent, 8)}%` }}
                         >
                           {widthPercent > 20 && (
-                            <span className="text-[9px] font-bold text-white truncate">
+                            <span className="text-[9px] font-bold text-white truncate min-w-0">
                               {formatCurrency(annualCost)}
                             </span>
                           )}

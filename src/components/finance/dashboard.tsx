@@ -275,8 +275,8 @@ export function Dashboard() {
                     <ArrowDownRight className="h-3.5 w-3.5 text-rose-600" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium truncate">{tx.description}</p>
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <p className="text-xs font-medium truncate min-w-0 overflow-hidden">{tx.description}</p>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <Badge
                       variant="secondary"

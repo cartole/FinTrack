@@ -46,6 +46,8 @@
 :root {
   --radius: 0.625rem;
   --app-height: 100vh;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   /* Fintech theme - Clean white with emerald accents */
   --background: oklch(0.985 0.002 155);
   --foreground: oklch(0.145 0.005 155);
@@ -115,12 +117,21 @@
   --sidebar-ring: oklch(0.6 0.18 155);
 }
 
+/* iOS Safari height fix */
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --app-height: -webkit-fill-available;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
   .safe-area-pt {
     padding-top: max(5rem, env(safe-area-inset-top, 0px));
@@ -129,6 +140,9 @@
     .safe-area-pt {
       padding-top: 1.5rem;
     }
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

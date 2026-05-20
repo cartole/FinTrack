@@ -661,8 +661,8 @@ export function FixedTermCalculator() {
                   {idx + 1}
                 </div>
                 <div className="flex-1 min-w-0 overflow-hidden">
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <span className="text-sm font-medium truncate">{bank.bank}</span>
+                  <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+                    <span className="text-sm font-medium truncate min-w-0">{bank.bank}</span>
                     {idx === 0 && (
                       <Badge className="text-[9px] px-1.5 py-0 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 shrink-0">
                         Mejor opción

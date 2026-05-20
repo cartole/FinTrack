@@ -217,7 +217,7 @@ function CalendarGrid({
       <div className="grid grid-cols-7 gap-1">
         {cells.map((day, idx) => {
           if (day === null) {
-            return <div key={`empty-${idx}`} className="h-14 sm:h-16" />;
+            return <div key={`empty-${idx}`} className="h-12 sm:h-16" />;
           }
 
           const dayStr = String(day).padStart(2, "0");
@@ -232,7 +232,7 @@ function CalendarGrid({
               key={dateStr}
               onClick={() => onSelectDate(dateStr)}
               className={cn(
-                "h-14 sm:h-16 rounded-lg p-1 text-left transition-all relative group",
+                "h-12 sm:h-16 rounded-lg p-1 text-left transition-all relative group",
                 today && "ring-2 ring-primary ring-offset-1",
                 selected
                   ? "bg-primary/10 border border-primary"
@@ -248,12 +248,12 @@ function CalendarGrid({
                 {day}
               </span>
               {dayEvents.length > 0 && (
-                <div className="flex flex-wrap gap-0.5 mt-0.5">
+                <div className="flex flex-wrap gap-0.5 mt-0.5 overflow-hidden">
                   {dayEvents.slice(0, 3).map((ev, i) => (
                     <div
                       key={i}
                       className={cn(
-                        "h-1.5 w-1.5 rounded-full",
+                        "h-1.5 w-1.5 sm:h-1.5 sm:w-1.5 rounded-full shrink-0",
                         ev.type === "income" && "bg-emerald-500",
                         ev.type === "expense_recurring" && "bg-rose-500",
                         ev.type === "subscription" && "bg-pink-500",
