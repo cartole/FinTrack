@@ -32,6 +32,7 @@ import { SubscriptionTracker } from "@/components/finance/subscription-tracker";
 import { SmartAlerts } from "@/components/finance/smart-alerts";
 import { PaymentCalendar } from "@/components/finance/payment-calendar";
 import { IRPFCalculator } from "@/components/finance/irpf-calculator";
+import { Settings } from "@/components/finance/settings";
 import { TransactionForm } from "@/components/finance/transaction-form";
 import { SavingsPlanDisplay } from "@/components/finance/savings-plan-display";
 import { useFinanceStore } from "@/store/finance-store";
@@ -68,6 +69,8 @@ function ActiveTab() {
       return <ExtraIncomeAdvisor />;
     case "ai-advisor":
       return <AIAdvisor />;
+    case "settings":
+      return <Settings />;
     default:
       return <Dashboard />;
   }

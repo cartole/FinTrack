@@ -406,8 +406,8 @@ async function searchEuriborRates(zai: InstanceType<typeof ZAI>): Promise<Euribo
     console.error("Error fetching Euribor 3m:", error);
   }
 
-  // Fallback: usar web_search si page_reader falló
-  if (rates.length === 0) {
+  // Fallback: usar web_search si page_reader falló y faltan tasas
+  if (rates.length < 3) {
     try {
       const result = await zai.functions.invoke("web_search", {
         query: "Euribor valor actual hoy 12 meses 6 meses 3 meses 2026",
@@ -417,36 +417,44 @@ async function searchEuriborRates(zai: InstanceType<typeof ZAI>): Promise<Euribo
       if (Array.isArray(result)) {
         const allText = result.map((r: { snippet?: string }) => r.snippet || "").join(" ");
 
-        // Euribor 12 meses - buscar patrón más específico
-        const match12 = allText.match(/12\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i) ||
-                         allText.match(/(\d[.,]\d{3})\s*%[^]*12\s*meses/i);
-        if (match12) {
-          rates.push({
-            term: "12 meses",
-            rate: parseSpanishNumber(match12[1], "rate"),
-            lastUpdated: new Date().toISOString(),
-            source: "Web search",
-          });
+        // Euribor 12 meses - buscar si no lo tenemos
+        if (!rates.find(r => r.term === "12 meses")) {
+          const match12 = allText.match(/12\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i) ||
+                           allText.match(/(\d[.,]\d{3})\s*%[^]*12\s*meses/i);
+          if (match12) {
+            rates.push({
+              term: "12 meses",
+              rate: parseSpanishNumber(match12[1], "rate"),
+              lastUpdated: new Date().toISOString(),
+              source: "Web search",
+            });
+          }
         }
 
-        const match6 = allText.match(/6\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i);
-        if (match6) {
-          rates.push({
-            term: "6 meses",
-            rate: parseSpanishNumber(match6[1], "rate"),
-            lastUpdated: new Date().toISOString(),
-            source: "Web search",
-          });
+        // Euribor 6 meses
+        if (!rates.find(r => r.term === "6 meses")) {
+          const match6 = allText.match(/6\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i);
+          if (match6) {
+            rates.push({
+              term: "6 meses",
+              rate: parseSpanishNumber(match6[1], "rate"),
+              lastUpdated: new Date().toISOString(),
+              source: "Web search",
+            });
+          }
         }
 
-        const match3 = allText.match(/3\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i);
-        if (match3) {
-          rates.push({
-            term: "3 meses",
-            rate: parseSpanishNumber(match3[1], "rate"),
-            lastUpdated: new Date().toISOString(),
-            source: "Web search",
-          });
+        // Euribor 3 meses
+        if (!rates.find(r => r.term === "3 meses")) {
+          const match3 = allText.match(/3\s*meses[^]*?(\d[.,]\d{2,3})\s*%/i);
+          if (match3) {
+            rates.push({
+              term: "3 meses",
+              rate: parseSpanishNumber(match3[1], "rate"),
+              lastUpdated: new Date().toISOString(),
+              source: "Web search",
+            });
+          }
         }
       }
     } catch (error) {
@@ -455,13 +463,27 @@ async function searchEuriborRates(zai: InstanceType<typeof ZAI>): Promise<Euribo
   }
 
   // Valores por defecto basados en datos reales de mayo 2026
-  if (rates.length === 0) {
-    rates.push(
-      { term: "12 meses", rate: 2.821, lastUpdated: new Date().toISOString(), source: "Euribor-rates.eu (cache)" },
-      { term: "6 meses", rate: 2.730, lastUpdated: new Date().toISOString(), source: "Euribor-rates.eu (cache)" },
-      { term: "3 meses", rate: 2.650, lastUpdated: new Date().toISOString(), source: "Euribor-rates.eu (cache)" }
-    );
+  // Asegurar SIEMPRE que tenemos 12 meses y 6 meses (los más importantes)
+  const defaults = [
+    { term: "12 meses", rate: 2.821, source: "Euribor-rates.eu (cache)" },
+    { term: "6 meses", rate: 2.730, source: "Euribor-rates.eu (cache)" },
+    { term: "3 meses", rate: 2.650, source: "Euribor-rates.eu (cache)" },
+  ];
+
+  for (const def of defaults) {
+    if (!rates.find(r => r.term === def.term)) {
+      rates.push({
+        term: def.term,
+        rate: def.rate,
+        lastUpdated: new Date().toISOString(),
+        source: def.source,
+      });
+    }
   }
+
+  // Ordenar: 12 meses primero, luego 6, luego 3
+  const termOrder = ["12 meses", "6 meses", "3 meses"];
+  rates.sort((a, b) => termOrder.indexOf(a.term) - termOrder.indexOf(b.term));
 
   return rates;
 }

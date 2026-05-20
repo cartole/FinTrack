@@ -109,7 +109,7 @@ function EventCard({ event }: { event: CalendarEvent }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm overflow-hidden",
+        "flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm overflow-hidden min-w-0",
         config.bgColor
       )}
     >

@@ -31,6 +31,7 @@ import {
   Calculator,
   ChevronDown,
   ChevronRight,
+  Settings2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -76,6 +77,12 @@ const navSections = [
       { id: "emergency", label: "Gastos Imprevistos", icon: ShieldAlert },
       { id: "extra-income", label: "Ingreso Extra IA", icon: DollarSign },
       { id: "ai-advisor", label: "Asesor IA", icon: Brain },
+    ],
+  },
+  {
+    title: "Sistema",
+    items: [
+      { id: "settings", label: "Configuración", icon: Settings2 },
     ],
   },
 ];

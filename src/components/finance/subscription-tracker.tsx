@@ -519,11 +519,11 @@ export function SubscriptionTracker() {
                   return (
                     <div
                       key={sub.id}
-                      className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden"
+                      className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden min-w-0"
                     >
                       <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm font-medium truncate max-w-[160px]">
+                        <div className="flex items-center gap-2 flex-wrap overflow-hidden">
+                          <span className="text-sm font-medium truncate max-w-[160px] min-w-0">
                             {sub.name}
                           </span>
                           <Badge
@@ -718,9 +718,12 @@ export function SubscriptionTracker() {
                     maxAnnual > 0 ? (annualCost / maxAnnual) * 100 : 0;
 
                   return (
-                    <div key={sub.id} className="space-y-1.5 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-medium truncate">
+                    <div
+                      key={sub.id}
+                      className="space-y-1.5 min-w-0 overflow-hidden"
+                    >
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <span className="text-xs font-medium truncate min-w-0">
                           {sub.name}
                         </span>
                         <span className="text-xs font-bold shrink-0 whitespace-nowrap">

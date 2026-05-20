@@ -140,10 +140,17 @@ export function calculateDebtPayoff(
  * Genera un plan global de pago de deudas según la estrategia elegida.
  *
  * "bola_nieve" (snowball): pagar mínimos en todas, extra va a la
- *   deuda MÁS PEQUEÑA primero (motivacional).
+ *   deuda MÁS PEQUEÑA primero (motivacional). Al liquidar una deuda,
+ *   su pago mínimo se suma al extra para la siguiente.
  *
  * "avalancha" (avalanche): pagar mínimos en todas, extra va a la
- *   deuda con MAYOR INTERÉS primero (óptimo matemático).
+ *   deuda con MAYOR INTERÉS primero (óptimo matemático). Al liquidar
+ *   una deuda, su pago mínimo se suma al extra para la siguiente.
+ *
+ * La clave de ambas estrategias es el EFECTO CASCADA: cuando una deuda
+ * se liquida, su pago mínimo se libera y se añade al extra, acelerando
+ * el pago de las deudas restantes. Esto produce resultados diferentes
+ * según el orden de ataque elegido.
  */
 export function generateGlobalDebtPlan(
   debts: Debt[],
@@ -174,8 +181,11 @@ export function generateGlobalDebtPlan(
   // Ordenar deudas según estrategia
   const sortedDebts = [...debts].sort((a, b) => {
     if (strategy === "bola_nieve") {
-      // Menor balance primero
-      return a.currentBalance - b.currentBalance;
+      // Menor balance primero; si hay empate, mayor interés
+      if (a.currentBalance !== b.currentBalance) {
+        return a.currentBalance - b.currentBalance;
+      }
+      return b.interestRate - a.interestRate;
     } else {
       // Mayor interés primero; si hay empate, menor balance
       if (b.interestRate !== a.interestRate) {
@@ -185,10 +195,12 @@ export function generateGlobalDebtPlan(
     }
   });
 
-  // Simular mes a mes el plan global
+  // Simular mes a mes el plan global con efecto cascada
   const balances = new Map<string, number>();
   const paidOffMonths = new Map<string, number>();
   const totalInterestByDebt = new Map<string, number>();
+  // Rastrear deudas liquidadas para liberar sus pagos mínimos
+  const paidOffDebts = new Set<string>();
 
   for (const debt of debts) {
     balances.set(debt.id, debt.currentBalance);
@@ -198,21 +210,28 @@ export function generateGlobalDebtPlan(
   let totalInterest = 0;
   let totalMonths = 0;
   const maxMonths = 600;
-  const now = new Date();
 
   while (totalMonths < maxMonths) {
     totalMonths++;
 
-    // Determinar qué deudas siguen vivas y cuál es la prioritaria
+    // Determinar qué deudas siguen vivas
     const activeDebts = sortedDebts.filter(
       (d) => (balances.get(d.id) ?? 0) > 0
     );
     if (activeDebts.length === 0) break;
 
-    const targetDebt = activeDebts[0]; // Primera según estrategia
+    // El target es la primera deuda activa según la estrategia
+    const targetDebt = activeDebts[0];
 
-    // Distribuir pagos: mínimos a todas, extra al target
-    let remainingExtra = extraAmount;
+    // Calcular el extra disponible: el extra del usuario + los mínimos liberados
+    // de deudas ya liquidadas (EFECTO CASCADA)
+    const freedMinimums = sortedDebts
+      .filter((d) => paidOffDebts.has(d.id))
+      .reduce((sum, d) => sum + d.minimumPayment, 0);
+    const availableExtra = extraAmount + freedMinimums;
+
+    // Distribuir pagos: mínimos a todas las activas, extra al target
+    let remainingExtra = availableExtra;
 
     for (const debt of activeDebts) {
       const balance = balances.get(debt.id) ?? 0;
@@ -226,14 +245,15 @@ export function generateGlobalDebtPlan(
       totalInterest += interest;
 
       if (debt.id === targetDebt.id) {
-        // Pago mínimo + todo el extra disponible
-        let payment = debt.minimumPayment + remainingExtra;
+        // Pago mínimo + todo el extra disponible (incluyendo cascada)
+        const payment = debt.minimumPayment + remainingExtra;
         const principal = payment - interest;
 
         if (principal >= balance) {
-          // Se paga completamente - recover surplus for next debt
+          // Se paga completamente
           remainingExtra = principal - balance;
           paidOffMonths.set(debt.id, totalMonths);
+          paidOffDebts.add(debt.id);
           balances.set(debt.id, 0);
         } else {
           balances.set(debt.id, balance - principal);
@@ -250,8 +270,9 @@ export function generateGlobalDebtPlan(
         } else if (principal >= balance) {
           // Se paga completamente con el mínimo
           paidOffMonths.set(debt.id, totalMonths);
+          paidOffDebts.add(debt.id);
           balances.set(debt.id, 0);
-          // El sobrante del mínimo va al extra
+          // El sobrante del mínimo va al extra para esta iteración
           remainingExtra += principal - balance;
         } else {
           balances.set(debt.id, balance - principal);
@@ -261,7 +282,8 @@ export function generateGlobalDebtPlan(
   }
 
   // Generar planes individuales con los meses calculados
-  const individualPlans: DebtPayoffPlan[] = sortedDebts.map((debt) => {
+  // Calcular el pago mensual real para cada deuda (incluyendo cascada)
+  const individualPlans: DebtPayoffPlan[] = sortedDebts.map((debt, idx) => {
     const monthsToPayoff = paidOffMonths.get(debt.id) ?? totalMonths;
     const interestPaid = Math.round(
       (totalInterestByDebt.get(debt.id) ?? 0) * 100
@@ -270,12 +292,18 @@ export function generateGlobalDebtPlan(
       (debt.currentBalance + interestPaid) * 100
     ) / 100;
 
+    // Calcular el pago mensual efectivo para esta deuda:
+    // Su mínimo + el extra base + mínimos de deudas anteriores liquidadas
+    const priorDebtsFreedMinimums = sortedDebts
+      .slice(0, idx)
+      .reduce((sum, d) => sum + d.minimumPayment, 0);
+    const effectiveMonthlyPayment =
+      debt.minimumPayment + extraAmount + priorDebtsFreedMinimums;
+
     // Generar schedule simplificado para la deuda
     const schedule = generateDebtSchedule(
       debt,
-      debt.id === sortedDebts[0]?.id
-        ? debt.minimumPayment + extraAmount
-        : debt.minimumPayment,
+      effectiveMonthlyPayment,
       monthsToPayoff
     );
 
@@ -284,10 +312,7 @@ export function generateGlobalDebtPlan(
       monthsToPayoff,
       totalInterest: interestPaid,
       totalPaid,
-      monthlyPayment:
-        debt.id === sortedDebts[0]?.id
-          ? debt.minimumPayment + extraAmount
-          : debt.minimumPayment,
+      monthlyPayment: effectiveMonthlyPayment,
       schedule,
     };
   });

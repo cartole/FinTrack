@@ -639,7 +639,7 @@ export function InvestmentCalculator() {
           </ChartContainer>
 
           {/* Leyenda con valores finales */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 min-w-0">
             {investmentScenarios.map((scenario) => {
               const key = scenario.label.toLowerCase().replace(/\s/g, "");
               const finalValue = comparisonData[comparisonData.length - 1]?.[key] as number || 0;
@@ -673,12 +673,12 @@ export function InvestmentCalculator() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 min-w-0">
             {popularETFs.map((etf) => (
               <div
                 key={etf.symbol}
                 className={cn(
-                  "rounded-lg border p-3 hover:bg-muted/50 transition-colors cursor-pointer",
+                  "rounded-lg border p-3 hover:bg-muted/50 transition-colors cursor-pointer overflow-hidden min-w-0",
                   selectedETF === etf.symbol && "border-primary bg-primary/5"
                 )}
                 onClick={() => {
@@ -700,7 +700,7 @@ export function InvestmentCalculator() {
                     {etf.risk}
                   </Badge>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5">{etf.name}</p>
+                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5 truncate">{etf.name}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-muted-foreground">Rentabilidad media</span>
                   <span className="text-xs font-semibold text-emerald-600">~{etf.expectedReturn}%</span>

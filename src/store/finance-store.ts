@@ -18,6 +18,28 @@ import {
 import { mockTransactions, mockSavingsGoals, mockBudgets, mockSubscriptions, mockDebts } from "@/lib/mock-data";
 import { generateSavingsPlan } from "@/lib/savings-planner";
 
+// ---- Configuración de la app ----
+
+export interface AppSettings {
+  withholdingTaxRate: number;     // Retención sobre rendimientos del capital (%)
+  capitalGainsTaxRate: number;    // Retención sobre plusvalías (%)
+  inflationRate: number;          // Inflación estimada (%)
+  emergencyFundMonths: number;    // Meses de fondo de emergencia recomendado
+  defaultEcbRate: number;         // Tipo de interés BCE por defecto (%)
+  currencyDecimals: number;       // Decimales en moneda (0, 1, 2)
+  dateFormat: "dd/mm/yyyy" | "yyyy-mm-dd";
+}
+
+const defaultSettings: AppSettings = {
+  withholdingTaxRate: 19,
+  capitalGainsTaxRate: 19,
+  inflationRate: 2.0,
+  emergencyFundMonths: 6,
+  defaultEcbRate: 2.50,
+  currencyDecimals: 0,
+  dateFormat: "dd/mm/yyyy",
+};
+
 /** Genera un ID único simple */
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
@@ -38,6 +60,9 @@ interface FinanceState {
 
   // ---- Suscripciones ----
   subscriptions: Subscription[];
+
+  // ---- Configuración ----
+  settings: AppSettings;
 
   // ---- UI State ----
   isFormOpen: boolean;
@@ -72,6 +97,13 @@ interface FinanceState {
   updateSubscription: (id: string, updates: Partial<Omit<Subscription, "id" | "createdAt">>) => void;
   deleteSubscription: (id: string) => void;
 
+  // ---- Acciones de Configuración ----
+  updateSettings: (updates: Partial<AppSettings>) => void;
+  resetSettings: () => void;
+  resetAllData: () => void;
+  exportData: () => string;
+  importData: (json: string) => boolean;
+
   // ---- Acciones de UI ----
   setFormOpen: (open: boolean) => void;
   setSavingsPlanOpen: (open: boolean) => void;
@@ -93,6 +125,8 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   budgets: mockBudgets,
   debts: mockDebts,
   subscriptions: mockSubscriptions,
+
+  settings: { ...defaultSettings },
 
   isFormOpen: false,
   isSavingsPlanOpen: false,
@@ -232,6 +266,59 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set((state) => ({
       subscriptions: state.subscriptions.filter((s) => s.id !== id),
     })),
+
+  // ---- Configuración ----
+  updateSettings: (updates) =>
+    set((state) => ({
+      settings: { ...state.settings, ...updates },
+    })),
+
+  resetSettings: () => set({ settings: { ...defaultSettings } }),
+
+  resetAllData: () =>
+    set({
+      transactions: mockTransactions,
+      savingsGoals: mockSavingsGoals,
+      currentSavingsPlan: null,
+      budgets: mockBudgets,
+      debts: mockDebts,
+      subscriptions: mockSubscriptions,
+      settings: { ...defaultSettings },
+    }),
+
+  exportData: () => {
+    const state = get();
+    const data = {
+      transactions: state.transactions,
+      savingsGoals: state.savingsGoals,
+      budgets: state.budgets,
+      debts: state.debts,
+      subscriptions: state.subscriptions,
+      settings: state.settings,
+      exportedAt: new Date().toISOString(),
+      version: "1.0.0",
+    };
+    return JSON.stringify(data, null, 2);
+  },
+
+  importData: (json) => {
+    try {
+      const data = JSON.parse(json);
+      if (!data.transactions || !Array.isArray(data.transactions)) return false;
+      set({
+        transactions: data.transactions,
+        savingsGoals: Array.isArray(data.savingsGoals) ? data.savingsGoals : mockSavingsGoals,
+        budgets: Array.isArray(data.budgets) ? data.budgets : mockBudgets,
+        debts: Array.isArray(data.debts) ? data.debts : mockDebts,
+        subscriptions: Array.isArray(data.subscriptions) ? data.subscriptions : mockSubscriptions,
+        settings: data.settings ? { ...defaultSettings, ...data.settings } : { ...defaultSettings },
+        currentSavingsPlan: null,
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  },
 
   // ---- UI ----
   setFormOpen: (open) => set({ isFormOpen: open }),

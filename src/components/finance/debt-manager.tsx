@@ -420,39 +420,39 @@ export function DebtManager() {
                 )}
 
                 {/* Orden de ataque visual */}
-                <div className="space-y-3">
+                <div className="space-y-3 overflow-hidden">
                   <p className="text-[11px] font-semibold">Orden de ataque por estrategia:</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="rounded-lg border p-2.5 space-y-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <Snowflake className="h-3.5 w-3.5 text-sky-500" />
-                        <span className="text-[11px] font-semibold text-sky-700 dark:text-sky-300">Bola de Nieve</span>
+                    <div className="rounded-lg border p-2.5 space-y-1.5 overflow-hidden">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Snowflake className="h-3.5 w-3.5 text-sky-500 shrink-0" />
+                        <span className="text-[11px] font-semibold text-sky-700 dark:text-sky-300 truncate">Bola de Nieve</span>
                       </div>
                       {comparison.snowball.debtsOrder.map((debt, i) => (
-                        <div key={debt.id} className="flex items-center gap-2 text-[10px]">
+                        <div key={debt.id} className="flex items-center gap-2 text-[10px] min-w-0">
                           <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300 font-bold text-[8px]">
                             {i + 1}
                           </span>
-                          <span className="truncate">{debt.name}</span>
-                          <span className="text-muted-foreground ml-auto shrink-0">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
+                          <span className="truncate min-w-0">{debt.name}</span>
+                          <span className="text-muted-foreground ml-auto shrink-0 whitespace-nowrap">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
                         </div>
                       ))}
                       {comparison.snowball.debtsOrder.length === 0 && (
                         <p className="text-[10px] text-muted-foreground">Sin deudas</p>
                       )}
                     </div>
-                    <div className="rounded-lg border p-2.5 space-y-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <Mountain className="h-3.5 w-3.5 text-orange-500" />
-                        <span className="text-[11px] font-semibold text-orange-700 dark:text-orange-300">Avalancha</span>
+                    <div className="rounded-lg border p-2.5 space-y-1.5 overflow-hidden">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Mountain className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+                        <span className="text-[11px] font-semibold text-orange-700 dark:text-orange-300 truncate">Avalancha</span>
                       </div>
                       {comparison.avalanche.debtsOrder.map((debt, i) => (
-                        <div key={debt.id} className="flex items-center gap-2 text-[10px]">
+                        <div key={debt.id} className="flex items-center gap-2 text-[10px] min-w-0">
                           <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 font-bold text-[8px]">
                             {i + 1}
                           </span>
-                          <span className="truncate">{debt.name}</span>
-                          <span className="text-muted-foreground ml-auto shrink-0">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
+                          <span className="truncate min-w-0">{debt.name}</span>
+                          <span className="text-muted-foreground ml-auto shrink-0 whitespace-nowrap">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
                         </div>
                       ))}
                       {comparison.avalanche.debtsOrder.length === 0 && (
@@ -516,7 +516,7 @@ export function DebtManager() {
                     <div
                       key={debt.id}
                       className={cn(
-                        "rounded-xl border p-4 space-y-3 transition-all",
+                        "rounded-xl border p-4 space-y-3 transition-all overflow-hidden",
                         isTarget &&
                           "border-primary/40 bg-primary/5 shadow-sm"
                       )}
