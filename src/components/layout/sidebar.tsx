@@ -144,12 +144,12 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
       <div className="shrink-0">
         <Logo />
         <Separator className="my-3" />
       </div>
-      <ScrollArea className="flex-1 min-h-0 px-2">
+      <ScrollArea className="flex-1 min-h-0 overflow-y-auto px-2">
         <nav className="flex flex-col gap-1 pb-4">
           {navSections.map((section) => (
             <div key={section.title}>
@@ -204,7 +204,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r bg-card h-screen sticky top-0">
+      <aside className="hidden md:flex w-64 flex-col border-r bg-card h-screen sticky top-0 overflow-hidden">
         <NavContent />
       </aside>
 

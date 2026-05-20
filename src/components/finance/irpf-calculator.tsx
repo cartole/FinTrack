@@ -766,7 +766,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">
+          <div className="space-y-2 overflow-x-auto">
             {/* Header */}
             <div className="grid grid-cols-4 gap-2 text-[10px] text-muted-foreground font-semibold pb-1 border-b min-w-[380px]">
               <span>Tramo</span>

@@ -103,8 +103,8 @@ const chartConfig: ChartConfig = {
   conservador: { label: "Conservador (2,5%)", color: "#3b82f6" },
   moderado: { label: "Moderado (5,5%)", color: "#10b981" },
   agresivo: { label: "Agresivo (8,5%)", color: "#f59e0b" },
-  muyAgresivo: { label: "Muy Agresivo (12%)", color: "#ef4444" },
-  contributions: { label: "Total aportado", color: "#6b7280" },
+  muyagresivo: { label: "Muy Agresivo (12%)", color: "#ef4444" },
+  contributions: { label: "Total aportado", color: "#6b7280" }
 };
 
 // ---- Componente Principal ----
@@ -552,20 +552,21 @@ export function InvestmentCalculator() {
             </div>
 
             {/* Tabla de evolución */}
-            <div className="rounded-lg border overflow-hidden">
-              <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground min-w-[400px]">
-                <span>Año</span>
-                <span className="text-right">Aportado</span>
-                <span className="text-right">Valor</span>
-                <span className="text-right">Ganancia</span>
-              </div>
-              <ScrollArea className="max-h-[200px]">
+            <div className="rounded-lg border overflow-hidden overflow-x-auto">
+              <div className="min-w-[400px]">
+                <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  <span>Año</span>
+                  <span className="text-right">Aportado</span>
+                  <span className="text-right">Valor</span>
+                  <span className="text-right">Ganancia</span>
+                </div>
+                <ScrollArea className="max-h-[200px]">
                 {activeScenario.projection
                   .filter((_, idx) => idx === 0 || idx === activeScenario.projection.length - 1 || idx % Math.max(1, Math.floor(activeScenario.projection.length / 8)) === 0)
                   .map((point) => (
                     <div
                       key={point.year}
-                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30 min-w-[400px]"
+                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
                     >
                       <span className="font-medium">{point.year}</span>
                       <span className="text-right">{formatCurrency(point.contributed)}</span>
@@ -582,7 +583,8 @@ export function InvestmentCalculator() {
                       </span>
                     </div>
                   ))}
-              </ScrollArea>
+                </ScrollArea>
+              </div>
             </div>
           </CardContent>
         </Card>

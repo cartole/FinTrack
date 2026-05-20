@@ -60,6 +60,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // ---- Tipos ----
 
@@ -567,27 +568,29 @@ export function FixedTermCalculator() {
             </div>
 
             {/* Tabla de desglose mensual */}
-            <div className="rounded-lg border overflow-hidden">
-              <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground min-w-[400px]">
-                <span>Mes</span>
-                <span className="text-right">Interés/mes</span>
-                <span className="text-right">Bruto acum.</span>
-                <span className="text-right">Neto acum.</span>
-              </div>
-              <div className="max-h-[150px] overflow-y-auto overflow-x-hidden">
-                {calculation.monthlyBreakdown.map((m) => (
-                  <div
-                    key={m.month}
-                    className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30 min-w-[400px]"
-                  >
+            <div className="rounded-lg border overflow-hidden overflow-x-auto">
+              <div className="min-w-[400px]">
+                <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  <span>Mes</span>
+                  <span className="text-right">Interés/mes</span>
+                  <span className="text-right">Bruto acum.</span>
+                  <span className="text-right">Neto acum.</span>
+                </div>
+                <div className="max-h-[150px] overflow-y-auto">
+                  {calculation.monthlyBreakdown.map((m) => (
+                    <div
+                      key={m.month}
+                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
+                    >
                     <span className="font-medium">{m.month}</span>
                     <span className="text-right">{formatCurrency(m.interest)}</span>
                     <span className="text-right text-blue-600">{formatCurrency(m.cumulative)}</span>
                     <span className="text-right text-emerald-600 font-semibold">
                       {formatCurrency(m.netCumulative)}
                     </span>
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </CardContent>
