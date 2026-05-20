@@ -112,7 +112,7 @@ export function BalanceCards() {
               <card.icon className={cn("h-4 w-4", card.color)} />
             </div>
             <div className="space-y-1">
-              <p className={cn("text-2xl font-bold tracking-tight", card.color)}>
+              <p className={cn("text-2xl font-bold tracking-tight whitespace-nowrap", card.color)}>
                 {card.value}
               </p>
               <div className="flex items-center gap-1.5">

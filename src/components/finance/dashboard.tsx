@@ -77,7 +77,7 @@ export function Dashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <CalendarDays className="h-3.5 w-3.5 mr-2" />
               <SelectValue />
             </SelectTrigger>

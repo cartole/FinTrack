@@ -253,7 +253,7 @@ export function InvestmentCalculator() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10">
             <TrendingUp className="h-6 w-6 text-emerald-500" />
@@ -553,8 +553,8 @@ export function InvestmentCalculator() {
 
             {/* Tabla de evolución */}
             <div className="rounded-lg border overflow-hidden overflow-x-auto">
-              <div className="min-w-[400px]">
-                <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="min-w-[300px]">
+                <div className="grid grid-cols-4 gap-1 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   <span>Año</span>
                   <span className="text-right whitespace-nowrap">Aportado</span>
                   <span className="text-right whitespace-nowrap">Valor</span>
@@ -566,7 +566,7 @@ export function InvestmentCalculator() {
                   .map((point) => (
                     <div
                       key={point.year}
-                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
+                      className="grid grid-cols-4 gap-1 p-2 text-xs border-t hover:bg-muted/30"
                     >
                       <span className="font-medium">{point.year}</span>
                       <span className="text-right whitespace-nowrap">{formatCurrency(point.contributed)}</span>

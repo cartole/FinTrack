@@ -105,7 +105,7 @@ export function TransactionList() {
             </CardDescription>
           </div>
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <CalendarDays className="h-3.5 w-3.5 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -135,7 +135,7 @@ export function TransactionList() {
             />
           </div>
           <Select value={filterType} onValueChange={(v) => setFilterType(v as typeof filterType)}>
-            <SelectTrigger className="w-[130px] h-9">
+            <SelectTrigger className="w-full sm:w-[130px] h-9">
               <Filter className="h-3.5 w-3.5 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -149,7 +149,7 @@ export function TransactionList() {
             value={filterCategory}
             onValueChange={(v) => setFilterCategory(v as typeof filterCategory)}
           >
-            <SelectTrigger className="w-[150px] h-9">
+            <SelectTrigger className="w-full sm:w-[150px] h-9">
               <SelectValue placeholder="Categoría" />
             </SelectTrigger>
             <SelectContent>

@@ -711,13 +711,13 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
         <Card className="border-0 shadow-sm bg-muted/50">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Ingreso Bruto</p>
-            <p className="text-base font-bold">{formatCurrency(result.grossIncome)}</p>
+            <p className="text-base font-bold whitespace-nowrap">{formatCurrency(result.grossIncome)}</p>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-sm bg-rose-50 dark:bg-rose-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">IRPF Total</p>
-            <p className="text-base font-bold text-rose-600 dark:text-rose-400">
+            <p className="text-base font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
               {formatCurrency(result.totalTax)}
             </p>
           </CardContent>
@@ -725,13 +725,13 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
         <Card className="border-0 shadow-sm bg-muted/50">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Tipo Efectivo</p>
-            <p className="text-base font-bold">{result.effectiveRate.toFixed(2)}%</p>
+            <p className="text-base font-bold whitespace-nowrap">{result.effectiveRate.toFixed(2)}%</p>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Neto Anual</p>
-            <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">
+            <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
               {formatCurrency(result.netAnnualIncome)}
             </p>
           </CardContent>
@@ -768,46 +768,46 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
         <CardContent>
           <div className="space-y-2 overflow-x-auto">
             {/* Header */}
-            <div className="grid grid-cols-4 gap-2 text-[10px] text-muted-foreground font-semibold pb-1 border-b min-w-[380px]">
+            <div className="grid grid-cols-4 gap-1 text-[10px] text-muted-foreground font-semibold pb-1 border-b min-w-[300px]">
               <span>Tramo</span>
-              <span className="text-right">Base</span>
-              <span className="text-right">Tipo</span>
-              <span className="text-right">Cuota</span>
+              <span className="text-right whitespace-nowrap">Base</span>
+              <span className="text-right whitespace-nowrap">Tipo</span>
+              <span className="text-right whitespace-nowrap">Cuota</span>
             </div>
             {result.brackets
               .filter((b) => b.baseInBracket > 0)
               .map((bracket, idx) => (
-                <div key={idx} className="grid grid-cols-4 gap-2 text-xs py-1.5 min-w-[380px]">
-                  <span className="text-muted-foreground">
+                <div key={idx} className="grid grid-cols-4 gap-1 text-xs py-1.5 min-w-[300px]">
+                  <span className="text-muted-foreground whitespace-nowrap">
                     {bracket.to === Infinity
                       ? `> ${formatCurrency(bracket.from)}`
                       : `${formatCurrency(bracket.from)} - ${formatCurrency(bracket.to)}`}
                   </span>
-                  <span className="text-right font-medium">
+                  <span className="text-right font-medium whitespace-nowrap">
                     {formatCurrency(bracket.baseInBracket)}
                   </span>
-                  <span className="text-right">{bracket.rate}%</span>
-                  <span className="text-right font-semibold">
+                  <span className="text-right whitespace-nowrap">{bracket.rate}%</span>
+                  <span className="text-right font-semibold whitespace-nowrap">
                     {formatCurrency(bracket.taxInBracket)}
                   </span>
                 </div>
               ))}
             {/* Totales */}
-            <div className="grid grid-cols-4 gap-2 text-xs py-1.5 border-t font-bold min-w-[380px]">
+            <div className="grid grid-cols-4 gap-1 text-xs py-1.5 border-t font-bold min-w-[300px]">
               <span>Total</span>
-              <span className="text-right">{formatCurrency(result.baseLiquidable)}</span>
+              <span className="text-right whitespace-nowrap">{formatCurrency(result.baseLiquidable)}</span>
               <span />
-              <span className="text-right">{formatCurrency(result.totalTax)}</span>
+              <span className="text-right whitespace-nowrap">{formatCurrency(result.totalTax)}</span>
             </div>
             {/* Desglose estatal/autonómico */}
             <div className="grid grid-cols-2 gap-3 mt-2">
               <div className="rounded-lg bg-muted/50 p-2 text-center">
                 <p className="text-[10px] text-muted-foreground">Cuota estatal</p>
-                <p className="text-sm font-semibold">{formatCurrency(result.stateTax)}</p>
+                <p className="text-sm font-semibold whitespace-nowrap">{formatCurrency(result.stateTax)}</p>
               </div>
               <div className="rounded-lg bg-muted/50 p-2 text-center">
                 <p className="text-[10px] text-muted-foreground">Cuota autonómica</p>
-                <p className="text-sm font-semibold">{formatCurrency(result.autonomousTax)}</p>
+                <p className="text-sm font-semibold whitespace-nowrap">{formatCurrency(result.autonomousTax)}</p>
               </div>
             </div>
           </div>

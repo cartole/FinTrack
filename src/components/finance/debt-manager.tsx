@@ -211,14 +211,14 @@ export function DebtManager() {
         <Card className="border-0 shadow-sm">
           <CardContent className="p-4 text-center">
             <Wallet className="mx-auto mb-1.5 h-5 w-5 text-rose-500" />
-            <p className="text-lg font-bold">{formatCurrency(totalDebt)}</p>
+            <p className="text-lg font-bold whitespace-nowrap">{formatCurrency(totalDebt)}</p>
             <p className="text-[10px] text-muted-foreground">Total deuda</p>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-sm">
           <CardContent className="p-4 text-center">
             <Clock className="mx-auto mb-1.5 h-5 w-5 text-amber-500" />
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold whitespace-nowrap">
               {formatCurrency(totalMinimumPayment)}
             </p>
             <p className="text-[10px] text-muted-foreground">
@@ -229,7 +229,7 @@ export function DebtManager() {
         <Card className="border-0 shadow-sm">
           <CardContent className="p-4 text-center">
             <Percent className="mx-auto mb-1.5 h-5 w-5 text-orange-500" />
-            <p className="text-lg font-bold">{formatCurrency(totalInterest)}</p>
+            <p className="text-lg font-bold whitespace-nowrap">{formatCurrency(totalInterest)}</p>
             <p className="text-[10px] text-muted-foreground">
               Intereses totales est.
             </p>
@@ -238,7 +238,7 @@ export function DebtManager() {
         <Card className="border-0 shadow-sm">
           <CardContent className="p-4 text-center">
             <Trophy className="mx-auto mb-1.5 h-5 w-5 text-emerald-500" />
-            <p className="text-lg font-bold">{monthsToFreedom} meses</p>
+            <p className="text-lg font-bold whitespace-nowrap">{monthsToFreedom} meses</p>
             <p className="text-[10px] text-muted-foreground">
               Para libertad
             </p>
@@ -351,35 +351,35 @@ export function DebtManager() {
 
                 {/* Tabla comparativa con overflow controlado */}
                 <div className="rounded-lg border overflow-hidden overflow-x-auto">
-                  <div className="min-w-[340px]">
+                  <div className="min-w-[280px]">
                     {/* Header */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 bg-muted/70 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    <div className="grid grid-cols-3 gap-1 p-2 bg-muted/70 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                       <span />
-                      <span className="text-center text-sky-700 dark:text-sky-300">Bola de Nieve</span>
-                      <span className="text-center text-orange-700 dark:text-orange-300">Avalancha</span>
+                      <span className="text-center text-sky-700 dark:text-sky-300 whitespace-nowrap">Bola de Nieve</span>
+                      <span className="text-center text-orange-700 dark:text-orange-300 whitespace-nowrap">Avalancha</span>
                     </div>
                     {/* Meses */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
-                      <span className="text-muted-foreground font-medium">Meses libertad</span>
+                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center">
+                      <span className="text-muted-foreground font-medium whitespace-nowrap">Meses</span>
                       <span className="text-center font-bold">{comparison.snowball.totalMonthsToFreedom}</span>
                       <span className="text-center font-bold">{comparison.avalanche.totalMonthsToFreedom}</span>
                     </div>
                     {/* Intereses */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
-                      <span className="text-muted-foreground font-medium">Intereses totales</span>
-                      <span className="text-center font-bold text-rose-600">{formatCurrency(comparison.snowball.totalInterest)}</span>
-                      <span className="text-center font-bold text-rose-600">{formatCurrency(comparison.avalanche.totalInterest)}</span>
+                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center">
+                      <span className="text-muted-foreground font-medium whitespace-nowrap">Intereses</span>
+                      <span className="text-center font-bold text-rose-600 whitespace-nowrap">{formatCurrency(comparison.snowball.totalInterest)}</span>
+                      <span className="text-center font-bold text-rose-600 whitespace-nowrap">{formatCurrency(comparison.avalanche.totalInterest)}</span>
                     </div>
                     {/* Coste total */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center bg-muted/30">
-                      <span className="text-muted-foreground font-medium">Coste total (deuda+int.)</span>
-                      <span className="text-center font-bold">{formatCurrency(comparison.snowball.totalDebt + comparison.snowball.totalInterest)}</span>
-                      <span className="text-center font-bold">{formatCurrency(comparison.avalanche.totalDebt + comparison.avalanche.totalInterest)}</span>
+                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center bg-muted/30">
+                      <span className="text-muted-foreground font-medium whitespace-nowrap">Coste total</span>
+                      <span className="text-center font-bold whitespace-nowrap">{formatCurrency(comparison.snowball.totalDebt + comparison.snowball.totalInterest)}</span>
+                      <span className="text-center font-bold whitespace-nowrap">{formatCurrency(comparison.avalanche.totalDebt + comparison.avalanche.totalInterest)}</span>
                     </div>
                     {/* Primera deuda liquidada */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
-                      <span className="text-muted-foreground font-medium">1ª deuda liquidada</span>
-                      <span className="text-center">
+                    <div className="grid grid-cols-3 gap-1 p-2 text-xs border-t items-center min-w-0">
+                      <span className="text-muted-foreground font-medium whitespace-nowrap">1ª deuda</span>
+                      <span className="text-center truncate min-w-0">
                         {comparison.snowball.individualPlans.length > 0 && (
                           <>
                             <span className="font-semibold">{comparison.snowball.debtsOrder[0]?.name}</span>
@@ -387,7 +387,7 @@ export function DebtManager() {
                           </>
                         )}
                       </span>
-                      <span className="text-center">
+                      <span className="text-center truncate min-w-0">
                         {comparison.avalanche.individualPlans.length > 0 && (
                           <>
                             <span className="font-semibold">{comparison.avalanche.debtsOrder[0]?.name}</span>
@@ -580,28 +580,28 @@ export function DebtManager() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-center overflow-hidden">
+                      <div className="grid grid-cols-3 gap-1 text-center overflow-hidden">
                         <div className="min-w-0">
-                          <p className="text-xs font-bold truncate">
+                          <p className="text-[10px] sm:text-xs font-bold truncate whitespace-nowrap">
                             {formatCurrency(debt.currentBalance)}
                           </p>
-                          <p className="text-[10px] text-muted-foreground truncate">
+                          <p className="text-[9px] sm:text-[10px] text-muted-foreground truncate whitespace-nowrap">
                             de {formatCurrency(debt.totalAmount)}
                           </p>
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-bold text-rose-600 truncate">
+                          <p className="text-[10px] sm:text-xs font-bold text-rose-600 truncate whitespace-nowrap">
                             {debt.interestRate}% TAE
                           </p>
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className="text-[9px] sm:text-[10px] text-muted-foreground">
                             Interés
                           </p>
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-bold truncate">
+                          <p className="text-[10px] sm:text-xs font-bold truncate whitespace-nowrap">
                             {formatCurrency(debt.minimumPayment)}
                           </p>
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className="text-[9px] sm:text-[10px] text-muted-foreground">
                             Mín./mes
                           </p>
                         </div>
@@ -618,12 +618,12 @@ export function DebtManager() {
 
                       {/* Payoff info */}
                       {plan && (
-                        <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                          <span>
-                            💸 Intereses: {formatCurrency(plan.totalInterest)}
+                        <div className="flex flex-wrap items-center justify-between text-[10px] text-muted-foreground gap-1">
+                          <span className="whitespace-nowrap">
+                            Intereses: {formatCurrency(plan.totalInterest)}
                           </span>
-                          <span>
-                            📅 Libre en {plan.monthsToPayoff} meses
+                          <span className="whitespace-nowrap">
+                            Libre en {plan.monthsToPayoff} meses
                           </span>
                         </div>
                       )}
