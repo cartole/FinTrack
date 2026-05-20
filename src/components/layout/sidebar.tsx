@@ -210,8 +210,8 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r bg-card h-screen sticky top-0 overflow-hidden">
+      {/* Desktop sidebar - uses --app-height for iOS Safari fix */}
+      <aside className="hidden md:flex w-64 flex-col border-r bg-card sticky top-0 overflow-hidden" style={{ height: 'var(--app-height, 100vh)' }}>
         <div className="flex flex-col h-full min-h-0 overflow-hidden">
           <NavContent />
         </div>

@@ -45,6 +45,7 @@
 
 :root {
   --radius: 0.625rem;
+  --app-height: 100vh;
   /* Fintech theme - Clean white with emerald accents */
   --background: oklch(0.985 0.002 155);
   --foreground: oklch(0.145 0.005 155);
@@ -120,6 +121,14 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .safe-area-pt {
+    padding-top: max(5rem, env(safe-area-inset-top, 0px));
+  }
+  @media (min-width: 768px) {
+    .safe-area-pt {
+      padding-top: 1.5rem;
+    }
   }
 }
 

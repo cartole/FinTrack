@@ -1064,18 +1064,18 @@ export function IRPFCalculator() {
 
       {/* Step navigation dots */}
       {!result && (
-        <div className="flex items-center justify-center gap-1 flex-wrap">
+        <div className="flex items-center justify-center gap-0.5 overflow-x-auto flex-nowrap">
           {effectiveSteps.map((step, idx) => (
             <button
               key={idx}
               onClick={() => idx <= currentStep && setCurrentStep(idx)}
               className={cn(
-                "h-2 rounded-full transition-all",
+                "h-1.5 rounded-full transition-all shrink-0",
                 idx === currentStep
-                  ? "w-6 bg-primary"
+                  ? "w-5 bg-primary"
                   : idx < currentStep
-                  ? "w-2 bg-primary/50 cursor-pointer"
-                  : "w-2 bg-muted"
+                  ? "w-1.5 bg-primary/50 cursor-pointer"
+                  : "w-1.5 bg-muted"
               )}
               title={step.title}
             />

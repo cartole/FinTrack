@@ -580,7 +580,7 @@ export function DebtManager() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-center overflow-hidden">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center overflow-hidden">
                         <div className="min-w-0">
                           <p className="text-[10px] sm:text-xs font-bold truncate">
                             {formatCurrency(debt.currentBalance)}

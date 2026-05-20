@@ -84,7 +84,7 @@ export default function Home() {
 
       {/* Contenido principal */}
       <main className="flex-1 min-w-0 overflow-y-auto">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 pt-16 md:pt-6 pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 pb-24 safe-area-pt">
           <ActiveTab />
         </div>
       </main>

@@ -1,22 +1,28 @@
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Add more configuration functions to FinTrack settings and make savings goals selectable
+Task: Professional frontend QA audit and bug fixes for FinTrack
 
 Work Log:
-- Read all key project files to understand current state: settings.tsx, savings-goals.tsx, finance-store.ts, fixed-term-calculator.tsx, dashboard.tsx, sidebar.tsx, debt-manager.tsx, subscription-tracker.tsx, investment-calculator.tsx, payment-calendar.tsx, market-service.ts
-- Expanded AppSettings interface in finance-store.ts with 12 new configuration fields across 6 categories
-- Completely rewrote settings.tsx with 7 comprehensive sections (was 4)
-- Updated savings-goals.tsx to support goal selection with visual indicator
-- Updated dashboard.tsx to use global selectedGoalId from settings instead of local state
-- Fixed month dropdown infinite growth by limiting to last 12 months
-- Verified Euribor 6m and 12m are already present in fixed-term-calculator.tsx
-- Verified Banco Sabadell is already in market-service.ts default deposits
-- Verified all overflow handling is in place across components
-- Build succeeded with no errors
+- Performed comprehensive professional QA audit of entire FinTrack frontend
+- Identified 10 bugs ranging from critical to low priority
+- Created ThemeProvider with useThemeSync and useViewportHeightFix hooks
+- Added inline script to layout.tsx for theme flash prevention
+- Fixed infinite month dropdown in TransactionList by limiting to last 12 months
+- Fixed iOS Safari 100vh issue using --app-height CSS custom property
+- Added AlertDialog confirmation for resetSettings in Settings component
+- Fixed calendar grid mobile responsiveness (cell heights, day labels, event card gaps)
+- Fixed IRPF step navigation wrapping on mobile (scrollable instead of wrapping)
+- Fixed debt manager grid overflow on mobile (grid-cols-1 sm:grid-cols-3)
+- Fixed subscription tracker mobile layout overflow (flex-wrap, removed hardcoded max-width)
+- Replaced emoji icons with Lucide React icons in Budget Planner
+- Added aria-labels to delete buttons in TransactionList
+- Fixed dashboard savings goal selector on mobile (proper truncation)
+- Added --app-height CSS custom property to globals.css
+- Fixed main content scroll on mobile with safe-area-inset-top support
 
 Stage Summary:
-- Settings now has: Perfil Personal, Fiscalidad, Economía, Visualización, Notificaciones y Alertas, Metas de Ahorro Activa, Privacidad, Datos, Información
-- Savings goals are now selectable with visual ring indicator, star icon, and active banner
-- Selected goal is synced globally between Dashboard, Savings Goals, and Settings
-- Month dropdown limited to 12 most recent months
+- All 10 identified bugs have been fixed
+- Project compiles successfully with `next build`
+- New files created: src/hooks/use-theme-sync.ts, src/components/providers/theme-provider.tsx
+- Key architectural improvements: theme sync system, iOS Safari viewport height fix

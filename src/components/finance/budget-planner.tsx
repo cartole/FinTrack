@@ -59,6 +59,15 @@ import {
   Loader2,
   AlertTriangle,
   CircleDot,
+  Utensils,
+  Home,
+  Car,
+  Gamepad2,
+  Heart,
+  GraduationCap,
+  RefreshCw,
+  Shirt,
+  PiggyBank,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -75,15 +84,15 @@ import { cn } from "@/lib/utils";
 
 /** Mapa de iconos de categoría */
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  comida: <span className="text-base">🍽️</span>,
-  alquiler: <span className="text-base">🏠</span>,
-  transporte: <span className="text-base">🚗</span>,
-  ocio: <span className="text-base">🎮</span>,
-  salud: <span className="text-base">❤️</span>,
-  educacion: <span className="text-base">🎓</span>,
-  suscripciones: <span className="text-base">🔄</span>,
-  ropa: <span className="text-base">👕</span>,
-  ahorro: <span className="text-base">🐷</span>,
+  comida: <Utensils className="h-4 w-4" />,
+  alquiler: <Home className="h-4 w-4" />,
+  transporte: <Car className="h-4 w-4" />,
+  ocio: <Gamepad2 className="h-4 w-4" />,
+  salud: <Heart className="h-4 w-4" />,
+  educacion: <GraduationCap className="h-4 w-4" />,
+  suscripciones: <RefreshCw className="h-4 w-4" />,
+  ropa: <Shirt className="h-4 w-4" />,
+  ahorro: <PiggyBank className="h-4 w-4" />,
 };
 
 export function BudgetPlanner() {

@@ -61,7 +61,13 @@ export function TransactionList() {
   const [filterType, setFilterType] = useState<"all" | TransactionType>("all");
   const [filterCategory, setFilterCategory] = useState<"all" | TransactionCategory>("all");
 
-  const availableMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
+  // Limit months shown in dropdown to last 12 + current (same as Dashboard)
+  const allMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
+  const availableMonths = useMemo(() => {
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const months = allMonths.filter(m => m <= currentMonth);
+    return months.slice(-12);
+  }, [allMonths]);
 
   const monthTransactions = useMemo(() => {
     return transactions
@@ -239,6 +245,7 @@ export function TransactionList() {
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7 shrink-0 hover:bg-destructive/10"
+                        aria-label="Eliminar transacción"
                       >
                         <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
                       </Button>

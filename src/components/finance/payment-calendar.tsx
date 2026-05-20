@@ -46,6 +46,7 @@ import { cn } from "@/lib/utils";
 // ============================================
 
 const DAYS_OF_WEEK = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const DAYS_OF_WEEK_SHORT = ["L", "M", "X", "J", "V", "S", "D"];
 const MONTHS_ES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
@@ -109,7 +110,7 @@ function EventCard({ event }: { event: CalendarEvent }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm overflow-hidden min-w-0",
+        "flex items-center gap-2 sm:gap-3 rounded-lg border p-3 transition-all hover:shadow-sm overflow-hidden min-w-0",
         config.bgColor
       )}
     >
@@ -122,8 +123,8 @@ function EventCard({ event }: { event: CalendarEvent }) {
         <Icon className={cn("h-4 w-4", config.color)} />
       </div>
       <div className="flex-1 min-w-0 overflow-hidden">
-        <p className="text-xs font-medium truncate">{event.title}</p>
-        <p className="text-[10px] text-muted-foreground truncate">
+        <p className="text-xs font-medium truncate min-w-0 overflow-hidden">{event.title}</p>
+        <p className="text-[10px] text-muted-foreground truncate min-w-0 overflow-hidden">
           {formatDateShort(event.date)}
           {event.isRecurring && event.recurrencePattern && (
             <span className="ml-1">
@@ -198,15 +199,16 @@ function CalendarGrid({
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 min-w-0">
       {/* Header días de la semana */}
       <div className="grid grid-cols-7 gap-1">
-        {DAYS_OF_WEEK.map((day) => (
+        {DAYS_OF_WEEK.map((day, idx) => (
           <div
             key={day}
             className="text-center text-[10px] font-semibold text-muted-foreground py-1"
           >
-            {day}
+            <span className="xs:hidden">{DAYS_OF_WEEK_SHORT[idx]}</span>
+            <span className="hidden xs:inline">{day}</span>
           </div>
         ))}
       </div>
@@ -215,7 +217,7 @@ function CalendarGrid({
       <div className="grid grid-cols-7 gap-1">
         {cells.map((day, idx) => {
           if (day === null) {
-            return <div key={`empty-${idx}`} className="h-12 sm:h-16" />;
+            return <div key={`empty-${idx}`} className="h-14 sm:h-16" />;
           }
 
           const dayStr = String(day).padStart(2, "0");
@@ -230,7 +232,7 @@ function CalendarGrid({
               key={dateStr}
               onClick={() => onSelectDate(dateStr)}
               className={cn(
-                "h-12 sm:h-16 rounded-lg p-1 text-left transition-all relative group",
+                "h-14 sm:h-16 rounded-lg p-1 text-left transition-all relative group",
                 today && "ring-2 ring-primary ring-offset-1",
                 selected
                   ? "bg-primary/10 border border-primary"

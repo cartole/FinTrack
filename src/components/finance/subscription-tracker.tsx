@@ -522,8 +522,8 @@ export function SubscriptionTracker() {
                       className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden min-w-0"
                     >
                       <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
-                        <div className="flex items-center gap-2 flex-nowrap overflow-hidden">
-                          <span className="text-sm font-medium truncate max-w-[120px] min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap overflow-hidden min-w-0">
+                          <span className="text-sm font-medium truncate min-w-0 flex-shrink">
                             {sub.name}
                           </span>
                           <Badge

@@ -1168,15 +1168,35 @@ export function Settings() {
                     Vuelve a los valores por defecto sin tocar tus datos
                   </p>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleResetSettings}
-                  className="gap-1.5 text-muted-foreground"
-                >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Restablecer
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1.5 text-muted-foreground"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Restablecer
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Restablecer configuración?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Se eliminarán todas las personalizaciones y se volverá a los valores por defecto. Esta acción no se puede deshacer.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleResetSettings}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Restablecer
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardContent>
           </Card>

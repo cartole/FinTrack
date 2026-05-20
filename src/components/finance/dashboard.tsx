@@ -208,14 +208,14 @@ export function Dashboard() {
                         key={goal.id}
                         variant={selectedGoal.id === goal.id ? "default" : "outline"}
                         size="sm"
-                        className="text-[10px] h-7 gap-1.5"
+                        className="text-[10px] h-7 gap-1.5 max-w-full"
                         onClick={() => handleSelectGoal(goal.id)}
                       >
                         {(() => {
                           const Icon = getGoalIcon(goal.name);
-                          return <Icon className="h-3 w-3" />;
+                          return <Icon className="h-3 w-3 shrink-0" />;
                         })()}
-                        <span className="truncate max-w-[80px]">{goal.name}</span>
+                        <span className="truncate max-w-[120px] sm:max-w-[200px]">{goal.name}</span>
                       </Button>
                     ))}
                   </div>
