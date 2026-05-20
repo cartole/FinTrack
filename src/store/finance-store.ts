@@ -21,23 +21,75 @@ import { generateSavingsPlan } from "@/lib/savings-planner";
 // ---- Configuración de la app ----
 
 export interface AppSettings {
+  // Fiscalidad
   withholdingTaxRate: number;     // Retención sobre rendimientos del capital (%)
   capitalGainsTaxRate: number;    // Retención sobre plusvalías (%)
+
+  // Economía
   inflationRate: number;          // Inflación estimada (%)
   emergencyFundMonths: number;    // Meses de fondo de emergencia recomendado
   defaultEcbRate: number;         // Tipo de interés BCE por defecto (%)
+
+  // Visualización
   currencyDecimals: number;       // Decimales en moneda (0, 1, 2)
   dateFormat: "dd/mm/yyyy" | "yyyy-mm-dd";
+  theme: "light" | "dark" | "system";  // Tema de la app
+  compactMode: boolean;           // Modo compacto (menos padding)
+
+  // Perfil personal
+  userName: string;               // Nombre del usuario
+  monthlyIncome: number;          // Ingresos mensuales netos (€)
+  savingsRateTarget: number;      // Objetivo de tasa de ahorro (%)
+  riskProfile: "conservador" | "moderado" | "agresivo";  // Perfil de riesgo
+
+  // Notificaciones y alertas
+  spendingAlertThreshold: number; // Umbral de alerta de gasto (% del presupuesto)
+  subscriptionRenewalDays: number;// Días antes de renovación para avisar
+  budgetWarningPercent: number;   // % del presupuesto para aviso
+  enableNotifications: boolean;   // Notificaciones activadas
+
+  // Metas de ahorro
+  selectedGoalId: string;         // ID de la meta de ahorro seleccionada/activa
+  autoAllocateSavings: boolean;   // Asignar automáticamente al ahorro
+
+  // Privacidad
+  dataRetentionDays: number;      // Días de retención de datos (0 = infinito)
 }
 
 const defaultSettings: AppSettings = {
+  // Fiscalidad
   withholdingTaxRate: 19,
   capitalGainsTaxRate: 19,
+
+  // Economía
   inflationRate: 2.0,
   emergencyFundMonths: 6,
   defaultEcbRate: 2.50,
+
+  // Visualización
   currencyDecimals: 0,
   dateFormat: "dd/mm/yyyy",
+  theme: "system",
+  compactMode: false,
+
+  // Perfil personal
+  userName: "",
+  monthlyIncome: 0,
+  savingsRateTarget: 20,
+  riskProfile: "moderado",
+
+  // Notificaciones y alertas
+  spendingAlertThreshold: 80,
+  subscriptionRenewalDays: 7,
+  budgetWarningPercent: 75,
+  enableNotifications: true,
+
+  // Metas de ahorro
+  selectedGoalId: "",
+  autoAllocateSavings: false,
+
+  // Privacidad
+  dataRetentionDays: 0,
 };
 
 /** Genera un ID único simple */

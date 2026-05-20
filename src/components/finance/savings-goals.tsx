@@ -4,6 +4,7 @@
  * ============================================
  * Componente para visualizar y gestionar metas
  * de ahorro con barras de progreso y acciones.
+ * Incluye selección de meta activa.
  */
 
 "use client";
@@ -35,7 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useFinanceStore } from "@/store/finance-store";
 import { formatCurrency, formatDate } from "@/lib/finance-utils";
-import { Target, Plus, Trash2, Brain, Rocket, Plane, Laptop, Pencil } from "lucide-react";
+import { Target, Plus, Trash2, Brain, Rocket, Plane, Laptop, Pencil, Check, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -48,7 +49,15 @@ function getGoalIcon(name: string) {
 }
 
 export function SavingsGoals() {
-  const { savingsGoals, addSavingsGoal, editSavingsGoal, deleteSavingsGoal, generatePlan } = useFinanceStore();
+  const {
+    savingsGoals,
+    addSavingsGoal,
+    editSavingsGoal,
+    deleteSavingsGoal,
+    generatePlan,
+    settings,
+    updateSettings,
+  } = useFinanceStore();
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
@@ -64,6 +73,9 @@ export function SavingsGoals() {
     currentAmount: "",
     deadline: "",
   });
+
+  // Selected goal from settings
+  const selectedGoalId = settings.selectedGoalId;
 
   const handleAddGoal = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,6 +110,20 @@ export function SavingsGoals() {
       title: "Plan generado",
       description: "Tu asesor IA ha generado un plan de ahorro personalizado.",
     });
+  };
+
+  const handleSelectGoal = (goalId: string) => {
+    // Toggle selection: if already selected, deselect
+    updateSettings({
+      selectedGoalId: selectedGoalId === goalId ? "" : goalId,
+    });
+    if (selectedGoalId !== goalId) {
+      const goal = savingsGoals.find((g) => g.id === goalId);
+      toast({
+        title: "Meta seleccionada",
+        description: `"${goal?.name}" es ahora tu meta activa`,
+      });
+    }
   };
 
   const handleOpenEdit = (goal: typeof savingsGoals[0]) => {
@@ -143,7 +169,7 @@ export function SavingsGoals() {
         <div>
           <h3 className="text-base font-semibold">Metas de Ahorro</h3>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Define objetivos y genera planes con IA
+            Define objetivos, selecciona tu meta activa y genera planes con IA
           </p>
         </div>
         <Button onClick={() => setIsAdding(true)} size="sm" className="gap-1.5">
@@ -151,6 +177,56 @@ export function SavingsGoals() {
           Nueva Meta
         </Button>
       </div>
+
+      {/* Selected Goal Summary Banner */}
+      {selectedGoalId && (() => {
+        const selectedGoal = savingsGoals.find((g) => g.id === selectedGoalId);
+        if (!selectedGoal) return null;
+        const progress = Math.min(
+          100,
+          Math.round((selectedGoal.currentAmount / selectedGoal.targetAmount) * 100)
+        );
+        const remaining = selectedGoal.targetAmount - selectedGoal.currentAmount;
+        const daysLeft = Math.max(
+          0,
+          Math.ceil(
+            (new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+          )
+        );
+        const monthlyNeeded =
+          daysLeft > 0 ? (remaining / (daysLeft / 30)) : 0;
+
+        return (
+          <Card className="border-0 shadow-sm bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-l-4 border-l-primary">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Star className="h-4 w-4 text-primary fill-primary" />
+                <span className="text-sm font-semibold">Meta Activa:</span>
+                <span className="text-sm font-bold text-primary">{selectedGoal.name}</span>
+              </div>
+              <Progress value={progress} className="h-2.5 mb-2" />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                <div>
+                  <p className="text-xs font-bold">{formatCurrency(selectedGoal.currentAmount)}</p>
+                  <p className="text-[9px] text-muted-foreground">Ahorrado</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-primary">{formatCurrency(remaining)}</p>
+                  <p className="text-[9px] text-muted-foreground">Restante</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-amber-600">{formatCurrency(monthlyNeeded)}/mes</p>
+                  <p className="text-[9px] text-muted-foreground">Necesitas ahorrar</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold">{daysLeft} días</p>
+                  <p className="text-[9px] text-muted-foreground">Para la fecha límite</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       {/* Lista de metas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -166,14 +242,36 @@ export function SavingsGoals() {
               (new Date(goal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
             )
           );
+          const isSelected = selectedGoalId === goal.id;
 
           return (
-            <Card key={goal.id} className="border-0 shadow-sm group relative overflow-hidden">
+            <Card
+              key={goal.id}
+              className={cn(
+                "border-0 shadow-sm group relative overflow-hidden transition-all",
+                isSelected
+                  ? "ring-2 ring-primary shadow-md"
+                  : "hover:shadow-md"
+              )}
+            >
+              {/* Selected indicator */}
+              {isSelected && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
+              )}
+
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon className="h-5 w-5 text-primary" />
+                    <div className={cn(
+                      "flex h-10 w-10 items-center justify-center rounded-lg",
+                      isSelected
+                        ? "bg-primary/20"
+                        : "bg-primary/10"
+                    )}>
+                      <Icon className={cn(
+                        "h-5 w-5",
+                        isSelected ? "text-primary" : "text-primary"
+                      )} />
                     </div>
                     <div>
                       <h4 className="text-sm font-semibold">{goal.name}</h4>
@@ -231,7 +329,7 @@ export function SavingsGoals() {
                     <span className="font-semibold">{formatCurrency(goal.targetAmount)}</span>
                   </div>
                   <Progress value={progress} className="h-2" />
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <Badge
                       variant="secondary"
                       className={cn(
@@ -253,16 +351,39 @@ export function SavingsGoals() {
                   Fecha límite: {formatDate(goal.deadline)}
                 </div>
 
-                {/* Botón IA */}
-                <Button
-                  onClick={() => handleGeneratePlan(goal.id)}
-                  variant="outline"
-                  size="sm"
-                  className="w-full gap-1.5"
-                >
-                  <Brain className="h-3.5 w-3.5" />
-                  Generar Plan con IA
-                </Button>
+                {/* Action buttons */}
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleSelectGoal(goal.id)}
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={cn(
+                      "flex-1 gap-1.5",
+                      isSelected && "gap-1.5"
+                    )}
+                  >
+                    {isSelected ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" />
+                        Seleccionada
+                      </>
+                    ) : (
+                      <>
+                        <Star className="h-3.5 w-3.5" />
+                        Seleccionar
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => handleGeneratePlan(goal.id)}
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5"
+                  >
+                    <Brain className="h-3.5 w-3.5" />
+                    Plan IA
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           );

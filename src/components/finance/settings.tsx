@@ -4,9 +4,13 @@
  * ============================================
  *
  * "use client" component with:
+ * - Perfil Personal (name, income, savings target, risk profile)
  * - Fiscalidad (tax settings)
  * - Economía (economy settings)
- * - Visualización (display settings)
+ * - Visualización (display settings, theme, compact mode)
+ * - Notificaciones y Alertas (thresholds, warnings)
+ * - Metas de Ahorro (selected goal, auto-allocation)
+ * - Privacidad (data retention)
  * - Datos (data management: reset, export, import)
  * - Información de la app
  *
@@ -28,6 +32,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -48,10 +54,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useFinanceStore } from "@/store/finance-store";
+import { formatCurrency } from "@/lib/finance-utils";
 import { cn } from "@/lib/utils";
 import {
   Settings2,
-  Save,
   RotateCcw,
   Download,
   Upload,
@@ -64,8 +70,19 @@ import {
   CheckCircle2,
   AlertTriangle,
   Loader2,
-  FileJson,
   Trash2,
+  User,
+  Wallet,
+  Target,
+  Bell,
+  Lock,
+  Sun,
+  Moon,
+  Monitor,
+  PiggyBank,
+  TrendingUp,
+  Shield,
+  Zap,
 } from "lucide-react";
 
 export function Settings() {
@@ -76,6 +93,8 @@ export function Settings() {
     resetAllData,
     exportData,
     importData,
+    savingsGoals,
+    transactions,
   } = useFinanceStore();
 
   // Toast-like feedback state
@@ -134,7 +153,6 @@ export function Settings() {
       showFeedback("error", "Error al leer el archivo");
     } finally {
       setIsImporting(false);
-      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -156,6 +174,30 @@ export function Settings() {
     const clamped = Math.min(Math.max(value, min), max);
     updateSettings({ [key]: clamped });
   };
+
+  // Computed: current month income and expenses
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  const monthTransactions = transactions.filter(
+    (t) => t.date.startsWith(currentMonth)
+  );
+  const monthIncome = monthTransactions
+    .filter((t) => t.type === "ingreso")
+    .reduce((s, t) => s + t.amount, 0);
+  const monthExpenses = monthTransactions
+    .filter((t) => t.type === "gasto")
+    .reduce((s, t) => s + t.amount, 0);
+  const currentSavingsRate =
+    monthIncome > 0
+      ? Math.round(((monthIncome - monthExpenses) / monthIncome) * 100)
+      : 0;
+
+  // Theme icon
+  const getThemeIcon = () => {
+    if (settings.theme === "light") return Sun;
+    if (settings.theme === "dark") return Moon;
+    return Monitor;
+  };
+  const ThemeIcon = getThemeIcon();
 
   return (
     <div className="space-y-6">
@@ -202,6 +244,171 @@ export function Settings() {
 
       <ScrollArea className="max-h-[calc(100vh-12rem)]">
         <div className="space-y-6 pr-2">
+
+          {/* ============================================ */}
+          {/* PERFIL PERSONAL */}
+          {/* ============================================ */}
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <User className="h-4 w-4 text-emerald-500" />
+                Perfil Personal
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Tus datos personales para cálculos personalizados
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">Nombre</Label>
+                  <Input
+                    type="text"
+                    placeholder="Tu nombre"
+                    value={settings.userName}
+                    onChange={(e) =>
+                      updateSettings({ userName: e.target.value })
+                    }
+                  />
+                  <p className="text-[10px] text-muted-foreground">
+                    Para personalizar la experiencia
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Ingresos mensuales netos
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      min={0}
+                      step={100}
+                      value={settings.monthlyIncome || ""}
+                      onChange={(e) =>
+                        updateSettings({
+                          monthlyIncome: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                      placeholder="2500"
+                      className="pr-8"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      €
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    Tus ingresos netos mensuales (después de IRPF)
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Objetivo de tasa de ahorro
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      min={0}
+                      max={80}
+                      step={5}
+                      value={settings.savingsRateTarget}
+                      onChange={(e) =>
+                        clampAndUpdate(
+                          "savingsRateTarget",
+                          parseFloat(e.target.value) || 0,
+                          0,
+                          80
+                        )
+                      }
+                      className="pr-8"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      %
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-muted-foreground">
+                        Tasa actual: {currentSavingsRate}%
+                      </span>
+                      <span className={cn(
+                        "font-medium",
+                        currentSavingsRate >= settings.savingsRateTarget
+                          ? "text-emerald-600"
+                          : "text-amber-600"
+                      )}>
+                        Objetivo: {settings.savingsRateTarget}%
+                      </span>
+                    </div>
+                    <Progress
+                      value={Math.min(100, (currentSavingsRate / settings.savingsRateTarget) * 100)}
+                      className="h-1.5"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Perfil de riesgo para inversiones
+                  </Label>
+                  <Select
+                    value={settings.riskProfile}
+                    onValueChange={(v) =>
+                      updateSettings({
+                        riskProfile: v as "conservador" | "moderado" | "agresivo",
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="conservador">
+                        <div className="flex items-center gap-2">
+                          <Shield className="h-3.5 w-3.5 text-blue-500" />
+                          <div>
+                            <span className="font-medium">Conservador</span>
+                            <p className="text-[10px] text-muted-foreground">
+                              Depósitos, bonos, renta fija
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="moderado">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-3.5 w-3.5 text-amber-500" />
+                          <div>
+                            <span className="font-medium">Moderado</span>
+                            <p className="text-[10px] text-muted-foreground">
+                              Mix bonos y acciones (ETFs)
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="agresivo">
+                        <div className="flex items-center gap-2">
+                          <Zap className="h-3.5 w-3.5 text-rose-500" />
+                          <div>
+                            <span className="font-medium">Agresivo</span>
+                            <p className="text-[10px] text-muted-foreground">
+                              Acciones, mercados emergentes
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[10px] text-muted-foreground">
+                    Afecta las recomendaciones de inversión
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* ============================================ */}
           {/* FISCALIDAD */}
           {/* ============================================ */}
@@ -456,6 +663,402 @@ export function Settings() {
                   </p>
                 </div>
               </div>
+
+              <Separator />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Tema de la aplicación
+                  </Label>
+                  <Select
+                    value={settings.theme}
+                    onValueChange={(v) =>
+                      updateSettings({
+                        theme: v as "light" | "dark" | "system",
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <ThemeIcon className="h-3.5 w-3.5 mr-2" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="light">
+                        <div className="flex items-center gap-2">
+                          <Sun className="h-3.5 w-3.5 text-amber-500" />
+                          Claro
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="dark">
+                        <div className="flex items-center gap-2">
+                          <Moon className="h-3.5 w-3.5 text-blue-500" />
+                          Oscuro
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="system">
+                        <div className="flex items-center gap-2">
+                          <Monitor className="h-3.5 w-3.5 text-muted-foreground" />
+                          Sistema
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[10px] text-muted-foreground">
+                    Cambia el aspecto visual de la app
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">Modo compacto</Label>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <div>
+                      <p className="text-xs font-medium">Interfaz compacta</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        Reduce el espacio entre elementos
+                      </p>
+                    </div>
+                    <Switch
+                      checked={settings.compactMode}
+                      onCheckedChange={(v) =>
+                        updateSettings({ compactMode: v })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ============================================ */}
+          {/* NOTIFICACIONES Y ALERTAS */}
+          {/* ============================================ */}
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Bell className="h-4 w-4 text-orange-500" />
+                Notificaciones y Alertas
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Configura cuándo y cómo recibir avisos
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Enable notifications toggle */}
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <p className="text-xs font-medium">Activar notificaciones</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Recibe alertas de gastos, presupuestos y renovaciones
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.enableNotifications}
+                  onCheckedChange={(v) =>
+                    updateSettings({ enableNotifications: v })
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Alerta de gasto mensual
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      min={50}
+                      max={100}
+                      step={5}
+                      value={settings.spendingAlertThreshold}
+                      onChange={(e) =>
+                        clampAndUpdate(
+                          "spendingAlertThreshold",
+                          parseFloat(e.target.value) || 80,
+                          50,
+                          100
+                        )
+                      }
+                      className="pr-8"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      %
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    Avisar al alcanzar este % de ingresos gastados
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Aviso renovación suscripción
+                  </Label>
+                  <Select
+                    value={String(settings.subscriptionRenewalDays)}
+                    onValueChange={(v) =>
+                      updateSettings({ subscriptionRenewalDays: parseInt(v) })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 día antes</SelectItem>
+                      <SelectItem value="3">3 días antes</SelectItem>
+                      <SelectItem value="7">7 días antes</SelectItem>
+                      <SelectItem value="14">14 días antes</SelectItem>
+                      <SelectItem value="30">30 días antes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[10px] text-muted-foreground">
+                    Días de antelación para avisos de renovación
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Aviso de presupuesto
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      min={50}
+                      max={95}
+                      step={5}
+                      value={settings.budgetWarningPercent}
+                      onChange={(e) =>
+                        clampAndUpdate(
+                          "budgetWarningPercent",
+                          parseFloat(e.target.value) || 75,
+                          50,
+                          95
+                        )
+                      }
+                      className="pr-8"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      %
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    Avisar al consumir este % del presupuesto
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ============================================ */}
+          {/* METAS DE AHORRO */}
+          {/* ============================================ */}
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                Meta de Ahorro Activa
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Selecciona la meta de ahorro que quieres priorizar
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {savingsGoals.length === 0 ? (
+                <div className="rounded-lg bg-muted/50 p-4 text-center">
+                  <Target className="mx-auto h-6 w-6 mb-2 text-muted-foreground/50" />
+                  <p className="text-xs text-muted-foreground">
+                    No tienes metas de ahorro. Crea una desde el apartado &quot;Metas de Ahorro&quot;.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium">
+                    Meta de ahorro seleccionada
+                  </Label>
+                  <Select
+                    value={settings.selectedGoalId || "_none"}
+                    onValueChange={(v) =>
+                      updateSettings({
+                        selectedGoalId: v === "_none" ? "" : v,
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona una meta" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="_none">
+                        <span className="text-muted-foreground">Ninguna (desactivado)</span>
+                      </SelectItem>
+                      {savingsGoals.map((goal) => {
+                        const progress = Math.min(
+                          100,
+                          Math.round((goal.currentAmount / goal.targetAmount) * 100)
+                        );
+                        return (
+                          <SelectItem key={goal.id} value={goal.id}>
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="font-medium truncate">{goal.name}</span>
+                              <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0">
+                                {progress}%
+                              </Badge>
+                              <span className="text-muted-foreground text-[10px] shrink-0 whitespace-nowrap">
+                                {formatCurrency(goal.currentAmount)} / {formatCurrency(goal.targetAmount)}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Show selected goal details */}
+                  {settings.selectedGoalId && (() => {
+                    const selectedGoal = savingsGoals.find(
+                      (g) => g.id === settings.selectedGoalId
+                    );
+                    if (!selectedGoal) return null;
+                    const progress = Math.min(
+                      100,
+                      Math.round((selectedGoal.currentAmount / selectedGoal.targetAmount) * 100)
+                    );
+                    const remaining = selectedGoal.targetAmount - selectedGoal.currentAmount;
+                    const daysLeft = Math.max(
+                      0,
+                      Math.ceil(
+                        (new Date(selectedGoal.deadline).getTime() - Date.now()) /
+                          (1000 * 60 * 60 * 24)
+                      )
+                    );
+                    const monthlyNeeded =
+                      daysLeft > 0
+                        ? (remaining / (daysLeft / 30)).toFixed(0)
+                        : 0;
+
+                    return (
+                      <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Target className="h-4 w-4 text-primary shrink-0" />
+                          <span className="text-sm font-semibold truncate">
+                            {selectedGoal.name}
+                          </span>
+                          <Badge className="text-[9px] px-1.5 py-0 bg-primary text-primary-foreground shrink-0">
+                            Activa
+                          </Badge>
+                        </div>
+                        <Progress value={progress} className="h-2" />
+                        <div className="grid grid-cols-3 gap-2 text-center">
+                          <div>
+                            <p className="text-xs font-bold">
+                              {formatCurrency(selectedGoal.currentAmount)}
+                            </p>
+                            <p className="text-[9px] text-muted-foreground">
+                              Ahorrado
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-primary">
+                              {formatCurrency(remaining)}
+                            </p>
+                            <p className="text-[9px] text-muted-foreground">
+                              Restante
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-amber-600">
+                              {formatCurrency(Number(monthlyNeeded))}/mes
+                            </p>
+                            <p className="text-[9px] text-muted-foreground">
+                              Necesitas ahorrar
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground text-center">
+                          {daysLeft} días restantes · {progress}% completado
+                        </p>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+
+              <Separator />
+
+              {/* Auto-allocate savings toggle */}
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <p className="text-xs font-medium flex items-center gap-1.5">
+                    <PiggyBank className="h-3.5 w-3.5 text-emerald-500" />
+                    Asignar ahorro automáticamente
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    El superávit mensual se asigna a la meta seleccionada
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.autoAllocateSavings}
+                  onCheckedChange={(v) =>
+                    updateSettings({ autoAllocateSavings: v })
+                  }
+                  disabled={!settings.selectedGoalId}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ============================================ */}
+          {/* PRIVACIDAD */}
+          {/* ============================================ */}
+          <Card className="border-0 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Lock className="h-4 w-4 text-violet-500" />
+                Privacidad y Datos
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Controla la retención y el almacenamiento de tus datos
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">
+                  Retención de datos históricos
+                </Label>
+                <Select
+                  value={String(settings.dataRetentionDays)}
+                  onValueChange={(v) =>
+                    updateSettings({ dataRetentionDays: parseInt(v) })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Sin límite (conservar todo)</SelectItem>
+                    <SelectItem value="90">3 meses</SelectItem>
+                    <SelectItem value="180">6 meses</SelectItem>
+                    <SelectItem value="365">1 año</SelectItem>
+                    <SelectItem value="730">2 años</SelectItem>
+                    <SelectItem value="1825">5 años</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-[10px] text-muted-foreground">
+                  Transacciones más antiguas se eliminarán automáticamente
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-muted/50 p-3 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span className="text-xs font-medium">Tus datos son privados</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground leading-relaxed pl-6">
+                  Todos los datos se almacenan exclusivamente en tu navegador.
+                  No se envía información personal a servidores externos.
+                  Las búsquedas de mercado son anónimas y no contienen datos financieros personales.
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -593,7 +1196,7 @@ export function Settings() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">Versión</span>
                   <Badge variant="secondary" className="text-[10px] px-2">
-                    v1.0.0
+                    v1.1.0
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">

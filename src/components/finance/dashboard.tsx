@@ -7,7 +7,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useFinanceStore } from "@/store/finance-store";
 import { BalanceCards } from "./balance-cards";
 import { TrendChart, ProjectionChart, CategoryBreakdownChart } from "./charts";
@@ -56,10 +56,16 @@ function getGoalIcon(name: string) {
 }
 
 export function Dashboard() {
-  const { transactions, savingsGoals, selectedMonth, setSelectedMonth, deleteTransaction, setActiveTab } = useFinanceStore();
+  const { transactions, savingsGoals, selectedMonth, setSelectedMonth, deleteTransaction, setActiveTab, settings, updateSettings } = useFinanceStore();
   const { toast } = useToast();
-  const availableMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
-  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
+  const allMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
+  // Limit months shown in dropdown to last 12 + current
+  const availableMonths = useMemo(() => {
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const months = allMonths.filter(m => m <= currentMonth);
+    return months.slice(-12);
+  }, [allMonths]);
+  const selectedGoalId = settings.selectedGoalId;
 
   const recentTransactions = useMemo(() => {
     return [...transactions]
@@ -71,6 +77,10 @@ export function Dashboard() {
     () => savingsGoals.find((g) => g.id === selectedGoalId) ?? savingsGoals[0] ?? null,
     [savingsGoals, selectedGoalId]
   );
+
+  const handleSelectGoal = (goalId: string) => {
+    updateSettings({ selectedGoalId: goalId });
+  };
 
   const handleDelete = (id: string, desc: string) => {
     deleteTransaction(id);
@@ -199,7 +209,7 @@ export function Dashboard() {
                         variant={selectedGoal.id === goal.id ? "default" : "outline"}
                         size="sm"
                         className="text-[10px] h-7 gap-1.5"
-                        onClick={() => setSelectedGoalId(goal.id)}
+                        onClick={() => handleSelectGoal(goal.id)}
                       >
                         {(() => {
                           const Icon = getGoalIcon(goal.name);
