@@ -163,11 +163,23 @@ export function calculateTotalBalance(transactions: Transaction[]): number {
 
 /**
  * Obtiene la lista de meses disponibles para el selector.
+ * Limita a los últimos 24 meses para evitar un desplegable infinito.
+ * Incluye siempre el mes actual aunque no tenga transacciones.
  */
 export function getAvailableMonths(transactions: Transaction[]): string[] {
   const monthsSet = new Set<string>();
+  
+  // Añadir meses de transacciones
   for (const tx of transactions) {
     monthsSet.add(getMonthFromISO(tx.date));
   }
-  return Array.from(monthsSet).sort().reverse();
+  
+  // Añadir siempre el mes actual
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  monthsSet.add(currentMonth);
+  
+  // Ordenar y limitar a los últimos 24 meses
+  const allMonths = Array.from(monthsSet).sort().reverse();
+  return allMonths.slice(0, 24);
 }

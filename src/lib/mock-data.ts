@@ -180,6 +180,18 @@ export const mockBudgets: Budget[] = [
 export const mockDebts: Debt[] = [
   {
     id: generateId(),
+    name: "Tarjeta Visa Gold",
+    type: "tarjeta_credito",
+    totalAmount: 3200,
+    currentBalance: 2100,
+    interestRate: 19.9,
+    minimumPayment: 85,
+    dueDay: 5,
+    startDate: createDate(2025, 3, 5),
+    createdAt: createDate(2025, 3, 5),
+  },
+  {
+    id: generateId(),
     name: "Préstamo personal Banco Santander",
     type: "prestamo_personal",
     totalAmount: 8000,
@@ -193,18 +205,6 @@ export const mockDebts: Debt[] = [
   },
   {
     id: generateId(),
-    name: "Tarjeta Visa Gold",
-    type: "tarjeta_credito",
-    totalAmount: 3200,
-    currentBalance: 2100,
-    interestRate: 19.9,
-    minimumPayment: 85,
-    dueDay: 5,
-    startDate: createDate(2025, 3, 5),
-    createdAt: createDate(2025, 3, 5),
-  },
-  {
-    id: generateId(),
     name: "Préstamo coche",
     type: "prestamo_auto",
     totalAmount: 12000,
@@ -215,6 +215,19 @@ export const mockDebts: Debt[] = [
     startDate: createDate(2025, 1, 20),
     endDate: createDate(2029, 1, 20),
     createdAt: createDate(2025, 1, 20),
+  },
+  {
+    id: generateId(),
+    name: "Microcrédito hipotecario",
+    type: "prestamo_personal",
+    totalAmount: 1800,
+    currentBalance: 1200,
+    interestRate: 4.5,
+    minimumPayment: 60,
+    dueDay: 10,
+    startDate: createDate(2025, 9, 10),
+    endDate: createDate(2027, 9, 10),
+    createdAt: createDate(2025, 9, 10),
   },
 ];
 

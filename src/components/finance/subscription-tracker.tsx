@@ -519,16 +519,16 @@ export function SubscriptionTracker() {
                   return (
                     <div
                       key={sub.id}
-                      className="flex items-center gap-3 rounded-xl border p-3"
+                      className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden"
                     >
-                      <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm font-medium truncate">
+                          <span className="text-sm font-medium truncate max-w-[160px]">
                             {sub.name}
                           </span>
                           <Badge
                             className={cn(
-                              "text-[9px] px-1.5",
+                              "text-[9px] px-1.5 shrink-0",
                               CYCLE_BADGE_COLORS[sub.billingCycle]
                             )}
                           >
@@ -536,13 +536,13 @@ export function SubscriptionTracker() {
                           </Badge>
                           <Badge
                             variant="secondary"
-                            className="text-[9px] px-1.5"
+                            className="text-[9px] px-1.5 shrink-0"
                           >
                             {CATEGORY_CONFIG[sub.category]?.label ?? sub.category}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                          <span>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
+                          <span className="whitespace-nowrap">
                             {formatCurrency(sub.amount)}/
                             {sub.billingCycle === "mensual"
                               ? "mes"
@@ -552,10 +552,10 @@ export function SubscriptionTracker() {
                                   ? "semestre"
                                   : "año"}
                           </span>
-                          <span>≈ {formatCurrency(monthlyCost)}/mes</span>
-                          <span>{formatCurrency(annualCost)}/año</span>
+                          <span className="whitespace-nowrap">≈ {formatCurrency(monthlyCost)}/mes</span>
+                          <span className="whitespace-nowrap">{formatCurrency(annualCost)}/año</span>
                         </div>
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="text-[10px] text-muted-foreground truncate">
                           Próximo cobro: {formatDate(sub.nextBillingDate)}
                         </div>
                       </div>
@@ -718,12 +718,12 @@ export function SubscriptionTracker() {
                     maxAnnual > 0 ? (annualCost / maxAnnual) * 100 : 0;
 
                   return (
-                    <div key={sub.id} className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium truncate max-w-[60%]">
+                    <div key={sub.id} className="space-y-1.5 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-medium truncate">
                           {sub.name}
                         </span>
-                        <span className="text-xs font-bold shrink-0">
+                        <span className="text-xs font-bold shrink-0 whitespace-nowrap">
                           {formatCurrency(annualCost)}/año
                         </span>
                       </div>

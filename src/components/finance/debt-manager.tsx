@@ -342,59 +342,125 @@ export function DebtManager() {
 
           {/* Comparison Card */}
           {showComparison && (
-            <Card className="border-0 bg-muted/50">
-              <CardContent className="p-4 space-y-3">
+            <Card className="border-0 bg-muted/50 overflow-hidden">
+              <CardContent className="p-4 space-y-4">
                 <h3 className="text-xs font-semibold flex items-center gap-2">
                   <AlertCircle className="h-3.5 w-3.5 text-primary" />
-                  Comparativa de Estrategias
+                  Comparativa Detallada de Estrategias
                 </h3>
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div />
-                  <div className="rounded-lg bg-sky-50 dark:bg-sky-950/30 p-2">
-                    <p className="text-[10px] font-semibold text-sky-700 dark:text-sky-300">
-                      Bola de Nieve
-                    </p>
-                  </div>
-                  <div className="rounded-lg bg-orange-50 dark:bg-orange-950/30 p-2">
-                    <p className="text-[10px] font-semibold text-orange-700 dark:text-orange-300">
-                      Avalancha
-                    </p>
-                  </div>
 
-                  <div className="text-right text-[10px] text-muted-foreground self-center">
-                    Meses
-                  </div>
-                  <div className="text-sm font-bold text-center">
-                    {comparison.snowball.totalMonthsToFreedom}
-                  </div>
-                  <div className="text-sm font-bold text-center">
-                    {comparison.avalanche.totalMonthsToFreedom}
-                  </div>
-
-                  <div className="text-right text-[10px] text-muted-foreground self-center">
-                    Intereses
-                  </div>
-                  <div className="text-sm font-bold text-center">
-                    {formatCurrency(comparison.snowball.totalInterest)}
-                  </div>
-                  <div className="text-sm font-bold text-center">
-                    {formatCurrency(comparison.avalanche.totalInterest)}
+                {/* Tabla comparativa con overflow controlado */}
+                <div className="rounded-lg border overflow-hidden overflow-x-auto">
+                  <div className="min-w-[340px]">
+                    {/* Header */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 bg-muted/70 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      <span />
+                      <span className="text-center text-sky-700 dark:text-sky-300">Bola de Nieve</span>
+                      <span className="text-center text-orange-700 dark:text-orange-300">Avalancha</span>
+                    </div>
+                    {/* Meses */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
+                      <span className="text-muted-foreground font-medium">Meses libertad</span>
+                      <span className="text-center font-bold">{comparison.snowball.totalMonthsToFreedom}</span>
+                      <span className="text-center font-bold">{comparison.avalanche.totalMonthsToFreedom}</span>
+                    </div>
+                    {/* Intereses */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
+                      <span className="text-muted-foreground font-medium">Intereses totales</span>
+                      <span className="text-center font-bold text-rose-600">{formatCurrency(comparison.snowball.totalInterest)}</span>
+                      <span className="text-center font-bold text-rose-600">{formatCurrency(comparison.avalanche.totalInterest)}</span>
+                    </div>
+                    {/* Coste total */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center bg-muted/30">
+                      <span className="text-muted-foreground font-medium">Coste total (deuda+int.)</span>
+                      <span className="text-center font-bold">{formatCurrency(comparison.snowball.totalDebt + comparison.snowball.totalInterest)}</span>
+                      <span className="text-center font-bold">{formatCurrency(comparison.avalanche.totalDebt + comparison.avalanche.totalInterest)}</span>
+                    </div>
+                    {/* Primera deuda liquidada */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 text-xs border-t items-center">
+                      <span className="text-muted-foreground font-medium">1ª deuda liquidada</span>
+                      <span className="text-center">
+                        {comparison.snowball.individualPlans.length > 0 && (
+                          <>
+                            <span className="font-semibold">{comparison.snowball.debtsOrder[0]?.name}</span>
+                            <span className="text-muted-foreground ml-1">({comparison.snowball.individualPlans[0]?.monthsToPayoff} meses)</span>
+                          </>
+                        )}
+                      </span>
+                      <span className="text-center">
+                        {comparison.avalanche.individualPlans.length > 0 && (
+                          <>
+                            <span className="font-semibold">{comparison.avalanche.debtsOrder[0]?.name}</span>
+                            <span className="text-muted-foreground ml-1">({comparison.avalanche.individualPlans[0]?.monthsToPayoff} meses)</span>
+                          </>
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {comparison.interestSavedByAvalanche > 0 && (
+                {/* Ahorro de avalancha */}
+                {(comparison.interestSavedByAvalanche > 0 || comparison.monthsSavedByAvalanche > 0) && (
                   <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 p-3 text-center">
                     <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
                       La Avalancha te ahorra{" "}
-                      <span className="font-bold">
-                        {formatCurrency(comparison.interestSavedByAvalanche)}
-                      </span>{" "}
-                      en intereses
-                      {comparison.monthsSavedByAvalanche > 0 &&
-                        ` y ${comparison.monthsSavedByAvalanche} meses`}
+                      {comparison.interestSavedByAvalanche > 0 && (
+                        <span className="font-bold">
+                          {formatCurrency(comparison.interestSavedByAvalanche)} en intereses
+                        </span>
+                      )}
+                      {comparison.interestSavedByAvalanche > 0 && comparison.monthsSavedByAvalanche > 0 && " y "}
+                      {comparison.monthsSavedByAvalanche > 0 && (
+                        <span className="font-bold">
+                          {comparison.monthsSavedByAvalanche} meses antes
+                        </span>
+                      )}
                     </p>
                   </div>
                 )}
+
+                {/* Orden de ataque visual */}
+                <div className="space-y-3">
+                  <p className="text-[11px] font-semibold">Orden de ataque por estrategia:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="rounded-lg border p-2.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Snowflake className="h-3.5 w-3.5 text-sky-500" />
+                        <span className="text-[11px] font-semibold text-sky-700 dark:text-sky-300">Bola de Nieve</span>
+                      </div>
+                      {comparison.snowball.debtsOrder.map((debt, i) => (
+                        <div key={debt.id} className="flex items-center gap-2 text-[10px]">
+                          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300 font-bold text-[8px]">
+                            {i + 1}
+                          </span>
+                          <span className="truncate">{debt.name}</span>
+                          <span className="text-muted-foreground ml-auto shrink-0">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
+                        </div>
+                      ))}
+                      {comparison.snowball.debtsOrder.length === 0 && (
+                        <p className="text-[10px] text-muted-foreground">Sin deudas</p>
+                      )}
+                    </div>
+                    <div className="rounded-lg border p-2.5 space-y-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Mountain className="h-3.5 w-3.5 text-orange-500" />
+                        <span className="text-[11px] font-semibold text-orange-700 dark:text-orange-300">Avalancha</span>
+                      </div>
+                      {comparison.avalanche.debtsOrder.map((debt, i) => (
+                        <div key={debt.id} className="flex items-center gap-2 text-[10px]">
+                          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 font-bold text-[8px]">
+                            {i + 1}
+                          </span>
+                          <span className="truncate">{debt.name}</span>
+                          <span className="text-muted-foreground ml-auto shrink-0">{formatCurrency(debt.currentBalance)} · {debt.interestRate}%</span>
+                        </div>
+                      ))}
+                      {comparison.avalanche.debtsOrder.length === 0 && (
+                        <p className="text-[10px] text-muted-foreground">Sin deudas</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
 
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   {comparison.recommendation}
@@ -514,25 +580,25 @@ export function DebtManager() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-center">
-                        <div>
-                          <p className="text-xs font-bold">
+                      <div className="grid grid-cols-3 gap-2 text-center overflow-hidden">
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold truncate">
                             {formatCurrency(debt.currentBalance)}
                           </p>
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className="text-[10px] text-muted-foreground truncate">
                             de {formatCurrency(debt.totalAmount)}
                           </p>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-rose-600">
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-rose-600 truncate">
                             {debt.interestRate}% TAE
                           </p>
                           <p className="text-[10px] text-muted-foreground">
                             Interés
                           </p>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold">
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold truncate">
                             {formatCurrency(debt.minimumPayment)}
                           </p>
                           <p className="text-[10px] text-muted-foreground">
@@ -600,12 +666,12 @@ export function DebtManager() {
                 const color = colorClasses[idx % colorClasses.length];
 
                 return (
-                  <div key={plan.debt.id} className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium truncate max-w-[60%]">
+                  <div key={plan.debt.id} className="space-y-1.5 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-medium truncate">
                         {plan.debt.name}
                       </span>
-                      <span className="text-[10px] text-muted-foreground shrink-0">
+                      <span className="text-[10px] text-muted-foreground shrink-0 whitespace-nowrap">
                         {plan.monthsToPayoff} meses —{" "}
                         {new Date(
                           new Date().setMonth(

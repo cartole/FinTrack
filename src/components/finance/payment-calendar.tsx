@@ -109,7 +109,7 @@ function EventCard({ event }: { event: CalendarEvent }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm",
+        "flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm overflow-hidden",
         config.bgColor
       )}
     >
@@ -121,9 +121,9 @@ function EventCard({ event }: { event: CalendarEvent }) {
       >
         <Icon className={cn("h-4 w-4", config.color)} />
       </div>
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 overflow-hidden">
         <p className="text-xs font-medium truncate">{event.title}</p>
-        <p className="text-[10px] text-muted-foreground">
+        <p className="text-[10px] text-muted-foreground truncate">
           {formatDateShort(event.date)}
           {event.isRecurring && event.recurrencePattern && (
             <span className="ml-1">
@@ -132,10 +132,10 @@ function EventCard({ event }: { event: CalendarEvent }) {
           )}
         </p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shrink-0">
         <Badge
           variant="secondary"
-          className={cn("text-[10px] px-1.5 py-0", config.color, config.bgColor, "border-0")}
+          className={cn("text-[10px] px-1.5 py-0 shrink-0", config.color, config.bgColor, "border-0")}
         >
           {config.label}
         </Badge>

@@ -556,9 +556,9 @@ export function InvestmentCalculator() {
               <div className="min-w-[400px]">
                 <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   <span>Año</span>
-                  <span className="text-right">Aportado</span>
-                  <span className="text-right">Valor</span>
-                  <span className="text-right">Ganancia</span>
+                  <span className="text-right whitespace-nowrap">Aportado</span>
+                  <span className="text-right whitespace-nowrap">Valor</span>
+                  <span className="text-right whitespace-nowrap">Ganancia</span>
                 </div>
                 <ScrollArea className="max-h-[200px]">
                 {activeScenario.projection
@@ -569,13 +569,13 @@ export function InvestmentCalculator() {
                       className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
                     >
                       <span className="font-medium">{point.year}</span>
-                      <span className="text-right">{formatCurrency(point.contributed)}</span>
-                      <span className="text-right font-semibold text-emerald-600">
+                      <span className="text-right whitespace-nowrap">{formatCurrency(point.contributed)}</span>
+                      <span className="text-right font-semibold text-emerald-600 whitespace-nowrap">
                         {formatCurrency(point.value)}
                       </span>
                       <span
                         className={cn(
-                          "text-right font-semibold",
+                          "text-right font-semibold whitespace-nowrap",
                           point.value - point.contributed >= 0 ? "text-emerald-600" : "text-rose-600"
                         )}
                       >

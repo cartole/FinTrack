@@ -572,9 +572,9 @@ export function FixedTermCalculator() {
               <div className="min-w-[400px]">
                 <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   <span>Mes</span>
-                  <span className="text-right">Interés/mes</span>
-                  <span className="text-right">Bruto acum.</span>
-                  <span className="text-right">Neto acum.</span>
+                  <span className="text-right whitespace-nowrap">Interés/mes</span>
+                  <span className="text-right whitespace-nowrap">Bruto acum.</span>
+                  <span className="text-right whitespace-nowrap">Neto acum.</span>
                 </div>
                 <div className="max-h-[150px] overflow-y-auto">
                   {calculation.monthlyBreakdown.map((m) => (
@@ -583,9 +583,9 @@ export function FixedTermCalculator() {
                       className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
                     >
                     <span className="font-medium">{m.month}</span>
-                    <span className="text-right">{formatCurrency(m.interest)}</span>
-                    <span className="text-right text-blue-600">{formatCurrency(m.cumulative)}</span>
-                    <span className="text-right text-emerald-600 font-semibold">
+                    <span className="text-right whitespace-nowrap">{formatCurrency(m.interest)}</span>
+                    <span className="text-right text-blue-600 whitespace-nowrap">{formatCurrency(m.cumulative)}</span>
+                    <span className="text-right text-emerald-600 font-semibold whitespace-nowrap">
                       {formatCurrency(m.netCumulative)}
                     </span>
                     </div>
