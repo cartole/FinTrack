@@ -501,11 +501,12 @@ async function searchDepositRates(zai: InstanceType<typeof ZAI>): Promise<Deposi
           { name: "Wizink", keywords: ["wizink"] },
           { name: "Achmea Bank", keywords: ["achmea"] },
           { name: "Arquia Banca", keywords: ["arquia"] },
+          { name: "Bankinter", keywords: ["bankinter"] },
+          { name: "Openbank", keywords: ["openbank"] },
+          { name: "ING", keywords: ["ing "] },
+          { name: "Santander", keywords: ["santander"] },
           { name: "BBVA", keywords: ["bbva"] },
           { name: "CaixaBank", keywords: ["caixabank", "la caixa"] },
-          { name: "Santander", keywords: ["santander"] },
-          { name: "ING", keywords: ["ing "] },
-          { name: "Openbank", keywords: ["openbank"] },
         ];
 
         for (const bank of bankPatterns) {
@@ -560,6 +561,10 @@ async function searchDepositRates(zai: InstanceType<typeof ZAI>): Promise<Deposi
     { bank: "Wizink", term: "18 meses", tae: 2.85, tin: 2.82, minAmount: 10000, source: "HelpMyCash - mayo 2026" },
     { bank: "Achmea Bank", term: "4 años", tae: 2.93, tin: 2.81, minAmount: 5000, source: "LaVanguardia - mayo 2026" },
     { bank: "Arquia Banca", term: "6 meses", tae: 2.60, tin: 2.57, minAmount: 5000, source: "HelpMyCash - mayo 2026" },
+    { bank: "Bankinter", term: "12 meses", tae: 2.50, tin: 2.48, minAmount: 5000, source: "Bankinter.es - mayo 2026" },
+    { bank: "Openbank", term: "14 meses", tae: 2.30, tin: 2.27, minAmount: 5000, source: "Openbank.es - mayo 2026" },
+    { bank: "ING", term: "12 meses", tae: 2.20, tin: 2.18, minAmount: 5000, source: "ING.es - mayo 2026" },
+    { bank: "Santander", term: "12 meses", tae: 2.10, tin: 2.08, minAmount: 5000, source: "Santander.es - mayo 2026" },
     { bank: "BBVA", term: "12 meses", tae: 2.00, tin: 1.98, minAmount: 5000, source: "BBVA.es - mayo 2026" },
     { bank: "CaixaBank", term: "12 meses", tae: 1.80, tin: 1.78, minAmount: 5000, source: "CaixaBank.es - mayo 2026" },
   ];

@@ -74,6 +74,17 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 /** Form state for adding/editing a debt */
@@ -472,14 +483,34 @@ export function DebtManager() {
                           >
                             <Pencil className="h-3 w-3" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600"
-                            onClick={() => handleDeleteDebt(debt.id)}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>¿Eliminar deuda?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Se eliminará &quot;{debt.name}&quot; ({formatCurrency(debt.currentBalance)}). Esta acción no se puede deshacer.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteDebt(debt.id)}
+                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                  Eliminar
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </div>
 

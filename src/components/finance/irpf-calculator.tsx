@@ -768,7 +768,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
         <CardContent>
           <div className="space-y-2">
             {/* Header */}
-            <div className="grid grid-cols-4 gap-2 text-[10px] text-muted-foreground font-semibold pb-1 border-b">
+            <div className="grid grid-cols-4 gap-2 text-[10px] text-muted-foreground font-semibold pb-1 border-b min-w-[380px]">
               <span>Tramo</span>
               <span className="text-right">Base</span>
               <span className="text-right">Tipo</span>
@@ -777,7 +777,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
             {result.brackets
               .filter((b) => b.baseInBracket > 0)
               .map((bracket, idx) => (
-                <div key={idx} className="grid grid-cols-4 gap-2 text-xs py-1.5">
+                <div key={idx} className="grid grid-cols-4 gap-2 text-xs py-1.5 min-w-[380px]">
                   <span className="text-muted-foreground">
                     {bracket.to === Infinity
                       ? `> ${formatCurrency(bracket.from)}`
@@ -793,7 +793,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
                 </div>
               ))}
             {/* Totales */}
-            <div className="grid grid-cols-4 gap-2 text-xs py-1.5 border-t font-bold">
+            <div className="grid grid-cols-4 gap-2 text-xs py-1.5 border-t font-bold min-w-[380px]">
               <span>Total</span>
               <span className="text-right">{formatCurrency(result.baseLiquidable)}</span>
               <span />
@@ -1064,8 +1064,8 @@ export function IRPFCalculator() {
 
       {/* Step navigation dots */}
       {!result && (
-        <div className="flex items-center justify-center gap-1.5">
-          {effectiveSteps.map((_, idx) => (
+        <div className="flex items-center justify-center gap-1 flex-wrap">
+          {effectiveSteps.map((step, idx) => (
             <button
               key={idx}
               onClick={() => idx <= currentStep && setCurrentStep(idx)}
@@ -1077,6 +1077,7 @@ export function IRPFCalculator() {
                   ? "w-2 bg-primary/50 cursor-pointer"
                   : "w-2 bg-muted"
               )}
+              title={step.title}
             />
           ))}
         </div>

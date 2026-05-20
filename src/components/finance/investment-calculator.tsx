@@ -552,8 +552,8 @@ export function InvestmentCalculator() {
             </div>
 
             {/* Tabla de evolución */}
-            <div className="rounded-lg border">
-              <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="rounded-lg border overflow-hidden">
+              <div className="grid grid-cols-4 gap-2 p-2 bg-muted/50 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground min-w-[400px]">
                 <span>Año</span>
                 <span className="text-right">Aportado</span>
                 <span className="text-right">Valor</span>
@@ -565,7 +565,7 @@ export function InvestmentCalculator() {
                   .map((point) => (
                     <div
                       key={point.year}
-                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30"
+                      className="grid grid-cols-4 gap-2 p-2 text-xs border-t hover:bg-muted/30 min-w-[400px]"
                     >
                       <span className="font-medium">{point.year}</span>
                       <span className="text-right">{formatCurrency(point.contributed)}</span>

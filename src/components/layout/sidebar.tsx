@@ -125,7 +125,7 @@ function Logo() {
   );
 }
 
-function NavContent() {
+function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
   const { activeTab, setActiveTab } = useFinanceStore();
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
@@ -138,11 +138,18 @@ function NavContent() {
     });
   };
 
+  const handleNavClick = (tabId: string) => {
+    setActiveTab(tabId);
+    onNavigate?.();
+  };
+
   return (
-    <div className="flex flex-col h-full">
-      <Logo />
-      <Separator className="my-3" />
-      <ScrollArea className="flex-1 px-2">
+    <div className="flex flex-col h-full min-h-0">
+      <div className="shrink-0">
+        <Logo />
+        <Separator className="my-3" />
+      </div>
+      <ScrollArea className="flex-1 min-h-0 px-2">
         <nav className="flex flex-col gap-1 pb-4">
           {navSections.map((section) => (
             <div key={section.title}>
@@ -166,7 +173,7 @@ function NavContent() {
                       label={item.label}
                       icon={item.icon}
                       active={activeTab === item.id}
-                      onClick={() => setActiveTab(item.id)}
+                      onClick={() => handleNavClick(item.id)}
                     />
                   ))}
                 </div>
@@ -175,7 +182,7 @@ function NavContent() {
           ))}
         </nav>
       </ScrollArea>
-      <div className="px-2 pb-4">
+      <div className="shrink-0 px-2 pb-4">
         <Separator className="mb-3" />
         <div className="rounded-lg bg-muted/50 p-3">
           <div className="flex items-center gap-2 mb-2">
@@ -192,6 +199,8 @@ function NavContent() {
 }
 
 export function Sidebar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <>
       {/* Desktop sidebar */}
@@ -201,15 +210,15 @@ export function Sidebar() {
 
       {/* Mobile sidebar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center gap-2 border-b bg-card px-4 py-3">
-        <Sheet>
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="shrink-0">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0">
+          <SheetContent side="left" className="w-64 p-0 h-full">
             <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
-            <NavContent />
+            <NavContent onNavigate={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
         <Logo />
