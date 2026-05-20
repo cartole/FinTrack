@@ -13,6 +13,7 @@
  * - Annual cost breakdown per subscription
  *
  * All text in Spanish, currency in EUR.
+ * Fully responsive for mobile, tablet and desktop.
  */
 
 "use client";
@@ -66,13 +67,14 @@ import {
   Trash2,
   Sparkles,
   Calendar,
-  AlertCircle,
-  Eye,
-  EyeOff,
-  ChevronRight,
-  Loader2,
   CreditCard,
   TrendingUp,
+  Loader2,
+  Eye,
+  EyeOff,
+  Flame,
+  PiggyBank,
+  X,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -109,6 +111,13 @@ const CYCLE_LABELS: Record<BillingCycle, string> = {
   trimestral: "Trimestral",
   semestral: "Semestral",
   anual: "Anual",
+};
+
+const CYCLE_PERIOD: Record<BillingCycle, string> = {
+  mensual: "mes",
+  trimestral: "trimestre",
+  semestral: "semestre",
+  anual: "año",
 };
 
 const CYCLE_BADGE_COLORS: Record<BillingCycle, string> = {
@@ -181,7 +190,6 @@ export function SubscriptionTracker() {
 
   const handleDetectSubscriptions = () => {
     setIsDetecting(true);
-    // Simulate "AI analysis" delay
     setTimeout(() => {
       const detected = detectSubscriptionFromTransactions(transactions);
       setDetectedSubs(detected);
@@ -202,7 +210,6 @@ export function SubscriptionTracker() {
       isActive: true,
       startDate: new Date().toISOString(),
     });
-    // Remove from detected list
     setDetectedSubs((prev) => prev.filter((d) => d !== detected));
   };
 
@@ -211,290 +218,306 @@ export function SubscriptionTracker() {
     (r) => r.daysUntil <= 30
   );
 
+  // Potential savings from inactive subs
+  const inactiveMonthlySavings = inactiveSubs.reduce(
+    (sum, s) => sum + getMonthlyEquivalent(s.amount, s.billingCycle),
+    0
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500/10">
-          <Repeat className="h-6 w-6 text-pink-500" />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-pink-500/10 shrink-0">
+            <Repeat className="h-5 w-5 sm:h-6 sm:w-6 text-pink-500" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-lg font-bold">Rastreador de Suscripciones</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
+              Controla todos tus pagos recurrentes
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-bold">Rastreador de Suscripciones</h2>
-          <p className="text-sm text-muted-foreground">
-            Controla todos tus pagos recurrentes
-          </p>
-        </div>
+        <Button size="sm" onClick={() => handleOpenAdd()} className="gap-1.5 shrink-0">
+          <Plus className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Añadir</span>
+        </Button>
       </div>
 
-      {/* Big Summary Card - Shock Factor */}
-      <Card className="border-0 shadow-sm bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-950/30 dark:to-pink-950/20">
-        <CardContent className="p-6 text-center space-y-2">
-          <p className="text-sm text-muted-foreground">Gastas en suscripciones</p>
-          <div className="flex items-baseline justify-center gap-1">
-            <span className="text-4xl font-bold text-rose-600">
-              {formatCurrency(summary.totalMonthly)}
-            </span>
-            <span className="text-lg text-muted-foreground">/mes</span>
-          </div>
-          <div className="flex items-center justify-center gap-1.5">
-            <span className="text-2xl font-semibold text-rose-500">
-              {formatCurrency(summary.totalAnnual)}
-            </span>
-            <span className="text-sm text-muted-foreground">/año</span>
-          </div>
-          <p className="text-xs text-muted-foreground pt-1">
-            {summary.activeCount} suscripción
-            {summary.activeCount !== 1 ? "es" : ""} activa
-            {summary.activeCount !== 1 ? "s" : ""}
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* AI Detection */}
-      <Card className="border-0 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-amber-500" />
-            Detectar Suscripciones IA
-          </CardTitle>
-          <CardDescription className="text-xs">
-            Analiza tus transacciones para encontrar pagos recurrentes
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <Button
-            variant="outline"
-            onClick={handleDetectSubscriptions}
-            disabled={isDetecting}
-            className="w-full gap-2"
-          >
-            {isDetecting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Sparkles className="h-4 w-4" />
-            )}
-            {isDetecting
-              ? "Analizando transacciones..."
-              : "Detectar suscripciones automáticamente"}
-          </Button>
-
-          {showDetection && (
-            <div className="space-y-2">
-              {detectedSubs.length === 0 ? (
-                <div className="rounded-lg bg-muted/50 p-4 text-center">
-                  <p className="text-xs text-muted-foreground">
-                    No se han detectado nuevas suscripciones en tus transacciones.
-                  </p>
+      {/* Top Row: Summary + Renewals */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Big Summary Card - Shock Factor */}
+        <Card className="lg:col-span-2 border shadow-sm bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-950/30 dark:to-pink-950/20 overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+              {/* Big numbers */}
+              <div className="text-center sm:text-left flex-1 min-w-0">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-1">Gastas en suscripciones</p>
+                <div className="flex items-baseline justify-center sm:justify-start gap-1 flex-wrap">
+                  <span className="text-3xl sm:text-4xl font-bold text-rose-600">
+                    {formatCurrency(summary.totalMonthly)}
+                  </span>
+                  <span className="text-base sm:text-lg text-muted-foreground">/mes</span>
                 </div>
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 mt-1">
+                  <span className="text-lg sm:text-2xl font-semibold text-rose-500">
+                    {formatCurrency(summary.totalAnnual)}
+                  </span>
+                  <span className="text-xs sm:text-sm text-muted-foreground">/año</span>
+                </div>
+              </div>
+
+              {/* Stats grid */}
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full sm:w-auto">
+                <div className="rounded-lg bg-white/60 dark:bg-black/20 p-2.5 sm:p-3 text-center">
+                  <p className="text-lg sm:text-xl font-bold text-rose-600">{summary.activeCount}</p>
+                  <p className="text-[9px] sm:text-[10px] text-muted-foreground">Activas</p>
+                </div>
+                <div className="rounded-lg bg-white/60 dark:bg-black/20 p-2.5 sm:p-3 text-center">
+                  <p className="text-lg sm:text-xl font-bold text-muted-foreground">{inactiveSubs.length}</p>
+                  <p className="text-[9px] sm:text-[10px] text-muted-foreground">Inactivas</p>
+                </div>
+                <div className="rounded-lg bg-white/60 dark:bg-black/20 p-2.5 sm:p-3 text-center">
+                  <p className="text-lg sm:text-xl font-bold text-amber-600">{upcomingRenewals.length}</p>
+                  <p className="text-[9px] sm:text-[10px] text-muted-foreground">Próximas 30d</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Next Renewals (next 30 days) */}
+        <Card className="border shadow-sm overflow-hidden">
+          <CardHeader className="pb-2 px-4 pt-4">
+            <CardTitle className="text-xs font-semibold flex items-center gap-2">
+              <Calendar className="h-3.5 w-3.5 text-amber-500" />
+              Próximas Renovaciones
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4">
+            {upcomingRenewals.length === 0 ? (
+              <div className="text-center py-4">
+                <Calendar className="mx-auto h-6 w-6 text-muted-foreground/40 mb-1" />
+                <p className="text-[10px] text-muted-foreground">Sin renovaciones próximas</p>
+              </div>
+            ) : (
+              <ScrollArea className="max-h-36 sm:max-h-44">
+                <div className="space-y-1.5 pr-1">
+                  {upcomingRenewals.map(({ subscription, daysUntil }) => (
+                    <div
+                      key={subscription.id}
+                      className="flex items-center gap-2 rounded-lg border p-2"
+                    >
+                      <div
+                        className={cn(
+                          "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
+                          daysUntil <= 3
+                            ? "bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300"
+                            : daysUntil <= 7
+                              ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+                              : "bg-muted text-muted-foreground"
+                        )}
+                      >
+                        {daysUntil}d
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-medium truncate">{subscription.name}</p>
+                        <p className="text-[9px] text-muted-foreground">
+                          {formatDate(subscription.nextBillingDate)}
+                        </p>
+                      </div>
+                      <span className="text-[11px] font-bold shrink-0 whitespace-nowrap">
+                        {formatCurrency(subscription.amount)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Second Row: AI Detection + Category Breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* AI Detection */}
+        <Card className="border shadow-sm overflow-hidden">
+          <CardHeader className="pb-2 px-4 pt-4">
+            <CardTitle className="text-xs font-semibold flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+              Detectar Suscripciones IA
+            </CardTitle>
+            <CardDescription className="text-[10px]">
+              Analiza tus transacciones para encontrar pagos recurrentes
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-4 pb-4 space-y-2.5">
+            <Button
+              variant="outline"
+              onClick={handleDetectSubscriptions}
+              disabled={isDetecting}
+              className="w-full gap-2 h-9 text-xs"
+            >
+              {isDetecting ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
-                <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground">
-                    Se han encontrado {detectedSubs.length} posible
-                    {detectedSubs.length !== 1 ? "s" : ""} suscripción
-                    {detectedSubs.length !== 1 ? "es" : ""}:
-                  </p>
-                  <ScrollArea className="max-h-48">
-                    <div className="space-y-2 pr-2">
+                <Sparkles className="h-3.5 w-3.5" />
+              )}
+              {isDetecting
+                ? "Analizando..."
+                : "Detectar suscripciones automáticamente"}
+            </Button>
+
+            {showDetection && (
+              <div className="space-y-2">
+                {detectedSubs.length === 0 ? (
+                  <div className="rounded-lg bg-muted/50 p-3 text-center">
+                    <p className="text-[10px] text-muted-foreground">
+                      No se han detectado nuevas suscripciones.
+                    </p>
+                  </div>
+                ) : (
+                  <ScrollArea className="max-h-40">
+                    <div className="space-y-1.5 pr-1">
                       {detectedSubs.map((det, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-3 rounded-lg border p-3"
+                          className="flex items-center gap-2 rounded-lg border p-2 overflow-hidden"
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="text-xs font-medium truncate">
-                              {det.description}
-                            </p>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-xs font-bold">
-                                {formatCurrency(det.amount)}
-                              </span>
-                              <Badge
-                                variant="secondary"
-                                className="text-[9px] px-1"
-                              >
+                            <p className="text-[11px] font-medium truncate">{det.description}</p>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-[10px] font-bold">{formatCurrency(det.amount)}</span>
+                              <Badge variant="secondary" className="text-[8px] px-1 py-0 h-4">
                                 {CYCLE_LABELS[det.suggestedCycle]}
                               </Badge>
-                              <span className="text-[10px] text-muted-foreground">
-                                {det.occurrences} pagos detectados
-                              </span>
+                              <Badge
+                                className={cn(
+                                  "text-[8px] px-1 py-0 h-4",
+                                  det.confidence >= 75
+                                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50"
+                                    : "bg-amber-100 text-amber-700 dark:bg-amber-900/50"
+                                )}
+                              >
+                                {det.confidence}%
+                              </Badge>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <Badge
-                              className={cn(
-                                "text-[9px] px-1.5",
-                                det.confidence >= 75
-                                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50"
-                                  : det.confidence >= 50
-                                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50"
-                                    : "bg-muted text-muted-foreground"
-                              )}
-                            >
-                              {det.confidence}% confianza
-                            </Badge>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-7 px-2 text-[10px]"
-                              onClick={() => handleAddDetected(det)}
-                            >
-                              + Añadir
-                            </Button>
-                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-6 px-2 text-[10px] shrink-0"
+                            onClick={() => handleAddDetected(det)}
+                          >
+                            + Añadir
+                          </Button>
                         </div>
                       ))}
                     </div>
                   </ScrollArea>
-                </div>
-              )}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDetection(false)}
-                className="w-full text-xs"
-              >
-                Cerrar
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Next Renewals (next 30 days) */}
-      {upcomingRenewals.length > 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-amber-500" />
-              Próximas Renovaciones
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Renovaciones en los próximos 30 días
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="max-h-40 sm:max-h-48">
-              <div className="space-y-2 pr-2">
-                {upcomingRenewals.map(({ subscription, daysUntil }) => (
-                  <div
-                    key={subscription.id}
-                    className="flex items-center gap-3 rounded-lg border p-3"
-                  >
-                    <div
-                      className={cn(
-                        "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-                        daysUntil <= 3
-                          ? "bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-300"
-                          : daysUntil <= 7
-                            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-                            : "bg-muted text-muted-foreground"
-                      )}
-                    >
-                      {daysUntil}d
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">
-                        {subscription.name}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">
-                        {formatDate(subscription.nextBillingDate)}
-                      </p>
-                    </div>
-                    <span className="text-xs font-bold shrink-0">
-                      {formatCurrency(subscription.amount)}
-                    </span>
-                  </div>
-                ))}
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowDetection(false)}
+                  className="w-full text-[10px] h-7"
+                >
+                  Cerrar
+                </Button>
               </div>
-            </ScrollArea>
+            )}
           </CardContent>
         </Card>
-      )}
 
-      {/* Category Breakdown */}
-      {Object.keys(summary.byCategory).length > 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-primary" />
+        {/* Category Breakdown */}
+        <Card className="border shadow-sm overflow-hidden">
+          <CardHeader className="pb-2 px-4 pt-4">
+            <CardTitle className="text-xs font-semibold flex items-center gap-2">
+              <TrendingUp className="h-3.5 w-3.5 text-primary" />
               Desglose por Categoría
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {Object.entries(summary.byCategory).map(([category, data]) => {
-                const catConfig =
-                  CATEGORY_CONFIG[category as TransactionCategory];
-                const percentage =
-                  summary.totalMonthly > 0
-                    ? (data.monthly / summary.totalMonthly) * 100
-                    : 0;
+          <CardContent className="px-4 pb-4">
+            {Object.keys(summary.byCategory).length === 0 ? (
+              <div className="text-center py-4">
+                <TrendingUp className="mx-auto h-6 w-6 text-muted-foreground/40 mb-1" />
+                <p className="text-[10px] text-muted-foreground">Sin datos de categorías</p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {Object.entries(summary.byCategory).map(([category, data]) => {
+                  const catConfig = CATEGORY_CONFIG[category as TransactionCategory];
+                  const percentage = summary.totalMonthly > 0 ? (data.monthly / summary.totalMonthly) * 100 : 0;
 
-                return (
-                  <div key={category} className="space-y-1.5 min-w-0 overflow-hidden">
-                    <div className="flex items-center justify-between gap-2 min-w-0">
-                      <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+                  return (
+                    <div key={category} className="space-y-1">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+                          <div
+                            className="h-2.5 w-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: catConfig?.color ?? "#6b7280" }}
+                          />
+                          <span className="text-[11px] font-medium truncate">{catConfig?.label ?? category}</span>
+                          <span className="text-[9px] text-muted-foreground shrink-0">({data.count})</span>
+                        </div>
+                        <div className="text-right whitespace-nowrap shrink-0">
+                          <span className="text-[11px] font-bold">{formatCurrency(data.monthly)}/m</span>
+                          <span className="text-[9px] text-muted-foreground ml-1">({Math.round(percentage)}%)</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                         <div
-                          className="h-3 w-3 rounded-full shrink-0"
+                          className="h-full rounded-full transition-all"
                           style={{
+                            width: `${percentage}%`,
                             backgroundColor: catConfig?.color ?? "#6b7280",
                           }}
                         />
-                        <span className="text-xs font-medium truncate min-w-0">
-                          {catConfig?.label ?? category}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground shrink-0">
-                          ({data.count})
-                        </span>
-                      </div>
-                      <div className="text-right whitespace-nowrap">
-                        <span className="text-xs font-bold">
-                          {formatCurrency(data.monthly)}/mes
-                        </span>
-                        <span className="text-[10px] text-muted-foreground ml-1">
-                          ({Math.round(percentage)}%)
-                        </span>
                       </div>
                     </div>
-                    <div className="h-2 rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${percentage}%`,
-                          backgroundColor: catConfig?.color ?? "#6b7280",
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Inactive savings banner */}
+      {inactiveMonthlySavings > 0 && (
+        <Card className="border shadow-sm bg-emerald-50 dark:bg-emerald-950/20 overflow-hidden">
+          <CardContent className="p-3 flex items-center gap-3">
+            <PiggyBank className="h-5 w-5 text-emerald-600 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                Ahorras {formatCurrency(inactiveMonthlySavings)}/mes en suscripciones inactivas
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                {formatCurrency(inactiveMonthlySavings * 12)}/año — ¡Bien hecho cancelando lo que no usas!
+              </p>
             </div>
           </CardContent>
         </Card>
       )}
 
       {/* Active Subscriptions List */}
-      <Card className="border-0 shadow-sm">
-        <CardHeader className="pb-3">
+      <Card className="border shadow-sm overflow-hidden">
+        <CardHeader className="pb-2 px-4 pt-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <CreditCard className="h-4 w-4" />
+              <CardTitle className="text-xs font-semibold flex items-center gap-2">
+                <CreditCard className="h-3.5 w-3.5" />
                 Suscripciones Activas
               </CardTitle>
-              <CardDescription className="text-xs mt-0.5">
+              <CardDescription className="text-[10px] mt-0.5">
                 {activeSubs.length} activa{activeSubs.length !== 1 ? "s" : ""} ·{" "}
-                {inactiveSubs.length} inactiva
-                {inactiveSubs.length !== 1 ? "s" : ""}
+                {inactiveSubs.length} inactiva{inactiveSubs.length !== 1 ? "s" : ""}
               </CardDescription>
             </div>
-            <Button size="sm" onClick={() => handleOpenAdd()} className="gap-1.5">
-              <Plus className="h-3.5 w-3.5" />
-              Añadir
-            </Button>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 pb-4">
           {subscriptions.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Repeat className="mx-auto h-10 w-10 mb-2 opacity-30" />
@@ -504,77 +527,55 @@ export function SubscriptionTracker() {
               </p>
             </div>
           ) : (
-            <ScrollArea className="max-h-96">
-              <div className="space-y-2 pr-2">
+            <ScrollArea className="max-h-[500px]">
+              <div className="space-y-2 pr-1">
                 {activeSubs.map((sub) => {
-                  const annualCost = getAnnualEquivalent(
-                    sub.amount,
-                    sub.billingCycle
-                  );
-                  const monthlyCost = getMonthlyEquivalent(
-                    sub.amount,
-                    sub.billingCycle
-                  );
+                  const annualCost = getAnnualEquivalent(sub.amount, sub.billingCycle);
+                  const monthlyCost = getMonthlyEquivalent(sub.amount, sub.billingCycle);
 
                   return (
                     <div
                       key={sub.id}
-                      className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden min-w-0"
+                      className="flex items-center gap-2 sm:gap-3 rounded-lg border p-2.5 sm:p-3 overflow-hidden"
                     >
-                      <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
-                        <div className="flex items-center gap-2 flex-wrap overflow-hidden min-w-0">
-                          <span className="text-sm font-medium truncate min-w-0 flex-shrink">
+                      {/* Name and details */}
+                      <div className="flex-1 min-w-0 space-y-0.5 overflow-hidden">
+                        <div className="flex items-center gap-1.5 flex-wrap overflow-hidden">
+                          <span className="text-xs sm:text-sm font-medium truncate max-w-[140px] sm:max-w-none">
                             {sub.name}
                           </span>
                           <Badge
-                            className={cn(
-                              "text-[9px] px-1.5 shrink-0",
-                              CYCLE_BADGE_COLORS[sub.billingCycle]
-                            )}
+                            className={cn("text-[8px] px-1 py-0 h-4 shrink-0", CYCLE_BADGE_COLORS[sub.billingCycle])}
                           >
                             {CYCLE_LABELS[sub.billingCycle]}
                           </Badge>
-                          <Badge
-                            variant="secondary"
-                            className="text-[9px] px-1.5 shrink-0"
-                          >
-                            {CATEGORY_CONFIG[sub.category]?.label ?? sub.category}
-                          </Badge>
                         </div>
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
-                          <span className="whitespace-nowrap">
-                            {formatCurrency(sub.amount)}/
-                            {sub.billingCycle === "mensual"
-                              ? "mes"
-                              : sub.billingCycle === "trimestral"
-                                ? "trimestre"
-                                : sub.billingCycle === "semestral"
-                                  ? "semestre"
-                                  : "año"}
+                        <div className="flex items-center gap-2 text-[9px] sm:text-[10px] text-muted-foreground flex-wrap">
+                          <span className="whitespace-nowrap font-medium">
+                            {formatCurrency(sub.amount)}/{CYCLE_PERIOD[sub.billingCycle]}
                           </span>
                           <span className="whitespace-nowrap">≈ {formatCurrency(monthlyCost)}/mes</span>
-                          <span className="whitespace-nowrap">{formatCurrency(annualCost)}/año</span>
                         </div>
-                        <div className="text-[10px] text-muted-foreground truncate">
-                          Próximo cobro: {formatDate(sub.nextBillingDate)}
-                        </div>
+                        <p className="text-[9px] text-muted-foreground truncate hidden sm:block">
+                          Próximo cobro: {formatDate(sub.nextBillingDate)} · {formatCurrency(annualCost)}/año
+                        </p>
                       </div>
 
-                      <div className="flex items-center gap-1.5 shrink-0">
+                      {/* Annual cost badge - visible on desktop */}
+                      <div className="hidden sm:flex flex-col items-end shrink-0">
+                        <span className="text-xs font-bold whitespace-nowrap">{formatCurrency(annualCost)}/año</span>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-1 shrink-0">
                         <Switch
                           checked={sub.isActive}
-                          onCheckedChange={() =>
-                            handleToggleActive(sub.id, sub.isActive)
-                          }
+                          onCheckedChange={() => handleToggleActive(sub.id, sub.isActive)}
                           className="scale-75"
                         />
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600"
-                            >
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </AlertDialogTrigger>
@@ -611,47 +612,30 @@ export function SubscriptionTracker() {
                     {inactiveSubs.map((sub) => (
                       <div
                         key={sub.id}
-                        className="flex items-center gap-3 rounded-xl border border-dashed p-3 opacity-60"
+                        className="flex items-center gap-2 sm:gap-3 rounded-lg border border-dashed p-2.5 sm:p-3 opacity-60"
                       >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium truncate line-through">
+                        <div className="flex-1 min-w-0 overflow-hidden">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-medium truncate line-through max-w-[140px] sm:max-w-none">
                               {sub.name}
                             </span>
-                            <Badge
-                              variant="secondary"
-                              className="text-[9px] px-1.5"
-                            >
+                            <Badge variant="secondary" className="text-[8px] px-1 py-0 h-4 shrink-0">
                               Cancelada
                             </Badge>
                           </div>
-                          <p className="text-[10px] text-muted-foreground">
-                            {formatCurrency(sub.amount)}/
-                            {sub.billingCycle === "mensual"
-                              ? "mes"
-                              : sub.billingCycle === "trimestral"
-                                ? "trimestre"
-                                : sub.billingCycle === "semestral"
-                                  ? "semestre"
-                                  : "año"}{" "}
-                            · {formatCurrency(getAnnualEquivalent(sub.amount, sub.billingCycle))}/año
+                          <p className="text-[9px] text-muted-foreground truncate">
+                            {formatCurrency(sub.amount)}/{CYCLE_PERIOD[sub.billingCycle]}
                           </p>
                         </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="flex items-center gap-1 shrink-0">
                           <Switch
                             checked={sub.isActive}
-                            onCheckedChange={() =>
-                              handleToggleActive(sub.id, sub.isActive)
-                            }
+                            onCheckedChange={() => handleToggleActive(sub.id, sub.isActive)}
                             className="scale-75"
                           />
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600"
-                              >
+                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600">
                                 <Trash2 className="h-3 w-3" />
                               </Button>
                             </AlertDialogTrigger>
@@ -684,20 +668,20 @@ export function SubscriptionTracker() {
         </CardContent>
       </Card>
 
-      {/* Annual Cost Breakdown */}
+      {/* Annual Cost Breakdown - horizontal bars */}
       {activeSubs.length > 1 && (
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <CreditCard className="h-4 w-4 text-primary" />
+        <Card className="border shadow-sm overflow-hidden">
+          <CardHeader className="pb-2 px-4 pt-4">
+            <CardTitle className="text-xs font-semibold flex items-center gap-2">
+              <Flame className="h-3.5 w-3.5 text-rose-500" />
               Coste Anual por Suscripción
             </CardTitle>
-            <CardDescription className="text-xs">
+            <CardDescription className="text-[10px]">
               Lo que realmente gastas al año en cada una
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+          <CardContent className="px-4 pb-4">
+            <div className="space-y-2.5">
               {[...activeSubs]
                 .sort((a, b) => {
                   const aAnnual = getAnnualEquivalent(a.amount, a.billingCycle);
@@ -705,41 +689,29 @@ export function SubscriptionTracker() {
                   return bAnnual - aAnnual;
                 })
                 .map((sub) => {
-                  const annualCost = getAnnualEquivalent(
-                    sub.amount,
-                    sub.billingCycle
-                  );
+                  const annualCost = getAnnualEquivalent(sub.amount, sub.billingCycle);
                   const maxAnnual = Math.max(
-                    ...activeSubs.map((s) =>
-                      getAnnualEquivalent(s.amount, s.billingCycle)
-                    )
+                    ...activeSubs.map((s) => getAnnualEquivalent(s.amount, s.billingCycle))
                   );
-                  const widthPercent =
-                    maxAnnual > 0 ? (annualCost / maxAnnual) * 100 : 0;
+                  const widthPercent = maxAnnual > 0 ? (annualCost / maxAnnual) * 100 : 0;
 
                   return (
-                    <div
-                      key={sub.id}
-                      className="space-y-1.5 min-w-0 overflow-hidden"
-                    >
+                    <div key={sub.id} className="space-y-1 min-w-0 overflow-hidden">
                       <div className="flex items-center justify-between gap-2 min-w-0">
-                        <span className="text-xs font-medium truncate min-w-0 overflow-hidden">
+                        <span className="text-[11px] font-medium truncate min-w-0">
                           {sub.name}
                         </span>
-                        <span className="text-xs font-bold shrink-0 whitespace-nowrap">
+                        <span className="text-[11px] font-bold shrink-0 whitespace-nowrap text-rose-600">
                           {formatCurrency(annualCost)}/año
                         </span>
                       </div>
-                      <div className="h-5 rounded-full bg-muted overflow-hidden min-w-0">
+                      <div className="h-4 rounded-full bg-muted overflow-hidden min-w-0">
                         <div
-                          className={cn(
-                            "h-full rounded-full flex items-center justify-end pr-2 bg-pink-500 transition-all overflow-hidden whitespace-nowrap",
-                            "min-w-0"
-                          )}
+                          className="h-full rounded-full bg-gradient-to-r from-pink-500 to-rose-500 transition-all overflow-hidden whitespace-nowrap"
                           style={{ width: `${Math.max(widthPercent, 8)}%` }}
                         >
-                          {widthPercent > 20 && (
-                            <span className="text-[9px] font-bold text-white truncate min-w-0">
+                          {widthPercent > 25 && (
+                            <span className="text-[8px] font-bold text-white px-1.5 truncate inline-block">
                               {formatCurrency(annualCost)}
                             </span>
                           )}
@@ -770,9 +742,7 @@ export function SubscriptionTracker() {
                 <Input
                   placeholder="Ej: Netflix, Spotify, Gimnasio..."
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
 
@@ -785,9 +755,7 @@ export function SubscriptionTracker() {
                     step="0.01"
                     placeholder="12.99"
                     value={formData.amount}
-                    onChange={(e) =>
-                      setFormData({ ...formData, amount: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     className="text-lg font-semibold"
                   />
                 </div>
@@ -795,12 +763,7 @@ export function SubscriptionTracker() {
                   <Label className="text-xs">Ciclo de facturación</Label>
                   <Select
                     value={formData.billingCycle}
-                    onValueChange={(v) =>
-                      setFormData({
-                        ...formData,
-                        billingCycle: v as BillingCycle,
-                      })
-                    }
+                    onValueChange={(v) => setFormData({ ...formData, billingCycle: v as BillingCycle })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -818,27 +781,13 @@ export function SubscriptionTracker() {
               {/* Monthly/Annual equivalent preview */}
               {formData.amount && (
                 <div className="rounded-lg bg-muted/50 p-3 flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">
-                    Equivalente
-                  </span>
+                  <span className="text-xs text-muted-foreground">Equivalente</span>
                   <div className="text-right">
                     <span className="text-sm font-bold">
-                      {formatCurrency(
-                        getMonthlyEquivalent(
-                          parseFloat(formData.amount) || 0,
-                          formData.billingCycle
-                        )
-                      )}
-                      /mes
+                      {formatCurrency(getMonthlyEquivalent(parseFloat(formData.amount) || 0, formData.billingCycle))}/mes
                     </span>
                     <span className="text-xs text-muted-foreground ml-2">
-                      {formatCurrency(
-                        getAnnualEquivalent(
-                          parseFloat(formData.amount) || 0,
-                          formData.billingCycle
-                        )
-                      )}
-                      /año
+                      {formatCurrency(getAnnualEquivalent(parseFloat(formData.amount) || 0, formData.billingCycle))}/año
                     </span>
                   </div>
                 </div>
@@ -849,12 +798,7 @@ export function SubscriptionTracker() {
                 <Input
                   type="date"
                   value={formData.nextBillingDate}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      nextBillingDate: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setFormData({ ...formData, nextBillingDate: e.target.value })}
                 />
               </div>
 
@@ -862,29 +806,16 @@ export function SubscriptionTracker() {
                 <Label className="text-xs">Categoría</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(v) =>
-                    setFormData({
-                      ...formData,
-                      category: v as TransactionCategory,
-                    })
-                  }
+                  onValueChange={(v) => setFormData({ ...formData, category: v as TransactionCategory })}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {(
-                      Object.entries(CATEGORY_CONFIG) as [
-                        TransactionCategory,
-                        (typeof CATEGORY_CONFIG)[TransactionCategory],
-                      ][]
-                    ).map(([key, config]) => (
+                    {(Object.entries(CATEGORY_CONFIG) as [TransactionCategory, (typeof CATEGORY_CONFIG)[TransactionCategory]][]).map(([key, config]) => (
                       <SelectItem key={key} value={key}>
                         <div className="flex items-center gap-2">
-                          <div
-                            className="h-2 w-2 rounded-full"
-                            style={{ backgroundColor: config.color }}
-                          />
+                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: config.color }} />
                           {config.label}
                         </div>
                       </SelectItem>

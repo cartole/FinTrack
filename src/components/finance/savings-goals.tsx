@@ -197,7 +197,7 @@ export function SavingsGoals() {
           daysLeft > 0 ? (remaining / (daysLeft / 30)) : 0;
 
         return (
-          <Card className="border-0 shadow-sm bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-l-4 border-l-primary">
+          <Card className="border shadow-sm bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-l-4 border-l-primary">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Star className="h-4 w-4 text-primary fill-primary" />
@@ -248,7 +248,7 @@ export function SavingsGoals() {
             <Card
               key={goal.id}
               className={cn(
-                "border-0 shadow-sm group relative overflow-hidden transition-all",
+                "border shadow-sm group relative overflow-hidden transition-all",
                 isSelected
                   ? "ring-2 ring-primary shadow-md"
                   : "hover:shadow-md"

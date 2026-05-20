@@ -381,7 +381,7 @@ export function EmergencyAdvisor() {
       </div>
 
       {/* Escenarios comunes */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Zap className="h-4 w-4 text-amber-500" />
@@ -412,7 +412,7 @@ export function EmergencyAdvisor() {
       </Card>
 
       {/* Formulario de gasto imprevisto */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-orange-500" />

@@ -98,21 +98,21 @@ export function BalanceCards() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {cards.map((card) => (
         <Card
           key={card.title}
-          className={cn("border-0 shadow-sm hover:shadow-md transition-shadow", card.bgColor)}
+          className={cn("border shadow-sm hover:shadow-md transition-shadow", card.bgColor)}
         >
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          <CardContent className="p-3 sm:p-5">
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
+              <span className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 {card.title}
               </span>
               <card.icon className={cn("h-4 w-4", card.color)} />
             </div>
             <div className="space-y-1">
-              <p className={cn("text-2xl font-bold tracking-tight whitespace-nowrap", card.color)}>
+              <p className={cn("text-lg sm:text-2xl font-bold tracking-tight whitespace-nowrap", card.color)}>
                 {card.value}
               </p>
               <div className="flex items-center gap-1.5">

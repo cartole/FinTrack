@@ -208,14 +208,14 @@ export function DebtManager() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-4 text-center">
             <Wallet className="mx-auto mb-1.5 h-5 w-5 text-rose-500" />
             <p className="text-lg font-bold whitespace-nowrap">{formatCurrency(totalDebt)}</p>
             <p className="text-[10px] text-muted-foreground">Total deuda</p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-4 text-center">
             <Clock className="mx-auto mb-1.5 h-5 w-5 text-amber-500" />
             <p className="text-lg font-bold whitespace-nowrap">
@@ -226,7 +226,7 @@ export function DebtManager() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-4 text-center">
             <Percent className="mx-auto mb-1.5 h-5 w-5 text-orange-500" />
             <p className="text-lg font-bold whitespace-nowrap">{formatCurrency(totalInterest)}</p>
@@ -235,7 +235,7 @@ export function DebtManager() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-4 text-center">
             <Trophy className="mx-auto mb-1.5 h-5 w-5 text-emerald-500" />
             <p className="text-lg font-bold whitespace-nowrap">{monthsToFreedom} meses</p>
@@ -247,7 +247,7 @@ export function DebtManager() {
       </div>
 
       {/* Strategy Selector + Extra Payment */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Mountain className="h-4 w-4 text-primary" />
@@ -258,7 +258,7 @@ export function DebtManager() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
               onClick={() => setStrategy("bola_nieve")}
               className={cn(
@@ -472,7 +472,7 @@ export function DebtManager() {
       </Card>
 
       {/* Debt List */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div>
@@ -638,7 +638,7 @@ export function DebtManager() {
 
       {/* Debt Freedom Timeline */}
       {debts.length > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Calendar className="h-4 w-4 text-emerald-500" />

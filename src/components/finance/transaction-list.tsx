@@ -101,7 +101,7 @@ export function TransactionList() {
   };
 
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
@@ -201,9 +201,9 @@ export function TransactionList() {
                   </div>
 
                   {/* Info */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 overflow-hidden">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium truncate">{tx.description}</span>
+                      <span className="text-sm font-medium truncate min-w-0">{tx.description}</span>
                       {tx.recurrence === "recurrente" && (
                         <Repeat className="h-3 w-3 text-muted-foreground shrink-0" />
                       )}

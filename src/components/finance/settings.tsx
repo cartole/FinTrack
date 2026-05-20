@@ -248,7 +248,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* PERFIL PERSONAL */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <User className="h-4 w-4 text-emerald-500" />
@@ -412,7 +412,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* FISCALIDAD */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Percent className="h-4 w-4 text-rose-500" />
@@ -490,7 +490,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* ECONOMÍA */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Landmark className="h-4 w-4 text-amber-500" />
@@ -596,7 +596,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* VISUALIZACIÓN */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Eye className="h-4 w-4 text-sky-500" />
@@ -733,7 +733,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* NOTIFICACIONES Y ALERTAS */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Bell className="h-4 w-4 text-orange-500" />
@@ -853,7 +853,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* METAS DE AHORRO */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-primary" />
@@ -1010,7 +1010,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* PRIVACIDAD */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Lock className="h-4 w-4 text-violet-500" />
@@ -1065,7 +1065,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* DATOS */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Database className="h-4 w-4 text-violet-500" />
@@ -1204,7 +1204,7 @@ export function Settings() {
           {/* ============================================ */}
           {/* INFORMACIÓN DE LA APP */}
           {/* ============================================ */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Info className="h-4 w-4 text-primary" />

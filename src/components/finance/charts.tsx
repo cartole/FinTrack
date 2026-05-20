@@ -76,7 +76,7 @@ export function TrendChart() {
   }, [transactions]);
 
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">Tendencia Mensual</CardTitle>
         <CardDescription className="text-xs">
@@ -142,7 +142,7 @@ export function ProjectionChart() {
   }, [transactions]);
 
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">Proyección Próximos 3 Meses</CardTitle>
         <CardDescription className="text-xs">
@@ -204,7 +204,7 @@ export function CategoryBreakdownChart() {
   const total = data.reduce((sum, item) => sum + item.amount, 0);
 
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">Gastos por Categoría</CardTitle>
         <CardDescription className="text-xs">

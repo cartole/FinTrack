@@ -278,7 +278,7 @@ export function InvestmentCalculator() {
       </div>
 
       {/* Índices bursátiles reales */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Globe className="h-4 w-4 text-blue-500" />
@@ -347,7 +347,7 @@ export function InvestmentCalculator() {
       {/* Calculadora principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Panel de entrada */}
-        <Card className="border-0 shadow-sm lg:col-span-1">
+        <Card className="border shadow-sm lg:col-span-1">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Calculator className="h-4 w-4 text-primary" />
@@ -478,7 +478,7 @@ export function InvestmentCalculator() {
         </Card>
 
         {/* Resultados */}
-        <Card className="border-0 shadow-sm lg:col-span-2">
+        <Card className="border shadow-sm lg:col-span-2">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-primary" />
@@ -591,7 +591,7 @@ export function InvestmentCalculator() {
       </div>
 
       {/* Comparación de escenarios */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <PiggyBank className="h-4 w-4 text-primary" />
@@ -659,7 +659,7 @@ export function InvestmentCalculator() {
       </Card>
 
       {/* ETFs populares */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Building2 className="h-4 w-4 text-primary" />
@@ -700,7 +700,7 @@ export function InvestmentCalculator() {
                     {etf.risk}
                   </Badge>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5 truncate" title={etf.name}>{etf.name}</p>
+                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5 truncate min-w-0" title={etf.name}>{etf.name}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-muted-foreground">Rentabilidad media</span>
                   <span className="text-xs font-semibold text-emerald-600">~{etf.expectedReturn}%</span>

@@ -708,13 +708,13 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
 
       {/* Tarjetas principales */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card className="border-0 shadow-sm bg-muted/50">
+        <Card className="border shadow-sm bg-muted/50">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Ingreso Bruto</p>
             <p className="text-base font-bold whitespace-nowrap">{formatCurrency(result.grossIncome)}</p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-rose-50 dark:bg-rose-950/20">
+        <Card className="border shadow-sm bg-rose-50 dark:bg-rose-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">IRPF Total</p>
             <p className="text-base font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
@@ -722,13 +722,13 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
             </p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-muted/50">
+        <Card className="border shadow-sm bg-muted/50">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Tipo Efectivo</p>
             <p className="text-base font-bold whitespace-nowrap">{result.effectiveRate.toFixed(2)}%</p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/20">
+        <Card className="border shadow-sm bg-emerald-50 dark:bg-emerald-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Neto Anual</p>
             <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
@@ -739,7 +739,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
       </div>
 
       {/* Ingreso neto mensual */}
-      <Card className="border-0 shadow-sm bg-gradient-to-r from-emerald-500/5 to-teal-500/5">
+      <Card className="border shadow-sm bg-gradient-to-r from-emerald-500/5 to-teal-500/5">
         <CardContent className="p-4 flex items-center justify-between">
           <div>
             <p className="text-xs text-muted-foreground">Ingreso neto mensual</p>
@@ -755,7 +755,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
       </Card>
 
       {/* Desglose por tramos */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <TrendingDown className="h-4 w-4" />
@@ -815,7 +815,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
       </Card>
 
       {/* Deducciones aplicadas */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <ArrowDown className="h-4 w-4 text-emerald-500" />
@@ -867,7 +867,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
 
       {/* Reducción por trabajo */}
       {result.workReduction > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Briefcase className="h-4 w-4 text-teal-500" />
@@ -895,7 +895,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
 
       {/* Estimaciones autónomo */}
       {profile.isAutonomo && result.quarterlyVAT !== undefined && result.quarterlyIRPF !== undefined && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Receipt className="h-4 w-4 text-purple-500" />
@@ -941,7 +941,7 @@ function ResultsDisplay({ result, profile }: { result: IRPFResult; profile: IRPF
       )}
 
       {/* Resumen textual */}
-      <Card className="border-0 shadow-sm bg-muted/50">
+      <Card className="border shadow-sm bg-muted/50">
         <CardContent className="p-4">
           <div className="flex items-center gap-2 mb-2">
             <Info className="h-4 w-4 text-primary" />
@@ -1087,7 +1087,7 @@ export function IRPFCalculator() {
       {result ? (
         <ResultsDisplay result={result} profile={profile} />
       ) : (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-4 sm:p-6">
             {/* Step content */}
             <div className="min-h-[200px]">

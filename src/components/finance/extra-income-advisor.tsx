@@ -114,7 +114,7 @@ function IncomeSuggestionCard({ suggestion, index }: { suggestion: IncomeSuggest
   const Icon = CATEGORY_ICONS[suggestion.category] || DollarSign;
 
   return (
-    <Card className="border-0 shadow-sm overflow-hidden">
+    <Card className="border shadow-sm overflow-hidden">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
@@ -246,7 +246,7 @@ function IncomeSuggestionCard({ suggestion, index }: { suggestion: IncomeSuggest
 /** Componente del plan de acción semanal */
 function ActionPlanTimeline({ plan }: { plan: ExtraIncomePlan }) {
   return (
-    <Card className="border-0 shadow-sm">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-semibold flex items-center gap-2">
           <Calendar className="h-4 w-4 text-primary" />
@@ -337,7 +337,7 @@ export function ExtraIncomeAdvisor() {
       </div>
 
       {/* Card principal de análisis */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Brain className="h-4 w-4 text-violet-500" />
@@ -425,7 +425,7 @@ export function ExtraIncomeAdvisor() {
       {plan && (
         <>
           {/* Diagnóstico */}
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <ShieldAlert className="h-4 w-4" />
@@ -541,7 +541,7 @@ export function ExtraIncomeAdvisor() {
           {plan.diagnosis.needsExtraIncome && (
             <>
               {/* Resumen del potencial */}
-              <Card className="border-0 shadow-sm bg-gradient-to-r from-primary/5 to-violet-500/5">
+              <Card className="border shadow-sm bg-gradient-to-r from-primary/5 to-violet-500/5">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -601,7 +601,7 @@ export function ExtraIncomeAdvisor() {
               </div>
 
               {/* Consejo final */}
-              <Card className="border-0 shadow-sm">
+              <Card className="border shadow-sm">
                 <CardContent className="p-4">
                   <div className="flex gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-950/40">

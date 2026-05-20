@@ -277,7 +277,7 @@ export function FixedTermCalculator() {
       </div>
 
       {/* Tipos de interés reales */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Percent className="h-4 w-4 text-blue-500" />
@@ -349,7 +349,7 @@ export function FixedTermCalculator() {
       {/* Calculadora principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Panel de entrada */}
-        <Card className="border-0 shadow-sm lg:col-span-1">
+        <Card className="border shadow-sm lg:col-span-1">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Calculator className="h-4 w-4 text-primary" />
@@ -471,7 +471,7 @@ export function FixedTermCalculator() {
         </Card>
 
         {/* Resultados */}
-        <Card className="border-0 shadow-sm lg:col-span-2">
+        <Card className="border shadow-sm lg:col-span-2">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Banknote className="h-4 w-4 text-primary" />
@@ -621,7 +621,7 @@ export function FixedTermCalculator() {
       </div>
 
       {/* Comparativa de bancos */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Scale className="h-4 w-4 text-primary" />
@@ -662,7 +662,7 @@ export function FixedTermCalculator() {
                 </div>
                 <div className="flex-1 min-w-0 overflow-hidden">
                   <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-                    <span className="text-sm font-medium truncate min-w-0">{bank.bank}</span>
+                    <span className="text-sm font-medium truncate min-w-0 overflow-hidden">{bank.bank}</span>
                     {idx === 0 && (
                       <Badge className="text-[9px] px-1.5 py-0 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 shrink-0">
                         Mejor opción

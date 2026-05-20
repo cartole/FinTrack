@@ -248,7 +248,7 @@ export function BudgetPlanner() {
       </div>
 
       {/* ---- Overall Summary Card ---- */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardContent className="p-4">
           <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
             <div>
@@ -284,7 +284,7 @@ export function BudgetPlanner() {
 
       {/* ---- Budget List ---- */}
       {budgetStatuses.length === 0 ? (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-8 text-center">
             <CircleDot className="mx-auto h-10 w-10 text-muted-foreground/40" />
             <p className="mt-3 text-sm font-medium text-muted-foreground">
@@ -311,7 +311,7 @@ export function BudgetPlanner() {
               const icon = CATEGORY_ICONS[bs.budget.category] || <CircleDot className="h-4 w-4" />;
 
               return (
-                <Card key={bs.budget.id} className="border-0 shadow-sm">
+                <Card key={bs.budget.id} className="border shadow-sm">
                   <CardContent className="p-4">
                     {/* Top row: icon, name, status badge, actions */}
                     <div className="flex items-center justify-between mb-2">

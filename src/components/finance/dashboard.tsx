@@ -136,7 +136,7 @@ export function Dashboard() {
 
         {/* Meta de ahorro activa */}
         {selectedGoal && (
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
@@ -226,7 +226,7 @@ export function Dashboard() {
         )}
 
         {!selectedGoal && (
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="h-4 w-4 text-primary" />
@@ -250,7 +250,7 @@ export function Dashboard() {
       </div>
 
       {/* Actividad reciente */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-semibold">Actividad Reciente</CardTitle>
         </CardHeader>

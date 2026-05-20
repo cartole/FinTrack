@@ -207,8 +207,8 @@ function CalendarGrid({
             key={day}
             className="text-center text-[10px] font-semibold text-muted-foreground py-1"
           >
-            <span className="xs:hidden">{DAYS_OF_WEEK_SHORT[idx]}</span>
-            <span className="hidden xs:inline">{day}</span>
+            <span className="sm:hidden">{DAYS_OF_WEEK_SHORT[idx]}</span>
+            <span className="hidden sm:inline">{day}</span>
           </div>
         ))}
       </div>
@@ -217,7 +217,7 @@ function CalendarGrid({
       <div className="grid grid-cols-7 gap-1">
         {cells.map((day, idx) => {
           if (day === null) {
-            return <div key={`empty-${idx}`} className="h-12 sm:h-16" />;
+            return <div key={`empty-${idx}`} className="h-10 sm:h-14 lg:h-16" />;
           }
 
           const dayStr = String(day).padStart(2, "0");
@@ -232,7 +232,7 @@ function CalendarGrid({
               key={dateStr}
               onClick={() => onSelectDate(dateStr)}
               className={cn(
-                "h-12 sm:h-16 rounded-lg p-1 text-left transition-all relative group",
+                "h-10 sm:h-14 lg:h-16 rounded-lg p-1 text-left transition-all relative group",
                 today && "ring-2 ring-primary ring-offset-1",
                 selected
                   ? "bg-primary/10 border border-primary"
@@ -433,8 +433,8 @@ export function PaymentCalendar() {
       </div>
 
       {/* Navegación del mes */}
-      <Card className="border-0 shadow-sm">
-        <CardContent className="p-4">
+      <Card className="border shadow-sm">
+        <CardContent className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-4">
             <Button variant="outline" size="sm" onClick={goToPrevMonth} className="gap-1">
               <ChevronLeft className="h-4 w-4" />
@@ -493,7 +493,7 @@ export function PaymentCalendar() {
 
       {/* Resumen del mes */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/20">
+        <Card className="border shadow-sm bg-emerald-50 dark:bg-emerald-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Ingresos del mes</p>
             <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">
@@ -501,7 +501,7 @@ export function PaymentCalendar() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-rose-50 dark:bg-rose-950/20">
+        <Card className="border shadow-sm bg-rose-50 dark:bg-rose-950/20">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Gastos del mes</p>
             <p className="text-base font-bold text-rose-600 dark:text-rose-400">
@@ -509,7 +509,7 @@ export function PaymentCalendar() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-muted/50 col-span-2 sm:col-span-1">
+        <Card className="border shadow-sm bg-muted/50 col-span-2 sm:col-span-1">
           <CardContent className="p-3 text-center">
             <p className="text-[10px] text-muted-foreground mb-1">Eventos del mes</p>
             <p className="text-base font-bold">{filteredMonthEvents.length}</p>
@@ -519,7 +519,7 @@ export function PaymentCalendar() {
 
       {/* Día seleccionado */}
       {selectedDate && dayEvents.length > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold capitalize">
               {formatDateFull(selectedDate)}
@@ -540,7 +540,7 @@ export function PaymentCalendar() {
       )}
 
       {selectedDate && dayEvents.length === 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-6 text-center">
             <CalendarDays className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">
@@ -552,7 +552,7 @@ export function PaymentCalendar() {
 
       {/* Próximos 7 días */}
       {upcomingEvents.length > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
@@ -576,7 +576,7 @@ export function PaymentCalendar() {
       )}
 
       {/* Todos los eventos del mes con filtros */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div>

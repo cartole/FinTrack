@@ -106,7 +106,7 @@ export function AIAdvisor() {
 
       {/* Desde meta existente */}
       {savingsGoals.length > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Target className="h-4 w-4" />
@@ -148,7 +148,7 @@ export function AIAdvisor() {
       )}
 
       {/* Metas rápidas */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Zap className="h-4 w-4 text-amber-500" />
@@ -179,7 +179,7 @@ export function AIAdvisor() {
       </Card>
 
       {/* Meta personalizada */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Sparkles className="h-4 w-4" />

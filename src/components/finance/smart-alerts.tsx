@@ -200,7 +200,7 @@ export function SmartAlerts() {
       {/* ---- Contadores de alertas ---- */}
       {hasAnalyzed && (
         <div className="grid grid-cols-3 gap-3">
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardContent className="p-3 flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
                 <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
@@ -211,7 +211,7 @@ export function SmartAlerts() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardContent className="p-3 flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/30">
                 <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
@@ -222,7 +222,7 @@ export function SmartAlerts() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm">
+          <Card className="border shadow-sm">
             <CardContent className="p-3 flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-100 dark:bg-sky-900/30">
                 <Info className="h-4 w-4 text-sky-600 dark:text-sky-400" />
@@ -238,7 +238,7 @@ export function SmartAlerts() {
 
       {/* ---- Loading animation ---- */}
       {isAnalyzing && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-8 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/30">
               <Loader2 className="h-8 w-8 text-sky-500 animate-spin" />
@@ -253,7 +253,7 @@ export function SmartAlerts() {
 
       {/* ---- Empty state ---- */}
       {hasAnalyzed && !isAnalyzing && alerts.length === 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-8 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
               <CheckCheck className="h-8 w-8 text-emerald-500" />
@@ -268,7 +268,7 @@ export function SmartAlerts() {
 
       {/* ---- Initial state (before first analysis) ---- */}
       {!hasAnalyzed && !isAnalyzing && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border shadow-sm">
           <CardContent className="p-8 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Bell className="h-8 w-8 text-muted-foreground" />
