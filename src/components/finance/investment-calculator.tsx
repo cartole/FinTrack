@@ -639,12 +639,12 @@ export function InvestmentCalculator() {
           </ChartContainer>
 
           {/* Leyenda con valores finales */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 min-w-0">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 min-w-0 overflow-hidden">
             {investmentScenarios.map((scenario) => {
               const key = scenario.label.toLowerCase().replace(/\s/g, "");
               const finalValue = comparisonData[comparisonData.length - 1]?.[key] as number || 0;
               return (
-                <div key={scenario.label} className="rounded-lg border p-2 text-center">
+                <div key={scenario.label} className="rounded-lg border p-2 text-center min-w-0 overflow-hidden">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <div className="h-2 w-2 rounded-full" style={{ backgroundColor: scenario.color }} />
                     <span className="text-[10px] font-semibold">{scenario.label}</span>
@@ -700,7 +700,7 @@ export function InvestmentCalculator() {
                     {etf.risk}
                   </Badge>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5 truncate">{etf.name}</p>
+                <p className="text-[11px] text-muted-foreground leading-tight mb-1.5 truncate" title={etf.name}>{etf.name}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-muted-foreground">Rentabilidad media</span>
                   <span className="text-xs font-semibold text-emerald-600">~{etf.expectedReturn}%</span>

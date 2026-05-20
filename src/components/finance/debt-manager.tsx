@@ -580,9 +580,9 @@ export function DebtManager() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-1 text-center overflow-hidden">
+                      <div className="grid grid-cols-3 gap-2 text-center overflow-hidden">
                         <div className="min-w-0">
-                          <p className="text-[10px] sm:text-xs font-bold truncate whitespace-nowrap">
+                          <p className="text-[10px] sm:text-xs font-bold truncate">
                             {formatCurrency(debt.currentBalance)}
                           </p>
                           <p className="text-[9px] sm:text-[10px] text-muted-foreground truncate whitespace-nowrap">
@@ -686,12 +686,12 @@ export function DebtManager() {
                     <div className="h-6 rounded-full bg-muted overflow-hidden">
                       <div
                         className={cn(
-                          "h-full rounded-full flex items-center justify-end pr-2 transition-all",
+                          "h-full rounded-full flex items-center justify-end pr-2 transition-all overflow-hidden whitespace-nowrap",
                           color
                         )}
                         style={{ width: `${Math.max(widthPercent, 8)}%` }}
                       >
-                        <span className="text-[10px] font-bold text-white">
+                        <span className="text-[10px] font-bold text-white truncate">
                           {formatCurrency(plan.debt.currentBalance)}
                         </span>
                       </div>

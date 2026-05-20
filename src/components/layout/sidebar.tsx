@@ -156,7 +156,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
         <Logo />
         <Separator className="my-3" />
       </div>
-      <ScrollArea className="flex-1 min-h-0 overflow-y-auto px-2">
+      <ScrollArea className="flex-1 min-h-0 overflow-y-auto px-2" style={{ height: 'calc(100vh - 8rem)' }}>
         <nav className="flex flex-col gap-1 pb-4">
           {navSections.map((section) => (
             <div key={section.title}>
@@ -212,7 +212,9 @@ export function Sidebar() {
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-64 flex-col border-r bg-card h-screen sticky top-0 overflow-hidden">
-        <NavContent />
+        <div className="flex flex-col h-full min-h-0 overflow-hidden">
+          <NavContent />
+        </div>
       </aside>
 
       {/* Mobile sidebar */}
@@ -223,9 +225,11 @@ export function Sidebar() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0 h-full">
+          <SheetContent side="left" className="w-64 p-0 h-full overflow-hidden">
             <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
-            <NavContent onNavigate={() => setMobileOpen(false)} />
+            <div className="h-full overflow-hidden">
+              <NavContent onNavigate={() => setMobileOpen(false)} />
+            </div>
           </SheetContent>
         </Sheet>
         <Logo />

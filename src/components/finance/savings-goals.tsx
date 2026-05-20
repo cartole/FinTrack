@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useFinanceStore } from "@/store/finance-store";
 import { formatCurrency, formatDate } from "@/lib/finance-utils";
-import { Target, Plus, Trash2, Brain, Rocket, Plane, Laptop } from "lucide-react";
+import { Target, Plus, Trash2, Brain, Rocket, Plane, Laptop, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -48,10 +48,17 @@ function getGoalIcon(name: string) {
 }
 
 export function SavingsGoals() {
-  const { savingsGoals, addSavingsGoal, deleteSavingsGoal, generatePlan } = useFinanceStore();
+  const { savingsGoals, addSavingsGoal, editSavingsGoal, deleteSavingsGoal, generatePlan } = useFinanceStore();
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
+  const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
   const [newGoal, setNewGoal] = useState({
+    name: "",
+    targetAmount: "",
+    currentAmount: "",
+    deadline: "",
+  });
+  const [editGoal, setEditGoal] = useState({
     name: "",
     targetAmount: "",
     currentAmount: "",
@@ -91,6 +98,43 @@ export function SavingsGoals() {
       title: "Plan generado",
       description: "Tu asesor IA ha generado un plan de ahorro personalizado.",
     });
+  };
+
+  const handleOpenEdit = (goal: typeof savingsGoals[0]) => {
+    setEditingGoalId(goal.id);
+    setEditGoal({
+      name: goal.name,
+      targetAmount: String(goal.targetAmount),
+      currentAmount: String(goal.currentAmount),
+      deadline: goal.deadline.split("T")[0],
+    });
+  };
+
+  const handleEditGoal = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingGoalId) return;
+    if (!editGoal.name || !editGoal.targetAmount || !editGoal.deadline) {
+      toast({
+        title: "Campos incompletos",
+        description: "Completa nombre, monto objetivo y fecha límite.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    editSavingsGoal(editingGoalId, {
+      name: editGoal.name,
+      targetAmount: parseFloat(editGoal.targetAmount),
+      currentAmount: parseFloat(editGoal.currentAmount) || 0,
+      deadline: new Date(editGoal.deadline).toISOString(),
+    });
+
+    toast({
+      title: "Meta actualizada",
+      description: `"${editGoal.name}" - ${formatCurrency(parseFloat(editGoal.targetAmount))}`,
+    });
+
+    setEditingGoalId(null);
   };
 
   return (
@@ -138,12 +182,21 @@ export function SavingsGoals() {
                       </p>
                     </div>
                   </div>
-                  <AlertDialog>
+                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => handleOpenEdit(goal)}
+                    >
+                      <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
+                    </Button>
+                    <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="h-7 w-7"
                       >
                         <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
                       </Button>
@@ -166,6 +219,7 @@ export function SavingsGoals() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+                  </div>
                 </div>
 
                 {/* Progreso */}
@@ -222,6 +276,63 @@ export function SavingsGoals() {
           </div>
         )}
       </div>
+
+      {/* Dialog: Editar Meta */}
+      <Dialog open={editingGoalId !== null} onOpenChange={(open) => { if (!open) setEditingGoalId(null); }}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Pencil className="h-5 w-5" />
+              Editar Meta de Ahorro
+            </DialogTitle>
+            <DialogDescription>
+              Modifica el nombre, monto objetivo, ahorro actual o fecha límite.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleEditGoal} className="space-y-4 mt-2">
+            <div className="space-y-2">
+              <Label>Nombre de la meta</Label>
+              <Input
+                placeholder="Ej: Viaje a Japón"
+                value={editGoal.name}
+                onChange={(e) => setEditGoal({ ...editGoal, name: e.target.value })}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>Monto objetivo (€)</Label>
+                <Input
+                  type="number"
+                  placeholder="3000"
+                  value={editGoal.targetAmount}
+                  onChange={(e) => setEditGoal({ ...editGoal, targetAmount: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Ya ahorrado (€)</Label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={editGoal.currentAmount}
+                  onChange={(e) => setEditGoal({ ...editGoal, currentAmount: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Fecha límite</Label>
+              <Input
+                type="date"
+                value={editGoal.deadline}
+                onChange={(e) => setEditGoal({ ...editGoal, deadline: e.target.value })}
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              <Pencil className="h-4 w-4 mr-2" />
+              Guardar Cambios
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Dialog: Nueva Meta */}
       <Dialog open={isAdding} onOpenChange={setIsAdding}>

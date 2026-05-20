@@ -447,7 +447,7 @@ export function SubscriptionTracker() {
                           ({data.count})
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right whitespace-nowrap">
                         <span className="text-xs font-bold">
                           {formatCurrency(data.monthly)}/mes
                         </span>
@@ -522,8 +522,8 @@ export function SubscriptionTracker() {
                       className="flex items-center gap-3 rounded-xl border p-3 overflow-hidden min-w-0"
                     >
                       <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
-                        <div className="flex items-center gap-2 flex-wrap overflow-hidden">
-                          <span className="text-sm font-medium truncate max-w-[160px] min-w-0">
+                        <div className="flex items-center gap-2 flex-nowrap overflow-hidden">
+                          <span className="text-sm font-medium truncate max-w-[120px] min-w-0">
                             {sub.name}
                           </span>
                           <Badge
@@ -732,11 +732,14 @@ export function SubscriptionTracker() {
                       </div>
                       <div className="h-5 rounded-full bg-muted overflow-hidden">
                         <div
-                          className="h-full rounded-full flex items-center justify-end pr-2 bg-pink-500 transition-all"
+                          className={cn(
+                            "h-full rounded-full flex items-center justify-end pr-2 bg-pink-500 transition-all overflow-hidden whitespace-nowrap",
+                            "min-w-0"
+                          )}
                           style={{ width: `${Math.max(widthPercent, 8)}%` }}
                         >
                           {widthPercent > 20 && (
-                            <span className="text-[9px] font-bold text-white">
+                            <span className="text-[9px] font-bold text-white truncate">
                               {formatCurrency(annualCost)}
                             </span>
                           )}

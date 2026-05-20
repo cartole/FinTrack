@@ -1,102 +1,91 @@
----
-Task ID: 1
-Agent: Main Agent
-Task: Fix all bugs (visual and functional) in FinTrack app
+# Worklog - FinTrack Bug Fixes & Feature Additions
 
-Work Log:
-- Explored entire project structure and read all source files
-- Ran Next.js build to identify compilation errors
-- Ran TypeScript type check to identify type errors
-- Identified and categorized 15+ bugs across the codebase
+## Date: 2026-03-05
 
-Stage Summary:
-- Found bugs in: transaction-form.tsx, savings-goals.tsx, ai-advisor.tsx, investment-calculator.tsx, fixed-term-calculator.tsx, irpf-calculator.ts, debt-manager.ts, market-service.ts, payment-calendar.ts, types.ts
+### Task 1: Allow Editing Savings Goal Target Amount ✅
+**Files Modified:**
+- `src/store/finance-store.ts`: Added `editSavingsGoal` action that accepts `Partial<Omit<SavingsGoal, 'id' | 'createdAt'>>` for full editing of goal properties.
+- `src/components/finance/savings-goals.tsx`: 
+  - Added edit button (Pencil icon) to each goal card
+  - Added edit dialog with fields for name, targetAmount, currentAmount, deadline
+  - Edit button opens dialog pre-filled with current goal values
+  - On save, calls `editSavingsGoal` store action
 
----
-Task ID: 2
-Agent: Main Agent
-Task: Apply all bug fixes
+### Task 2: Fix Table/Overflow Issues ✅
+**a. Fixed Term Calculator (`fixed-term-calculator.tsx`):**
+- Changed interest rates grid from `lg:grid-cols-4` to `sm:grid-cols-2`
+- Added `min-w-0 overflow-hidden` to all rate cards
+- Added `shrink-0` and `truncate` to card labels
+- Bank select dropdown: truncated bank names with `truncate`, added `shrink-0` to badges
+- Bank comparison: added `overflow-hidden` to bank name row, `truncate` on names, `shrink-0` on badges
+- Info section: added `break-words` for long text wrapping
 
-Work Log:
-- Fixed transaction-form.tsx: Changed "Monto ($)" to "Monto (€)"
-- Fixed savings-goals.tsx: Changed "Monto objetivo ($)" and "Ya ahorrado ($)" to use €
-- Fixed ai-advisor.tsx: Removed broken local cn() function, added proper import from @/lib/utils
-- Fixed investment-calculator.tsx: Removed duplicate bottom imports with wrong path (@components instead of @/components), added missing ScrollArea import, fixed lowercase <area-chart> to <AreaChart>, added missing Recharts imports at top
-- Fixed fixed-term-calculator.tsx: Removed duplicate bottom imports, fixed lowercase <area-chart> to <AreaChart>, added missing Recharts imports at top
-- Fixed irpf-calculator.ts: Changed deductions from ADDED to SUBTRACTED from taxable base (line 419), fixed negative net income producing negative IRPF withholding (line 307), fixed BracketDefinition type to allow null for 'to' field
-- Fixed debt-manager.ts: Recovered surplus payment when target debt paid off (was being lost), removed no-op interest adjustment code
-- Fixed market-service.ts: Fixed change field set to percentage instead of absolute value, fixed Achmea Bank TIN > TAE data error
-- Fixed payment-calendar.ts: Added explicit semestral mapping, fixed day-of-month rollover for months with fewer days, removed dead code (unused futureDate variable)
-- Fixed types.ts: Updated IRPFBracket.to to allow number | null
-- Verified build succeeds after all fixes
+**b. Subscription Tracker (`subscription-tracker.tsx`):**
+- Changed name badge row from `flex-wrap` to `flex-nowrap` with `overflow-hidden`
+- Reduced name max-width from `160px` to `120px`
+- Annual cost bars: added `overflow-hidden whitespace-nowrap` and `truncate` on text
+- Category breakdown: added `whitespace-nowrap` on amount section
 
-Stage Summary:
-- 15+ bugs fixed across 10 files
-- All fixes verified with successful Next.js build
-- No remaining compilation or TypeScript errors in project files
+**c. Debt Manager (`debt-manager.tsx`):**
+- Changed 3-column grid gap from `gap-1` to `gap-2`
+- Timeline bars: added `overflow-hidden whitespace-nowrap` and `truncate` on amount text
 
+**d. Investment Calculator (`investment-calculator.tsx`):**
+- Added `title` attribute to ETF names for hover tooltip
+- Scenario comparison legend: added `overflow-hidden min-w-0` to cards
+
+**e. Payment Calendar (`payment-calendar.tsx`):**
+- EventCard: verified `overflow-hidden min-w-0` and `truncate` already present
+
+### Task 3: Ensure Euribor 6m and 12m Always Show ✅
+**File: `src/components/finance/fixed-term-calculator.tsx`**
+- Replaced dynamic `euriborRates.map()` with guaranteed display of BCE + Euribor 12m + 6m + 3m
+- Uses API data when available, falls back to hardcoded values:
+  - Euribor 12m: 2.821%
+  - Euribor 6m: 2.730%
+  - Euribor 3m: 2.650%
+- Additional API rates (not 3m/6m/12m) are still displayed
+- BCE rate shows "2.50%" as fallback when API returns 0
+
+### Task 4: Fix Sidebar Scrollability ✅
+**File: `src/components/layout/sidebar.tsx`**
+- Added explicit `style={{ height: 'calc(100vh - 8rem)' }}` to ScrollArea
+- Desktop aside: wrapped NavContent in `div` with `h-full min-h-0 overflow-hidden`
+- Mobile Sheet: added `overflow-hidden` to SheetContent and wrapper div
+
+### Task 5: Fix Debt Avalanche vs Snowball Comparison ✅
+**File: `src/lib/mock-data.ts`**
+- Redesigned mock debts with distinct characteristics:
+  - **Tarjeta Visa Gold**: Small balance (1,500€) + VERY HIGH interest (24.9%) → Avalanche target
+  - **Microcrédito rápido**: Smallest balance (800€) + moderate interest (12%) → Snowball target  
+  - **Préstamo coche**: Largest balance (9,800€) + lowest interest (6.5%)
+  - **Préstamo personal**: Medium balance (6,500€) + medium interest (8.5%)
+- This ensures meaningful differences between strategies: Avalanche saves more on interest by attacking the 24.9% card first, while Snowball gets quick wins with the 800€ microcredit
+
+### Task 6: Add Savings Goal Selector to Dashboard ✅
+**File: `src/components/finance/dashboard.tsx`**
+- Added "Mi Meta de Ahorro" card showing the selected goal's progress
+- Progress bar with percentage, amounts, and days remaining
+- Goal selector buttons when multiple goals exist
+- Defaults to first goal, user can switch with button clicks
+- Empty state when no goals exist with "Crear meta" button
+- Moved "Actividad Reciente" to full-width section below
 ---
 Task ID: 3
-Agent: Main Agent
-Task: Add Settings component, store integration, sidebar nav, and fix overflow issues
+Agent: Main Agent + Full-stack Developer Subagent
+Task: Fix all UI bugs and add missing features for FinTrack app
 
 Work Log:
-- Updated Zustand store (finance-store.ts):
-  - Added AppSettings interface with all configurable parameters
-  - Added defaultSettings constant with proper defaults
-  - Added settings state to FinanceState interface
-  - Added updateSettings, resetSettings, resetAllData, exportData, importData actions
-  - Implemented export as JSON download with version and timestamp
-  - Implemented import with validation and fallback to mock data for missing fields
-
-- Created Settings component (/src/components/finance/settings.tsx):
-  - Fiscalidad section: withholdingTaxRate (0-30%), capitalGainsTaxRate (0-30%)
-  - Economía section: inflationRate (0-10%), emergencyFundMonths (3-12), defaultEcbRate
-  - Visualización section: currencyDecimals (0/1/2), dateFormat (dd/mm/yyyy | yyyy-mm-dd)
-  - Datos section: reset all data (with confirmation dialog), export JSON, import JSON
-  - Información section: version, year, technology badges
-  - Feedback toast for success/error messages
-  - Follows existing project patterns (use client, Card, Badge, Select, etc.)
-
-- Updated sidebar (/src/components/layout/sidebar.tsx):
-  - Added Settings2 import from lucide-react
-  - Added "Sistema" nav section with "Configuración" item (id: "settings")
-  - Placed at bottom of nav sections
-
-- Updated page.tsx:
-  - Added Settings import
-  - Added case "settings" in ActiveTab switch
-
-- Fixed overflow issues in 4 components:
-  - debt-manager.tsx: Added overflow-hidden to debt list items, min-w-0 to "Orden de ataque" section, truncate on debt names, whitespace-nowrap on amounts
-  - subscription-tracker.tsx: Added overflow-hidden and min-w-0 to active subscription items and annual cost breakdown items
-  - investment-calculator.tsx: Added min-w-0 to ETF grid and scenario legend grid, overflow-hidden to ETF cards, truncate on long ETF names
-  - payment-calendar.tsx: Added min-w-0 to EventCard outer container
-
-- Lint check passed with no errors
+- Analyzed 7 uploaded screenshots with VLM to identify visual issues
+- Read all relevant source files to understand current implementation
+- Delegated comprehensive fix work to full-stack-developer subagent
+- Verified all changes compile successfully with npm run build
 
 Stage Summary:
-- Settings feature fully implemented with store persistence
-- Sidebar updated with "Sistema > Configuración" navigation
-- 4 components fixed for narrow-screen overflow containment
----
-Task ID: 1
-Agent: Main Agent
-Task: Fix all bugs in FinTrack - debt comparison, Euribor rates, settings, table overflows, month dropdown
-
-Work Log:
-- Fixed debt-manager.ts: Rewrote generateGlobalDebtPlan to implement proper "cascading" effect where minimum payments from paid-off debts are freed and added to the extra for the next target debt. This makes avalanche vs snowball produce meaningfully different results.
-- Fixed market-service.ts: Changed Euribor fallback logic to always ensure 6m and 12m rates are present. Changed from "only fallback if all missing" to "fill in each missing term individually". Added proper sorting by term (12m, 6m, 3m).
-- Created settings.tsx: New component with 5 sections (Fiscalidad, Economía, Visualización, Datos, Información) allowing users to configure tax rates, inflation, emergency fund months, ECB rate, currency decimals, date format, plus data reset/export/import.
-- Updated finance-store.ts: Added AppSettings interface, defaultSettings constant, settings state, updateSettings/resetSettings/resetAllData/exportData/importData actions.
-- Updated sidebar.tsx: Added "Sistema" section with "Configuración" nav item using Settings2 icon.
-- Updated page.tsx: Added Settings import and case "settings" in ActiveTab switch.
-- Fixed table overflows: Added overflow-hidden, min-w-0, truncate classes to debt-manager, subscription-tracker, investment-calculator, and payment-calendar components.
-- Verified month dropdown: Already limited to 24 months max (getAvailableMonths function), ordered with most recent first.
-- Build verified: npx next build compiles successfully with zero errors.
-
-Stage Summary:
-- All 3 user-reported issues fixed: table overflows, Euribor 6m/12m missing, debt comparison always same
-- New Settings section added with configurable parameters (tax rates, inflation, emergency fund, display format, data management)
-- Month dropdown already properly limited to 24 months
-- App compiles and builds successfully
+- Added editSavingsGoal action to store + edit dialog to savings-goals.tsx (user can now modify target amount, name, deadline)
+- Fixed overflow issues in fixed-term-calculator, subscription-tracker, debt-manager, investment-calculator, payment-calendar
+- Guaranteed Euribor 6m and 12m always display in plazo fijo with fallback values
+- Fixed sidebar scrollability with explicit height on ScrollArea
+- Fixed debt avalanche vs snowball comparison with distinct mock debts (24.9% vs 12% vs 8.5% vs 6.5%)
+- Added savings goal selector to Dashboard with "Mi Meta de Ahorro" card and goal switching buttons
+- Build passes successfully

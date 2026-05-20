@@ -77,6 +77,7 @@ interface FinanceState {
   // ---- Acciones de Metas de Ahorro ----
   addSavingsGoal: (goal: Omit<SavingsGoal, "id" | "createdAt">) => void;
   updateSavingsGoal: (id: string, amount: number) => void;
+  editSavingsGoal: (id: string, updates: Partial<Omit<SavingsGoal, "id" | "createdAt">>) => void;
   deleteSavingsGoal: (id: string) => void;
 
   // ---- Acciones de IA ----
@@ -168,6 +169,13 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set((state) => ({
       savingsGoals: state.savingsGoals.map((g) =>
         g.id === id ? { ...g, currentAmount: g.currentAmount + amount } : g
+      ),
+    })),
+
+  editSavingsGoal: (id, updates) =>
+    set((state) => ({
+      savingsGoals: state.savingsGoals.map((g) =>
+        g.id === id ? { ...g, ...updates } : g
       ),
     })),
 

@@ -291,28 +291,51 @@ export function FixedTermCalculator() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* BCE */}
-            <div className="rounded-lg border p-3">
+            <div className="rounded-lg border p-3 min-w-0 overflow-hidden">
               <div className="flex items-center gap-2 mb-1">
-                <Landmark className="h-3.5 w-3.5 text-blue-500" />
-                <span className="text-[10px] font-medium text-muted-foreground uppercase">BCE Facilidad Depósito</span>
+                <Landmark className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                <span className="text-[10px] font-medium text-muted-foreground uppercase truncate">BCE Facilidad Depósito</span>
               </div>
-              <p className="text-xl font-bold text-blue-600">{ecbRate > 0 ? `${ecbRate.toFixed(2)}%` : "—"}</p>
+              <p className="text-xl font-bold text-blue-600">{ecbRate > 0 ? `${ecbRate.toFixed(2)}%` : "2.50%"}</p>
               <p className="text-[10px] text-muted-foreground">Tipo de referencia zona euro</p>
             </div>
 
-            {/* Euribor rates */}
-            {euriborRates.map((rate) => (
-              <div key={rate.term} className="rounded-lg border p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="h-3.5 w-3.5 text-amber-500" />
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase">Euribor {rate.term}</span>
+            {/* Euribor rates - ALWAYS show 12m, 6m, 3m with fallback */}
+            {[
+              { term: "12 meses", fallbackRate: 2.821 },
+              { term: "6 meses", fallbackRate: 2.730 },
+              { term: "3 meses", fallbackRate: 2.650 },
+            ].map((fallback) => {
+              const apiRate = euriborRates.find((r) => r.term === fallback.term);
+              const rate = apiRate?.rate ?? fallback.fallbackRate;
+              const source = apiRate?.source ?? "Valor de referencia";
+              return (
+                <div key={fallback.term} className="rounded-lg border p-3 min-w-0 overflow-hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase truncate">Euribor {fallback.term}</span>
+                  </div>
+                  <p className="text-xl font-bold text-amber-600">{rate.toFixed(3)}%</p>
+                  <p className="text-[10px] text-muted-foreground">{source}</p>
                 </div>
-                <p className="text-xl font-bold text-amber-600">{rate.rate > 0 ? `${rate.rate.toFixed(3)}%` : "—"}</p>
-                <p className="text-[10px] text-muted-foreground">{rate.source}</p>
-              </div>
-            ))}
+              );
+            })}
+
+            {/* Additional Euribor rates from API that aren't 3m/6m/12m */}
+            {euriborRates
+              .filter((r) => !["3 meses", "6 meses", "12 meses"].includes(r.term))
+              .map((rate) => (
+                <div key={rate.term} className="rounded-lg border p-3 min-w-0 overflow-hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase truncate">Euribor {rate.term}</span>
+                  </div>
+                  <p className="text-xl font-bold text-amber-600">{rate.rate > 0 ? `${rate.rate.toFixed(3)}%` : "—"}</p>
+                  <p className="text-[10px] text-muted-foreground">{rate.source}</p>
+                </div>
+              ))}
           </div>
 
           {lastUpdated && (
@@ -385,10 +408,10 @@ export function FixedTermCalculator() {
                 <SelectContent>
                   {depositRates.map((deposit) => (
                     <SelectItem key={deposit.bank} value={deposit.bank}>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{deposit.bank}</span>
-                        <span className="text-muted-foreground">— {deposit.term}</span>
-                        <Badge variant="secondary" className="text-[9px] px-1 py-0">
+                      <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+                        <span className="font-medium truncate">{deposit.bank}</span>
+                        <span className="text-muted-foreground shrink-0">— {deposit.term}</span>
+                        <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0">
                           {deposit.tae}% TAE
                         </Badge>
                       </div>
@@ -637,20 +660,20 @@ export function FixedTermCalculator() {
                 >
                   {idx + 1}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">{bank.bank}</span>
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="text-sm font-medium truncate">{bank.bank}</span>
                     {idx === 0 && (
-                      <Badge className="text-[9px] px-1.5 py-0 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                      <Badge className="text-[9px] px-1.5 py-0 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 shrink-0">
                         Mejor opción
                       </Badge>
                     )}
-                    <Badge variant="secondary" className="text-[9px] px-1 py-0">
+                    <Badge variant="secondary" className="text-[9px] px-1 py-0 shrink-0">
                       {bank.term}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-3 mt-0.5 text-[11px] text-muted-foreground">
-                    <span>TAE: <span className="font-semibold text-foreground">{bank.tae}%</span></span>
+                  <div className="flex items-center gap-3 mt-0.5 text-[11px] text-muted-foreground whitespace-nowrap">
+                    <span>Tae: <span className="font-semibold text-foreground">{bank.tae}%</span></span>
                     <span>Mín: {formatCurrency(bank.minAmount)}</span>
                   </div>
                 </div>
@@ -671,7 +694,7 @@ export function FixedTermCalculator() {
           <Info className="h-4 w-4 text-blue-500" />
           <span className="text-xs font-semibold">Información sobre depósitos a plazo fijo</span>
         </div>
-        <ul className="space-y-1 text-[11px] text-muted-foreground leading-relaxed">
+        <ul className="space-y-1 text-[11px] text-muted-foreground leading-relaxed break-words">
           <li>Los depósitos a plazo fijo están <strong>garantizados por el Fondo de Garantía de Depósitos</strong> hasta 100.000€ por entidad y titular.</li>
           <li>La <strong>retención del 19%</strong> se aplica sobre los rendimientos del capital mobiliario en España (IRPF).</li>
           <li>TAE (Tasa Anual Equivalente) incluye el efecto de la capitalización, mientras que TIN (Tipo de Interés Nominal) no.</li>

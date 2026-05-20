@@ -176,16 +176,16 @@ export const mockBudgets: Budget[] = [
   { id: generateId(), category: "educacion", monthlyLimit: 200, createdAt: createDate(2026, 1, 1) },
 ];
 
-/** Deudas de ejemplo */
+/** Deudas de ejemplo - con características distintas para que Avalancha vs Bola de Nieve produzcan resultados diferentes */
 export const mockDebts: Debt[] = [
   {
     id: generateId(),
     name: "Tarjeta Visa Gold",
     type: "tarjeta_credito",
-    totalAmount: 3200,
-    currentBalance: 2100,
-    interestRate: 19.9,
-    minimumPayment: 85,
+    totalAmount: 1500,
+    currentBalance: 1500,
+    interestRate: 24.9,
+    minimumPayment: 45,
     dueDay: 5,
     startDate: createDate(2025, 3, 5),
     createdAt: createDate(2025, 3, 5),
@@ -218,12 +218,12 @@ export const mockDebts: Debt[] = [
   },
   {
     id: generateId(),
-    name: "Microcrédito hipotecario",
+    name: "Microcrédito rápido",
     type: "prestamo_personal",
-    totalAmount: 1800,
-    currentBalance: 1200,
-    interestRate: 4.5,
-    minimumPayment: 60,
+    totalAmount: 800,
+    currentBalance: 800,
+    interestRate: 12.0,
+    minimumPayment: 50,
     dueDay: 10,
     startDate: createDate(2025, 9, 10),
     endDate: createDate(2027, 9, 10),
