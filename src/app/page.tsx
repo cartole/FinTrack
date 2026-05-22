@@ -106,7 +106,7 @@ export default function Home() {
 
       {/* Contenido principal */}
       <main className="flex-1 min-w-0 min-h-0 overflow-y-auto overscroll-contain">
-        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6 safe-area-pt pb-safe-mobile">
+        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 safe-area-pt pb-safe-mobile">
           <ActiveTab />
         </div>
       </main>

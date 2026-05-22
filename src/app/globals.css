@@ -148,29 +148,27 @@
   html {
     background-color: var(--background);
   }
-  /* Mobile: must account for the fixed header bar + safe area inset.
-     The header height = max(3rem, calc(safe-area-top + 3rem)).
-     We add a small extra gap (0.5rem) so content doesn't touch the header. */
+}
+
+/* Safe area padding classes - OUTSIDE @layer base so they have higher specificity
+   than Tailwind utility classes like py-4, which would otherwise override them. */
+.safe-area-pt {
+  padding-top: calc(max(3rem, env(safe-area-inset-top, 0px) + 3rem) + 0.5rem) !important;
+}
+@media (min-width: 768px) {
   .safe-area-pt {
-    padding-top: calc(max(3rem, env(safe-area-inset-top, 0px) + 3rem) + 0.5rem);
+    padding-top: 1.5rem !important;
   }
-  @media (min-width: 768px) {
-    .safe-area-pt {
-      padding-top: 1.5rem;
-    }
-  }
-  .pb-safe {
-    padding-bottom: max(5rem, env(safe-area-inset-bottom, 16px));
-  }
-  /* Mobile: must account for the fixed bottom nav bar (h-14 = 3.5rem) + safe area.
-     Add extra 0.25rem gap so last items aren't crammed against the nav. */
+}
+.pb-safe {
+  padding-bottom: max(5rem, env(safe-area-inset-bottom, 16px)) !important;
+}
+.pb-safe-mobile {
+  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + 0.75rem) !important;
+}
+@media (min-width: 768px) {
   .pb-safe-mobile {
-    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + 0.75rem);
-  }
-  @media (min-width: 768px) {
-    .pb-safe-mobile {
-      padding-bottom: 2rem;
-    }
+    padding-bottom: 2rem !important;
   }
 }
 
