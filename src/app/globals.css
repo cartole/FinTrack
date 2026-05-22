@@ -117,8 +117,14 @@
   --sidebar-ring: oklch(0.6 0.18 155);
 }
 
-/* iOS Safari height fix */
+/* iOS Safari height fix - use dynamic viewport height */
 @supports (-webkit-touch-callout: none) {
+  :root {
+    --app-height: 100dvh;
+  }
+}
+/* Fallback for browsers without dvh support */
+@supports not (height: 100dvh) {
   :root {
     --app-height: -webkit-fill-available;
   }
@@ -136,11 +142,17 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
     touch-action: manipulation;
+    /* Prevent white flash on overscroll (iOS) */
+    background-color: var(--background);
   }
-  /* Mobile: must account for the fixed header bar (3rem) + safe area inset.
-     The header is position:fixed so content needs explicit top padding. */
+  html {
+    background-color: var(--background);
+  }
+  /* Mobile: must account for the fixed header bar + safe area inset.
+     The header height = max(3rem, calc(safe-area-top + 3rem)).
+     We add a small extra gap (0.5rem) so content doesn't touch the header. */
   .safe-area-pt {
-    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
+    padding-top: calc(max(3rem, env(safe-area-inset-top, 0px) + 3rem) + 0.5rem);
   }
   @media (min-width: 768px) {
     .safe-area-pt {
@@ -150,10 +162,10 @@
   .pb-safe {
     padding-bottom: max(5rem, env(safe-area-inset-bottom, 16px));
   }
-  /* Mobile: must account for the fixed bottom nav bar (3.5rem / h-14) + safe area.
-     The bottom nav is position:fixed so content needs explicit bottom padding. */
+  /* Mobile: must account for the fixed bottom nav bar (h-14 = 3.5rem) + safe area.
+     Add extra 0.25rem gap so last items aren't crammed against the nav. */
   .pb-safe-mobile {
-    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + 0.75rem);
   }
   @media (min-width: 768px) {
     .pb-safe-mobile {

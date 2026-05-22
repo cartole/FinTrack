@@ -66,7 +66,7 @@ export function MobileBottomNav() {
   return (
     <>
       {/* Mobile header - minimal, just logo and title */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center border-b bg-card/95 backdrop-blur-lg px-4" style={{ paddingTop: 'env(safe-area-inset-top, 0px)', height: 'max(3rem, calc(env(safe-area-inset-top, 0px) + 3rem))' }}>
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center border-b backdrop-blur-lg px-4" style={{ paddingTop: 'env(safe-area-inset-top, 0px)', height: 'max(3rem, calc(env(safe-area-inset-top, 0px) + 3rem))', backgroundColor: 'var(--card)' }}>
         <div className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
             <Wallet className="h-4 w-4 text-primary-foreground" />
@@ -76,7 +76,7 @@ export function MobileBottomNav() {
       </div>
 
       {/* Bottom tab bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-lg" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-lg" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', backgroundColor: 'var(--card)' }}>
         <div className="flex items-center justify-around h-14">
           {mainTabs.map((tab) => {
             const Icon = tab.icon;

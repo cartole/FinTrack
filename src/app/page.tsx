@@ -100,7 +100,7 @@ export default function Home() {
   }
 
   return (
-    <div className={cn("flex bg-background overflow-hidden", settings.compactMode && "compact-mode")} style={{ height: 'var(--app-height, 100vh)' }}>
+    <div className={cn("flex bg-background overflow-hidden", settings.compactMode && "compact-mode")} style={{ height: '100dvh' }}>
       {/* Sidebar (desktop only, mobile uses bottom nav) */}
       <Sidebar />
 
