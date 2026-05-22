@@ -93,6 +93,18 @@ function ActiveTab() {
 
 export default function Home() {
   const { settings } = useFinanceStore();
+  const hydrated = useHydrated();
+
+  if (!hydrated) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+          <p className="text-sm text-muted-foreground">Cargando FinTrack...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex bg-background overflow-hidden", settings.compactMode && "compact-mode")} style={{ height: 'var(--app-height, 100vh)' }}>

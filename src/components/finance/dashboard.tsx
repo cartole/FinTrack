@@ -59,7 +59,13 @@ export function Dashboard() {
   const { transactions, savingsGoals, selectedMonth, setSelectedMonth, deleteTransaction, setActiveTab, settings, updateSettings } = useFinanceStore();
   const { toast } = useToast();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    // Set selectedMonth on client if empty (hydration-safe)
+    if (!selectedMonth) {
+      setSelectedMonth(new Date().toISOString().slice(0, 7));
+    }
+  }, []);
   const allMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
   // Limit months shown in dropdown to last 12 + current
   const availableMonths = useMemo(() => {

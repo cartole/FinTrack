@@ -187,7 +187,7 @@ export const useFinanceStore = create<FinanceState>()(
   isFormOpen: false,
   isSavingsPlanOpen: false,
   activeTab: "dashboard",
-  selectedMonth: getCurrentMonth(),
+  selectedMonth: "2025-01", // safe default, updated on client mount
 
   // ---- Transacciones ----
   addTransaction: (tx) =>

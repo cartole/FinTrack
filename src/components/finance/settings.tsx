@@ -171,13 +171,16 @@ export function Settings() {
   };
 
   const handleResetAllData = () => {
+    // First reset the Zustand store state
     resetAllData();
+    // Close the dialog
     setResetDialogOpen(false);
-    // Force page reload to ensure all state is reset
-    setTimeout(() => {
-      window.location.reload();
-    }, 300);
-    showFeedback("success", "Todos los datos han sido restablecidos");
+    // Clear localStorage completely to ensure old data is gone
+    try {
+      localStorage.removeItem("fintrack-storage");
+    } catch {}
+    // Force page reload to start fresh
+    window.location.reload();
   };
 
   // Clamped update helpers
