@@ -110,6 +110,9 @@ export function Settings() {
   const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Reset data dialog state
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
+
   const showFeedback = (type: "success" | "error", message: string) => {
     setFeedback({ type, message });
     setTimeout(() => setFeedback(null), 3000);
@@ -169,6 +172,11 @@ export function Settings() {
 
   const handleResetAllData = () => {
     resetAllData();
+    setResetDialogOpen(false);
+    // Force page reload to ensure all state is reset
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
     showFeedback("success", "Todos los datos han sido restablecidos");
   };
 
@@ -245,8 +253,7 @@ export function Settings() {
         onChange={handleFileChange}
       />
 
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
-        <div className="space-y-6 pr-2">
+        <div className="space-y-6">
 
           {/* ============================================ */}
           {/* PERFIL PERSONAL */}
@@ -1081,7 +1088,7 @@ export function Settings() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Reset all data */}
-                <AlertDialog>
+                <AlertDialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
@@ -1112,13 +1119,13 @@ export function Settings() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction
+                      <Button
                         onClick={handleResetAllData}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
                         <Trash2 className="h-4 w-4 mr-1.5" />
                         Resetear todo
-                      </AlertDialogAction>
+                      </Button>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -1289,7 +1296,6 @@ export function Settings() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   );
 }
