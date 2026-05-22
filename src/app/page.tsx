@@ -17,6 +17,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Dashboard } from "@/components/finance/dashboard";
 import { TransactionList } from "@/components/finance/transaction-list";
@@ -39,21 +40,10 @@ import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
 import { OfflineIndicator } from "@/components/pwa/offline-indicator";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { useFinanceStore } from "@/store/finance-store";
-import { useHydrated } from "@/hooks/use-hydrated";
 import { cn } from "@/lib/utils";
 
 function ActiveTab() {
   const { activeTab } = useFinanceStore();
-  const hydrated = useHydrated();
-
-  // Wait for Zustand hydration to avoid SSR/client mismatch
-  if (!hydrated) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
-      </div>
-    );
-  }
 
   switch (activeTab) {
     case "dashboard":
@@ -93,9 +83,12 @@ function ActiveTab() {
 
 export default function Home() {
   const { settings } = useFinanceStore();
-  const hydrated = useHydrated();
+  // Only render after client-side mount to prevent hydration mismatches
+  // The entire app depends on localStorage (Zustand persist), so SSR is meaningless
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
-  if (!hydrated) {
+  if (!mounted) {
     return (
       <div className="flex items-center justify-center h-screen bg-background">
         <div className="flex flex-col items-center gap-3">

@@ -264,7 +264,14 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {recentTransactions.map((tx) => (
+            {recentTransactions.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                <ArrowUpRight className="h-8 w-8 mb-2 opacity-30" />
+                <p className="text-sm">Sin actividad reciente</p>
+                <p className="text-[10px] mt-1">Añade tu primera transacción para empezar</p>
+              </div>
+            ) : (
+            recentTransactions.map((tx) => (
               <div
                 key={tx.id}
                 className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition-colors"
@@ -344,7 +351,8 @@ export function Dashboard() {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </CardContent>
       </Card>
