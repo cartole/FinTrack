@@ -35,10 +35,25 @@ import { IRPFCalculator } from "@/components/finance/irpf-calculator";
 import { Settings } from "@/components/finance/settings";
 import { TransactionForm } from "@/components/finance/transaction-form";
 import { SavingsPlanDisplay } from "@/components/finance/savings-plan-display";
+import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
+import { OfflineIndicator } from "@/components/pwa/offline-indicator";
+import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { useFinanceStore } from "@/store/finance-store";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { cn } from "@/lib/utils";
 
 function ActiveTab() {
   const { activeTab } = useFinanceStore();
+  const hydrated = useHydrated();
+
+  // Wait for Zustand hydration to avoid SSR/client mismatch
+  if (!hydrated) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
+      </div>
+    );
+  }
 
   switch (activeTab) {
     case "dashboard":
@@ -77,21 +92,32 @@ function ActiveTab() {
 }
 
 export default function Home() {
+  const { settings } = useFinanceStore();
+
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
+    <div className={cn("flex bg-background overflow-hidden", settings.compactMode && "compact-mode")} style={{ height: 'var(--app-height, 100vh)' }}>
+      {/* Sidebar (desktop only, mobile uses bottom nav) */}
       <Sidebar />
 
       {/* Contenido principal */}
-      <main className="flex-1 min-w-0 overflow-y-auto">
-        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 sm:pb-24 pb-safe safe-area-pt">
+      <main className="flex-1 min-w-0 min-h-0 overflow-y-auto overscroll-contain">
+        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6 safe-area-pt pb-safe-mobile">
           <ActiveTab />
         </div>
       </main>
 
+      {/* Mobile bottom tab bar */}
+      <MobileBottomNav />
+
       {/* Dialogs globales */}
       <TransactionForm />
       <SavingsPlanDisplay />
+
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
+
+      {/* Offline indicator */}
+      <OfflineIndicator />
     </div>
   );
 }

@@ -132,9 +132,15 @@
     @apply bg-background text-foreground;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    /* Mobile touch optimizations */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
   }
+  /* Mobile: must account for the fixed header bar (3rem) + safe area inset.
+     The header is position:fixed so content needs explicit top padding. */
   .safe-area-pt {
-    padding-top: max(5rem, env(safe-area-inset-top, 0px));
+    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
   }
   @media (min-width: 768px) {
     .safe-area-pt {
@@ -142,7 +148,17 @@
     }
   }
   .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: max(5rem, env(safe-area-inset-bottom, 16px));
+  }
+  /* Mobile: must account for the fixed bottom nav bar (3.5rem / h-14) + safe area.
+     The bottom nav is position:fixed so content needs explicit bottom padding. */
+  .pb-safe-mobile {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 768px) {
+    .pb-safe-mobile {
+      padding-bottom: 2rem;
+    }
   }
 }
 
@@ -165,4 +181,84 @@
   ::-webkit-scrollbar-thumb:hover {
     background: oklch(0.55 0.05 155);
   }
+}
+
+/* Mobile touch target enforcement - minimum 44px for interactive elements */
+@layer base {
+  button,
+  [role="button"],
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  summary {
+    min-height: 28px;
+  }
+  @media (pointer: coarse) {
+    button:not([class*="h-"]):not([class*="size-"]),
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    button.h-6.w-6,
+    button.h-7.w-7 {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button.h-8.w-8 {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+/* Prevent horizontal overflow only on mobile (coarse pointer) */
+@layer base {
+  @media (pointer: coarse) {
+    html, body {
+      overflow-x: hidden;
+    }
+  }
+}
+
+/* Compact mode - reduces spacing globally */
+.compact-mode {
+  --compact-scale: 0.7;
+}
+
+.compact-mode .space-y-6 > * + * {
+  margin-top: calc(1.5rem * var(--compact-scale, 1));
+}
+
+.compact-mode .space-y-4 > * + * {
+  margin-top: calc(1rem * var(--compact-scale, 1));
+}
+
+.compact-mode .p-4 {
+  padding: calc(1rem * var(--compact-scale, 1));
+}
+
+.compact-mode .p-5 {
+  padding: calc(1.25rem * var(--compact-scale, 1));
+}
+
+.compact-mode .p-6 {
+  padding: calc(1.5rem * var(--compact-scale, 1));
+}
+
+.compact-mode .gap-3 {
+  gap: calc(0.75rem * var(--compact-scale, 1));
+}
+
+.compact-mode .gap-4 {
+  gap: calc(1rem * var(--compact-scale, 1));
+}
+
+.compact-mode .gap-6 {
+  gap: calc(1.5rem * var(--compact-scale, 1));
 }

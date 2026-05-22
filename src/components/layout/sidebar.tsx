@@ -1,22 +1,22 @@
 /**
  * ============================================
- * Sidebar - Navegación Principal
+ * Sidebar - Navegación Principal (Desktop)
  * ============================================
  * Barra lateral con navegación entre secciones.
- * Responsive: colapsa en móvil con Sheet.
- * Scrollable cuando hay muchas secciones.
+ * Solo visible en desktop (md+).
+ * En móvil se usa MobileBottomNav en su lugar.
  */
 
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useFinanceStore } from "@/store/finance-store";
+import { useHydrated } from "@/hooks/use-hydrated";
 import {
   LayoutDashboard,
   ArrowLeftRight,
   Target,
   Brain,
-  Menu,
   TrendingUp,
   Wallet,
   ShieldAlert,
@@ -33,18 +33,11 @@ import {
   ChevronRight,
   Settings2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 
-const navSections = [
+export const navSections = [
   {
     title: "General",
     items: [
@@ -104,7 +97,7 @@ function NavItem({
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+        "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 min-h-[44px]",
         active
           ? "bg-primary text-primary-foreground shadow-sm"
           : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -132,9 +125,12 @@ function Logo() {
   );
 }
 
-function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
+export function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
   const { activeTab, setActiveTab } = useFinanceStore();
+  const hydrated = useHydrated();
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+
+  const currentTab = hydrated ? activeTab : "";
 
   const toggleSection = (title: string) => {
     setCollapsedSections((prev) => {
@@ -162,7 +158,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
             <div key={section.title}>
               <button
                 onClick={() => toggleSection(section.title)}
-                className="flex items-center justify-between w-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70 hover:text-muted-foreground"
+                className="flex items-center justify-between w-full px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70 hover:text-muted-foreground min-h-[36px]"
               >
                 {section.title}
                 {collapsedSections.has(section.title) ? (
@@ -179,7 +175,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
                       id={item.id}
                       label={item.label}
                       icon={item.icon}
-                      active={activeTab === item.id}
+                      active={currentTab === item.id}
                       onClick={() => handleNavClick(item.id)}
                     />
                   ))}
@@ -206,34 +202,14 @@ function NavContent({ onNavigate }: { onNavigate?: () => void } = {}) {
 }
 
 export function Sidebar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
   return (
     <>
-      {/* Desktop sidebar - uses --app-height for iOS Safari fix */}
-      <aside className="hidden md:flex w-64 flex-col border-r bg-card sticky top-0 overflow-hidden" style={{ height: 'var(--app-height, 100vh)' }}>
+      {/* Desktop sidebar only - mobile uses MobileBottomNav */}
+      <aside className="hidden md:flex w-64 flex-col border-r bg-card overflow-hidden shrink-0">
         <div className="flex flex-col h-full min-h-0 overflow-hidden">
           <NavContent />
         </div>
       </aside>
-
-      {/* Mobile sidebar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center gap-2 border-b bg-card px-4 py-3" style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top, 0px))' }}>
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="shrink-0">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0 h-full overflow-hidden">
-            <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
-            <div className="h-full flex flex-col min-h-0 overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-              <NavContent onNavigate={() => setMobileOpen(false)} />
-            </div>
-          </SheetContent>
-        </Sheet>
-        <Logo />
-      </div>
     </>
   );
 }
