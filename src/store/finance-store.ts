@@ -7,6 +7,7 @@
  */
 
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import {
   Transaction,
   SavingsGoal,
@@ -170,7 +171,9 @@ function getCurrentMonth(): string {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
 
-export const useFinanceStore = create<FinanceState>((set, get) => ({
+export const useFinanceStore = create<FinanceState>()(
+  persist(
+    (set, get) => ({
   // ---- Estado inicial ----
   transactions: mockTransactions,
   savingsGoals: mockSavingsGoals,
@@ -385,4 +388,30 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   setSavingsPlanOpen: (open) => set({ isSavingsPlanOpen: open }),
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedMonth: (month) => set({ selectedMonth: month }),
-}));
+}),
+{
+  name: "fintrack-storage",
+  storage: createJSONStorage(() => {
+    // SSR-safe: return noop during SSR
+    if (typeof window === "undefined") {
+      return {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      };
+    }
+    return localStorage;
+  }),
+  partialize: (state) => ({
+    transactions: state.transactions,
+    savingsGoals: state.savingsGoals,
+    budgets: state.budgets,
+    debts: state.debts,
+    subscriptions: state.subscriptions,
+    settings: state.settings,
+    activeTab: state.activeTab,
+    selectedMonth: state.selectedMonth,
+  }),
+}
+  )
+);
