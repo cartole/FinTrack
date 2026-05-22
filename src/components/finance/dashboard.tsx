@@ -7,7 +7,7 @@
 
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useFinanceStore } from "@/store/finance-store";
 import { BalanceCards } from "./balance-cards";
 import { TrendChart, ProjectionChart, CategoryBreakdownChart } from "./charts";
@@ -58,6 +58,8 @@ function getGoalIcon(name: string) {
 export function Dashboard() {
   const { transactions, savingsGoals, selectedMonth, setSelectedMonth, deleteTransaction, setActiveTab, settings, updateSettings } = useFinanceStore();
   const { toast } = useToast();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const allMonths = useMemo(() => getAvailableMonths(transactions), [transactions]);
   // Limit months shown in dropdown to last 12 + current
   const availableMonths = useMemo(() => {
@@ -109,10 +111,10 @@ export function Dashboard() {
             <SelectContent>
               {availableMonths.map((month) => (
                 <SelectItem key={month} value={month}>
-                  {new Date(month + "-01").toLocaleDateString("es-ES", {
+                  {mounted ? new Date(month + "-01").toLocaleDateString("es-ES", {
                     month: "long",
                     year: "numeric",
-                  })}
+                  }) : month}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -164,7 +166,7 @@ export function Dashboard() {
                 <div className="flex-1 min-w-0 overflow-hidden">
                   <p className="text-sm font-semibold truncate">{selectedGoal.name}</p>
                   <p className="text-[10px] text-muted-foreground">
-                    {Math.max(0, Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))} días restantes
+                    {mounted ? Math.max(0, Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))) : "..."} días restantes
                   </p>
                 </div>
               </div>

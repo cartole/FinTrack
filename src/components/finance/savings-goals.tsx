@@ -9,7 +9,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,6 +59,8 @@ export function SavingsGoals() {
     updateSettings,
   } = useFinanceStore();
   const { toast } = useToast();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const [isAdding, setIsAdding] = useState(false);
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
   const [newGoal, setNewGoal] = useState({
@@ -187,12 +189,12 @@ export function SavingsGoals() {
           Math.round((selectedGoal.currentAmount / selectedGoal.targetAmount) * 100)
         );
         const remaining = selectedGoal.targetAmount - selectedGoal.currentAmount;
-        const daysLeft = Math.max(
+        const daysLeft = mounted ? Math.max(
           0,
           Math.ceil(
             (new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
           )
-        );
+        ) : 0;
         const monthlyNeeded =
           daysLeft > 0 ? (remaining / (daysLeft / 30)) : 0;
 
@@ -236,12 +238,12 @@ export function SavingsGoals() {
             Math.round((goal.currentAmount / goal.targetAmount) * 100)
           );
           const Icon = getGoalIcon(goal.name);
-          const daysLeft = Math.max(
+          const daysLeft = mounted ? Math.max(
             0,
             Math.ceil(
               (new Date(goal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
             )
-          );
+          ) : 0;
           const isSelected = selectedGoalId === goal.id;
 
           return (

@@ -19,7 +19,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -95,6 +95,10 @@ export function Settings() {
     savingsGoals,
     transactions,
   } = useFinanceStore();
+
+  // Hydration-safe mount check
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   // Toast-like feedback state
   const [feedback, setFeedback] = useState<{
@@ -923,13 +927,13 @@ export function Settings() {
                       Math.round((selectedGoal.currentAmount / selectedGoal.targetAmount) * 100)
                     );
                     const remaining = selectedGoal.targetAmount - selectedGoal.currentAmount;
-                    const daysLeft = Math.max(
+                    const daysLeft = mounted ? Math.max(
                       0,
                       Math.ceil(
                         (new Date(selectedGoal.deadline).getTime() - Date.now()) /
                           (1000 * 60 * 60 * 24)
                       )
-                    );
+                    ) : 0;
                     const monthlyNeeded =
                       daysLeft > 0
                         ? (remaining / (daysLeft / 30)).toFixed(0)

@@ -9,7 +9,7 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -165,12 +165,14 @@ function CalendarGrid({
   events,
   selectedDate,
   onSelectDate,
+  mounted,
 }: {
   year: number;
   month: number;
   events: CalendarEvent[];
   selectedDate: string | null;
   onSelectDate: (date: string) => void;
+  mounted: boolean;
 }) {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
@@ -223,7 +225,7 @@ function CalendarGrid({
           const monthStr = String(month + 1).padStart(2, "0");
           const dateStr = `${year}-${monthStr}-${dayStr}`;
           const dayEvents = eventsByDay[dayStr] || [];
-          const today = isToday(dateStr);
+          const today = mounted && isToday(dateStr);
           const selected = selectedDate === dateStr;
 
           return (
@@ -326,10 +328,18 @@ function TypeFilter({
 export function PaymentCalendar() {
   const { transactions, subscriptions, debts, budgets } = useFinanceStore();
 
-  // Navegación de mes
-  const now = new Date();
-  const [viewYear, setViewYear] = useState(now.getFullYear());
-  const [viewMonth, setViewMonth] = useState(now.getMonth());
+  // Hydration-safe mount check
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  // Navegación de mes (safe default, updated on mount)
+  const [viewYear, setViewYear] = useState(2025);
+  const [viewMonth, setViewMonth] = useState(0);
+  useEffect(() => {
+    const now = new Date();
+    setViewYear(now.getFullYear());
+    setViewMonth(now.getMonth());
+  }, []);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<Set<CalendarEventType>>(
     new Set(["income", "expense_recurring", "subscription", "debt_payment", "tax_payment"])
@@ -462,6 +472,7 @@ export function PaymentCalendar() {
             events={filteredMonthEvents}
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
+            mounted={mounted}
           />
 
           {/* Leyenda */}
