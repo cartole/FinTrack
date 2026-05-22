@@ -58,3 +58,23 @@ Stage Summary:
 - Switch toggle made 40% bigger for easier touch interaction
 - overflow-hidden added to cards to prevent visual overflow
 - Build passes successfully
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Fix fixed-term-calculator "Selecciona un banco" overflow on mobile
+
+Work Log:
+- VLM identified the dropdown text "Elige banco o TAE personalizado" was overflowing its container
+- Root cause: SelectTrigger had `w-fit` and `whitespace-nowrap` which forced it to expand beyond container on mobile
+- Fixed global SelectTrigger: changed `w-fit` → `w-full`, removed `whitespace-nowrap`, added `truncate` and `min-w-0` to select-value
+- Shortened placeholder text: "Elige banco o TAE personalizado" → "Elige banco o TAE"
+- Added `max-w-[calc(100vw-2rem)]` to SelectContent to prevent dropdown overflow on mobile
+- Added `overflow-hidden` to all cards in fixed-term-calculator
+- Added `shrink-0` to icon elements inside SelectTrigger
+
+Stage Summary:
+- SelectTrigger now defaults to `w-full` (fills container) instead of `w-fit` (overflow risk)
+- Fixed-term-calculator dropdown no longer overflows on mobile
+- All Select dropdowns across the app benefit from the global fix
+- Build passes successfully

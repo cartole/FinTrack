@@ -348,7 +348,7 @@ export function FixedTermCalculator() {
       {/* Calculadora principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Panel de entrada */}
-        <Card className="border shadow-sm lg:col-span-1">
+        <Card className="border shadow-sm overflow-hidden lg:col-span-1">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Calculator className="h-4 w-4 text-primary" />
@@ -370,8 +370,8 @@ export function FixedTermCalculator() {
             <div className="space-y-2">
               <Label className="text-xs">Plazo del depósito</Label>
               <Select value={termMonths} onValueChange={setTermMonths}>
-                <SelectTrigger>
-                  <Clock className="h-3.5 w-3.5 mr-2" />
+                <SelectTrigger className="w-full">
+                  <Clock className="h-3.5 w-3.5 mr-2 shrink-0" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -400,9 +400,9 @@ export function FixedTermCalculator() {
                   }
                 }}
               >
-                <SelectTrigger>
-                  <Building2 className="h-3.5 w-3.5 mr-2" />
-                  <SelectValue placeholder="Elige banco o TAE personalizado" />
+                <SelectTrigger className="w-full">
+                  <Building2 className="h-3.5 w-3.5 mr-2 shrink-0" />
+                  <SelectValue placeholder="Elige banco o TAE" />
                 </SelectTrigger>
                 <SelectContent>
                   {depositRates.map((deposit) => (
@@ -470,7 +470,7 @@ export function FixedTermCalculator() {
         </Card>
 
         {/* Resultados */}
-        <Card className="border shadow-sm lg:col-span-2">
+        <Card className="border shadow-sm overflow-hidden lg:col-span-2">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Banknote className="h-4 w-4 text-primary" />
@@ -620,7 +620,7 @@ export function FixedTermCalculator() {
       </div>
 
       {/* Comparativa de bancos */}
-      <Card className="border shadow-sm">
+      <Card className="border shadow-sm overflow-hidden">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Scale className="h-4 w-4 text-primary" />
