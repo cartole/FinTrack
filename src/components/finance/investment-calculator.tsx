@@ -61,7 +61,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 // ---- Tipos ----
 
@@ -560,7 +559,7 @@ export function InvestmentCalculator() {
                   <span className="text-right whitespace-nowrap">Valor</span>
                   <span className="text-right whitespace-nowrap">Ganancia</span>
                 </div>
-                <ScrollArea className="max-h-[200px]">
+                <div className="max-h-[200px] overflow-y-auto overscroll-contain">
                 {activeScenario.projection
                   .filter((_, idx) => idx === 0 || idx === activeScenario.projection.length - 1 || idx % Math.max(1, Math.floor(activeScenario.projection.length / 8)) === 0)
                   .map((point) => (
@@ -583,7 +582,7 @@ export function InvestmentCalculator() {
                       </span>
                     </div>
                   ))}
-                </ScrollArea>
+                </div>
               </div>
             </div>
           </CardContent>

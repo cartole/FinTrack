@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -170,7 +169,7 @@ export function TransactionList() {
         </div>
 
         {/* Lista de transacciones */}
-        <ScrollArea className="h-[400px] pr-3">
+        <div className="h-[400px] overflow-y-auto overscroll-contain pr-3">
           <div className="space-y-2">
             {filteredTransactions.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
@@ -273,7 +272,7 @@ export function TransactionList() {
               ))
             )}
           </div>
-        </ScrollArea>
+        </div>
       </CardContent>
     </Card>
   );

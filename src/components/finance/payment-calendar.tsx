@@ -14,7 +14,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatCurrency } from "@/lib/finance-utils";
 import { useFinanceStore } from "@/store/finance-store";
 import {
@@ -552,7 +551,7 @@ export function PaymentCalendar() {
 
       {/* Próximos 7 días */}
       {upcomingEvents.length > 0 && (
-        <Card className="border shadow-sm">
+        <Card className="border shadow-sm overflow-hidden">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
@@ -564,19 +563,19 @@ export function PaymentCalendar() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="max-h-64">
+            <div className="max-h-64 overflow-y-auto overscroll-contain">
               <div className="space-y-2">
                 {upcomingEvents.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
-            </ScrollArea>
+            </div>
           </CardContent>
         </Card>
       )}
 
       {/* Todos los eventos del mes con filtros */}
-      <Card className="border shadow-sm">
+      <Card className="border shadow-sm overflow-hidden">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div>
@@ -604,7 +603,7 @@ export function PaymentCalendar() {
             <TypeFilter selectedTypes={selectedTypes} onToggleType={toggleType} />
           </div>
 
-          <ScrollArea className={showAllEvents ? "max-h-96" : "max-h-48"}>
+          <div className={showAllEvents ? "max-h-96 overflow-y-auto overscroll-contain" : "max-h-48 overflow-y-auto overscroll-contain"}>
             <div className="space-y-2">
               {(showAllEvents
                 ? filteredMonthEvents
@@ -628,7 +627,7 @@ export function PaymentCalendar() {
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </div>
         </CardContent>
       </Card>
     </div>

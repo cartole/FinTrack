@@ -19,7 +19,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useFinanceStore } from "@/store/finance-store";
 import { formatCurrency, formatMonth } from "@/lib/finance-utils";
@@ -96,7 +95,7 @@ export function SavingsPlanDisplay() {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[65vh] pr-2">
+        <div className="max-h-[65vh] pr-2 overflow-y-auto overscroll-contain">
           <div className="space-y-5">
             {/* Resumen */}
             <Card className="border-0 bg-muted/50">
@@ -275,7 +274,7 @@ export function SavingsPlanDisplay() {
               </div>
             </div>
           </div>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );

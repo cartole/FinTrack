@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFinanceStore } from "@/store/finance-store";
 import { type SmartAlert, type AlertSeverity } from "@/lib/types";
 import { generateSmartAlerts } from "@/lib/smart-alerts";
@@ -283,7 +282,7 @@ export function SmartAlerts() {
 
       {/* ---- Alertas agrupadas por severidad ---- */}
       {hasAnalyzed && !isAnalyzing && alerts.length > 0 && (
-        <ScrollArea className="max-h-[600px]">
+        <div className="max-h-[600px] overflow-y-auto overscroll-contain">
           <div className="space-y-6 pr-1">
             {(["critical", "warning", "info"] as AlertSeverity[]).map((severity) => {
               const group = groupedAlerts[severity];
@@ -394,7 +393,7 @@ export function SmartAlerts() {
               );
             })}
           </div>
-        </ScrollArea>
+        </div>
       )}
     </div>
   );

@@ -35,3 +35,26 @@ Stage Summary:
 - 16 component files updated with border fixes
 - subscription-tracker.tsx completely rewritten with better layout
 - Mobile responsiveness improved across all components
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix scroll issues, overflow errors, Switch size, and Zustand migration error
+
+Work Log:
+- Analyzed user screenshots (VLM identified Zustand migration error)
+- Error 1: "State loaded from storage couldn't be migrated since no migrate function was provided" in finance-store.ts
+- Error 2: Related to the same persist configuration (missing version/migrate)
+- Replaced ALL Radix ScrollArea components with native overflow-y-auto divs across 12 finance components for reliable mobile scrolling
+- Enlarged Switch toggle (h-[1.15rem] w-8 → h-[1.35rem] w-[2.5rem], thumb size-4 → size-5)
+- Removed scale-75 from subscription tracker Switch components
+- Added overflow-hidden to cards containing scrollable content (debt list, calendar events)
+- Added version: 1 and migrate function to Zustand persist config
+- Cleaned up unused ScrollArea import comments
+
+Stage Summary:
+- Zustand persist migration error fixed (added version + migrate)
+- All ScrollArea replaced with native scroll (overflow-y-auto overscroll-contain) for mobile reliability
+- Switch toggle made 40% bigger for easier touch interaction
+- overflow-hidden added to cards to prevent visual overflow
+- Build passes successfully

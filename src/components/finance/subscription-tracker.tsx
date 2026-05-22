@@ -46,7 +46,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFinanceStore } from "@/store/finance-store";
 import {
   CATEGORY_CONFIG,
@@ -302,8 +301,8 @@ export function SubscriptionTracker() {
                 <p className="text-[10px] text-muted-foreground">Sin renovaciones próximas</p>
               </div>
             ) : (
-              <ScrollArea className="max-h-36 sm:max-h-44">
-                <div className="space-y-1.5 pr-1">
+              <div className="max-h-36 sm:max-h-44 overflow-y-auto overscroll-contain">
+                <div className="space-y-1.5">
                   {upcomingRenewals.map(({ subscription, daysUntil }) => (
                     <div
                       key={subscription.id}
@@ -333,7 +332,7 @@ export function SubscriptionTracker() {
                     </div>
                   ))}
                 </div>
-              </ScrollArea>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -378,8 +377,8 @@ export function SubscriptionTracker() {
                     </p>
                   </div>
                 ) : (
-                  <ScrollArea className="max-h-40">
-                    <div className="space-y-1.5 pr-1">
+                  <div className="max-h-40 overflow-y-auto overscroll-contain">
+                    <div className="space-y-1.5">
                       {detectedSubs.map((det, idx) => (
                         <div
                           key={idx}
@@ -415,7 +414,7 @@ export function SubscriptionTracker() {
                         </div>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 )}
                 <Button
                   variant="ghost"
@@ -527,8 +526,8 @@ export function SubscriptionTracker() {
               </p>
             </div>
           ) : (
-            <ScrollArea className="max-h-[500px]">
-              <div className="space-y-2 pr-1">
+            <div className="max-h-[500px] overflow-y-auto overscroll-contain">
+              <div className="space-y-2">
                 {activeSubs.map((sub) => {
                   const annualCost = getAnnualEquivalent(sub.amount, sub.billingCycle);
                   const monthlyCost = getMonthlyEquivalent(sub.amount, sub.billingCycle);
@@ -571,7 +570,6 @@ export function SubscriptionTracker() {
                         <Switch
                           checked={sub.isActive}
                           onCheckedChange={() => handleToggleActive(sub.id, sub.isActive)}
-                          className="scale-75"
                         />
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
@@ -631,7 +629,6 @@ export function SubscriptionTracker() {
                           <Switch
                             checked={sub.isActive}
                             onCheckedChange={() => handleToggleActive(sub.id, sub.isActive)}
-                            className="scale-75"
                           />
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -663,7 +660,7 @@ export function SubscriptionTracker() {
                   </>
                 )}
               </div>
-            </ScrollArea>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -735,7 +732,7 @@ export function SubscriptionTracker() {
             </DialogDescription>
           </DialogHeader>
 
-          <ScrollArea className="max-h-[70vh] pr-2">
+          <div className="max-h-[70vh] overflow-y-auto overscroll-contain pr-2">
             <div className="space-y-4 py-2">
               <div className="space-y-2">
                 <Label className="text-xs">Nombre</Label>
@@ -833,7 +830,7 @@ export function SubscriptionTracker() {
                 Añadir Suscripción
               </Button>
             </div>
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -31,7 +31,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFinanceStore } from "@/store/finance-store";
 import { EXPENSE_CATEGORIES, CATEGORY_CONFIG, type TransactionCategory } from "@/lib/types";
 import { formatCurrency } from "@/lib/finance-utils";
@@ -120,7 +119,7 @@ function EmergencyPlanDisplay({ plan, onClose }: { plan: EmergencyPlan; onClose:
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[70vh] pr-2">
+        <div className="max-h-[70vh] pr-2 overflow-y-auto overscroll-contain">
           <div className="space-y-5">
             {/* Severidad y resumen */}
             <Card className="border-0 bg-muted/50">
@@ -298,7 +297,7 @@ function EmergencyPlanDisplay({ plan, onClose }: { plan: EmergencyPlan; onClose:
               </div>
             </div>
           </div>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );

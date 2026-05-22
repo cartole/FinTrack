@@ -45,7 +45,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFinanceStore } from "@/store/finance-store";
 import {
   DEBT_TYPE_CONFIG,
@@ -472,7 +471,7 @@ export function DebtManager() {
       </Card>
 
       {/* Debt List */}
-      <Card className="border shadow-sm">
+      <Card className="border shadow-sm overflow-hidden">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div>
@@ -498,8 +497,8 @@ export function DebtManager() {
               <p className="text-xs">Añade una deuda para empezar a planificar</p>
             </div>
           ) : (
-            <ScrollArea className="max-h-96">
-              <div className="space-y-3 pr-2">
+            <div className="max-h-[400px] overflow-y-auto overscroll-contain -webkit-overflow-scrolling-touch">
+              <div className="space-y-3 pr-1">
                 {activePlan.debtsOrder.map((debt, idx) => {
                   const plan = activePlan.individualPlans.find(
                     (p) => p.debt.id === debt.id
@@ -631,7 +630,7 @@ export function DebtManager() {
                   );
                 })}
               </div>
-            </ScrollArea>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -727,7 +726,7 @@ export function DebtManager() {
             </DialogDescription>
           </DialogHeader>
 
-          <ScrollArea className="max-h-[70vh] pr-2">
+          <div className="max-h-[70vh] overflow-y-auto overscroll-contain pr-2">
             <div className="space-y-4 py-2">
               <div className="space-y-2">
                 <Label className="text-xs">Nombre</Label>
@@ -885,7 +884,7 @@ export function DebtManager() {
                 {editingDebtId ? "Guardar Cambios" : "Añadir Deuda"}
               </Button>
             </div>
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

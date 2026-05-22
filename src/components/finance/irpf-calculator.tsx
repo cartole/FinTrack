@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatCurrency } from "@/lib/finance-utils";
 import { calculateIRPF } from "@/lib/irpf-calculator";
 import type {

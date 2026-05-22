@@ -391,6 +391,19 @@ export const useFinanceStore = create<FinanceState>()(
 }),
 {
   name: "fintrack-storage",
+  version: 1,
+  migrate: (persistedState: unknown, version: number) => {
+    // If no version or older version, merge with defaults to ensure
+    // all fields exist (handles schema changes gracefully)
+    if (version === 0 || !version) {
+      const state = persistedState as Record<string, unknown>;
+      return {
+        ...state,
+        settings: { ...defaultSettings, ...(state.settings as Partial<AppSettings>) },
+      };
+    }
+    return persistedState;
+  },
   storage: createJSONStorage(() => {
     // SSR-safe: return noop during SSR
     if (typeof window === "undefined") {

@@ -60,7 +60,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 // ---- Tipos ----
 
@@ -635,7 +634,7 @@ export function FixedTermCalculator() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="max-h-[500px]">
+          <div className="max-h-[500px] overflow-y-auto overscroll-contain">
           <div className="space-y-2 pr-1">
             {bankComparison.map((bank, idx) => (
               <div
@@ -684,7 +683,7 @@ export function FixedTermCalculator() {
               </div>
             ))}
           </div>
-          </ScrollArea>
+          </div>
         </CardContent>
       </Card>
 

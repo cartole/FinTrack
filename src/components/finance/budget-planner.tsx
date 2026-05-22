@@ -31,7 +31,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFinanceStore } from "@/store/finance-store";
 import {
   EXPENSE_CATEGORIES,
@@ -304,8 +303,8 @@ export function BudgetPlanner() {
           </CardContent>
         </Card>
       ) : (
-        <ScrollArea className="max-h-[500px]">
-          <div className="space-y-3 pr-1">
+        <div className="max-h-[500px] overflow-y-auto overscroll-contain">
+          <div className="space-y-3">
             {budgetStatuses.map((bs) => {
               const config = CATEGORY_CONFIG[bs.budget.category];
               const icon = CATEGORY_ICONS[bs.budget.category] || <CircleDot className="h-4 w-4" />;
@@ -413,7 +412,7 @@ export function BudgetPlanner() {
               );
             })}
           </div>
-        </ScrollArea>
+        </div>
       )}
 
       {/* ============================================================ */}
@@ -566,7 +565,7 @@ export function BudgetPlanner() {
             </DialogDescription>
           </DialogHeader>
 
-          <ScrollArea className="max-h-[400px] pr-2">
+          <div className="max-h-[400px] overflow-y-auto overscroll-contain pr-2">
             <div className="space-y-2 py-2">
               {recommendations.map((rec) => {
                 const config = CATEGORY_CONFIG[rec.category];
@@ -616,7 +615,7 @@ export function BudgetPlanner() {
                 );
               })}
             </div>
-          </ScrollArea>
+          </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsRecommendDialogOpen(false)}>
